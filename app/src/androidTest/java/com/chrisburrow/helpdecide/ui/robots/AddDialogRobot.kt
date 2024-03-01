@@ -8,9 +8,9 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddDialogTags
-
 class AddDialogRobot(private val rule: ComposeContentTestRule) {
 
     init {
@@ -37,7 +37,10 @@ class AddDialogRobot(private val rule: ComposeContentTestRule) {
 
     fun typeText(text: String) { rule.onNodeWithTag(AddDialogTags.OPTION_TEXT_TAG).performTextInput(text) }
 
+    fun pressKeyboardDone() { rule.onNodeWithTag(AddDialogTags.OPTION_TEXT_TAG).performImeAction() }
+
     fun dialogHidden() { rule.onNodeWithTag(AddDialogTags.BASE_VIEW_TAG).assertDoesNotExist() }
 }
+
 
 fun addDialog(rule: ComposeContentTestRule, block: AddDialogRobot.() -> Unit) = AddDialogRobot(rule).apply(block)

@@ -102,7 +102,7 @@ fun AddOptionDialog(
                     },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(
-                        onGo = { keyboardController?.show() }
+                        onGo = { keyboardController?.hide() }
                     ),
                     onValueChange = {
 
