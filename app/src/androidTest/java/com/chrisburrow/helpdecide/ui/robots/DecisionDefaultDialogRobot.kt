@@ -15,11 +15,15 @@ class DecisionDefaultDialogRobot(private val rule: ComposeContentTestRule) {
         rule.onNodeWithTag(DecisionDefaultDialogTags.BASE_VIEW_TAG).assertIsDisplayed()
     }
 
-    fun pressQuickOption() { pressOption(0) }
+    fun pressQuickOption() { pressOption(1) }
 
-    fun pressWheelOption() { pressOption(1) }
+    fun pressWheelOption() { pressOption(0) }
 
-    private fun pressOption(position: Int) { rule.onNodeWithTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position).performClick() }
+    fun checkText(optionChosenText: String) { rule.onNodeWithTag(DecisionDefaultDialogTags.OPTION_CHOSEN_TAG, useUnmergedTree = false).assertTextEquals(optionChosenText) }
+
+    fun pressOptions() { rule.onNodeWithTag(DecisionDefaultDialogTags.OPTION_CHOSEN_TAG).performClick() }
+
+    private fun pressOption(position: Int) { rule.onNodeWithTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position, useUnmergedTree = true).performClick() }
 
     fun pressGo() { rule.onNodeWithTag(DecisionDefaultDialogTags.GO_BUTTON_TAG).performClick() }
 }

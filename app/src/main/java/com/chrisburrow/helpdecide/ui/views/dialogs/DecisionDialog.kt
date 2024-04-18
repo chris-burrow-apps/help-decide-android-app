@@ -42,7 +42,7 @@ class DecisionDialogTags {
 @Composable
 fun DecisionDialog(
     options: List<OptionObject>,
-    model: DecisionViewModel = DecisionViewModel(RandomGenerator(), options),
+    model: DecisionViewModel = DecisionViewModel(randomGenerator = RandomGenerator(), options = options),
     donePressed: () -> Unit = {},
     clearPressed: () -> Unit = {}
 ) {
@@ -92,6 +92,7 @@ fun DecisionDialog(
 
                         Text(stringResource(R.string.done))
                     }
+                    
                 }
             }
         }

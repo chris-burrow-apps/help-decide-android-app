@@ -163,6 +163,7 @@ class HomeJourneyTest {
 
             decisionDefault(rule) {
 
+                pressOptions()
                 pressQuickOption()
                 pressGo()
             }
@@ -177,6 +178,7 @@ class HomeJourneyTest {
 
             decisionDefault(rule) {
 
+                pressOptions()
                 pressQuickOption()
                 pressGo()
             }
@@ -218,6 +220,7 @@ class HomeJourneyTest {
 
             decisionDefault(rule) {
 
+                pressOptions()
                 pressWheelOption()
                 pressGo()
             }
@@ -232,6 +235,7 @@ class HomeJourneyTest {
 
             decisionDefault(rule) {
 
+                pressOptions()
                 pressWheelOption()
                 pressGo()
             }

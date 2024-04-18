@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.chrisburrow.helpdecide.ui.views.dialogs
 
 import androidx.compose.foundation.layout.Column
@@ -9,18 +11,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,21 +51,24 @@ class DecisionDefaultDialogTags {
     companion object {
 
         const val BASE_VIEW_TAG = "DecisionDefaultView"
-        const val OPTION_ROW_TAG = "DecisionRow"
+        const val OPTION_CHOSEN_TAG = "DecisionChosenText"
+        const val OPTION_ROW_TAG = "DecisionChosenRow"
         const val GO_BUTTON_TAG = "DecisionGoButton"
     }
 }
 @Composable
 fun DecisionDefaultDialog(
     options: List<String> = listOf(
+        stringResource(R.string.spin_the_wheel),
         stringResource(R.string.instant_decision),
-        stringResource(R.string.spin_the_wheel)
     ),
     previouslySelected: Int,
     selected:(Int) -> Unit
 ) {
 
+    var expandedOptions by remember { mutableStateOf(false) }
     var selectedPosition by remember { mutableIntStateOf(previouslySelected) }
+    var selectedOptionText by remember { mutableStateOf(options[previouslySelected]) }
 
     Dialog(
         properties = DialogProperties(
@@ -75,44 +88,90 @@ fun DecisionDefaultDialog(
                     .height(16.dp)
                     .fillMaxWidth())
 
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.SemiBold,
-                    text = stringResource(R.string.how_do_you_want_to_decide),
-                )
-
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentSize()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                        .align(Alignment.CenterHorizontally)
-                ) {
-
-                    items(options.size) { position ->
-
-                        FilterChip(
+                    ExposedDropdownMenuBox(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize()
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                            .align(Alignment.CenterHorizontally),
+                        expanded = expandedOptions,
+                        onExpandedChange = {
+                            expandedOptions = !expandedOptions
+                        }
+                    ) {
+                        TextField(
                             modifier = Modifier
-                                .testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
-                            label = {
-                                Text(
-                                    color = Color.DarkGray,
-                                    text = options[position]
+                                .testTag(DecisionDefaultDialogTags.OPTION_CHOSEN_TAG)
+                                .menuAnchor(),
+                            readOnly = true,
+                            value = selectedOptionText,
+                            onValueChange = { },
+                            label = { Text(stringResource(R.string.how_do_you_want_to_decide)) },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(
+                                    expanded = expandedOptions
                                 )
                             },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Outlined.LocationOn,
-                                    modifier = Modifier.size(FilterChipDefaults.IconSize),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = { selectedPosition = position },
-                            selected = selectedPosition == position
+                            colors = ExposedDropdownMenuDefaults.textFieldColors()
                         )
+                        ExposedDropdownMenu(
+                            expanded = expandedOptions,
+                            onDismissRequest = {
+                                expandedOptions = false
+                            }
+                        ) {
+                            options.forEachIndexed { position, item ->
+
+                                DropdownMenuItem(
+                                    modifier = Modifier.testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
+                                    text = {
+                                        Text(
+                                            text = item
+                                        )
+                                    },
+                                    onClick = {
+                                        selectedOptionText = options[position]
+                                        expandedOptions = false
+                                        selectedPosition = position
+                                    }
+                                )
+                            }
+                        }
                     }
-                }
+
+
+//                LazyColumn(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .wrapContentSize()
+//                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+//                        .align(Alignment.CenterHorizontally)
+//                ) {
+//
+//
+//                    items(options.size) { position ->
+//
+//                        FilterChip(
+//                            modifier = Modifier
+//                                .testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
+//                            label = {
+//                                Text(
+//                                    color = Color.DarkGray,
+//                                    text = options[position]
+//                                )
+//                            },
+//                            leadingIcon = {
+//                                Icon(
+//                                    imageVector = Icons.Outlined.LocationOn,
+//                                    modifier = Modifier.size(FilterChipDefaults.IconSize),
+//                                    contentDescription = ""
+//                                )
+//                            },
+//                            onClick = { selectedPosition = position },
+//                            selected = selectedPosition == position
+//                        )
+//                    }
+//                }
 
                 TextButton(
                     modifier = Modifier

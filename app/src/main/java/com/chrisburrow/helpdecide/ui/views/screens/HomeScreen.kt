@@ -224,10 +224,10 @@ fun HomeScreen(
 
                     if(position == 0) {
 
-                        viewModel.showDecisionDialog()
+                        viewModel.showWheelDecisionDialog()
                     } else if(position == 1) {
 
-                        viewModel.showWheelDecisionDialog()
+                        viewModel.showDecisionDialog()
                     }
                 }
             )

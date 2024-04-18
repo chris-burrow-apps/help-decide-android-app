@@ -1,5 +1,6 @@
 package com.chrisburrow.helpdecide.utils.speechtotext
 
+import android.app.Activity
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.ComponentActivity
@@ -20,22 +21,22 @@ fun SpeechToText(response: (String) -> Unit, cancelled: () -> Unit) {
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
     intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak one of the options")
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode != ComponentActivity.RESULT_OK) {
-
-            cancelled()
-        } else {
-
-            val result = it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-
-            if (result !== null) {
-
-                response(result.first())
-            } else {
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+        when {
+            it.resultCode != Activity.RESULT_OK -> {
 
                 cancelled()
+            } else -> {
+
+                val result = it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+
+                if (result !== null) {
+
+                    response(result.first())
+                } else {
+
+                    cancelled()
+                }
             }
         }
     }
