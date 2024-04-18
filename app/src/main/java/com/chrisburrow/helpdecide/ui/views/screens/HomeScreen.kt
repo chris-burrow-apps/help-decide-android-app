@@ -1,13 +1,10 @@
 package com.chrisburrow.helpdecide.ui.views.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.InlineTextContent
@@ -60,6 +57,7 @@ class HomeTags {
         const val BASE_VIEW_TAG = "HomeView"
         const val ADD_TEXT_TAG = "HomeAddTextButton"
         const val ADD_VOICE_TAG = "HomeAddVoiceButton"
+        const val SETTINGS_TAG = "HomeSettingsButton"
         const val DECIDE_BUTTON_TAG = "HomeDecideFAB"
     }
 }
@@ -94,6 +92,18 @@ fun HomeScreen(
                         overflow = TextOverflow.Ellipsis
                     )
                 },
+//                actions = {
+//
+//                    IconButton(
+//                        modifier = Modifier.testTag(HomeTags.SETTINGS_TAG),
+//                        onClick = { viewModel.showAddDialog() },
+//                    ) {
+//                        Icon(
+//                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+//                            painter = painterResource(R.drawable.settings_icon),
+//                            contentDescription = stringResource(id = R.string.settings))
+//                    }
+//                }
             )
         },
         bottomBar = {
