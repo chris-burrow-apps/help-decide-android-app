@@ -15,4 +15,6 @@
     <string name="instant_decision">Instant Decision</string>
     <string name="spin_the_wheel">Spin the wheel</string>
     <string name="go">Go</string>
+    <string name="clear_all">Clear All</string>
+    <string name="got_a_few_ideas_but_undecided_which_to_pick">"Got a few ideas but undecided which to pick?\nLet the app pick for you.\n\n"</string>
 </resources>

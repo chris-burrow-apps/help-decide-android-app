@@ -1,5 +1,6 @@
 package com.chrisburrow.helpdecide
 
+import android.os.SystemClock
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
@@ -56,6 +57,7 @@ class HomeJourneyTest {
                 dialogHidden()
             }
 
+
             checkDecideDisabled()
 
             pressAdd()
@@ -108,31 +110,33 @@ class HomeJourneyTest {
 
         home(rule) {
 
-            pressAdd()
-
-            addDialog(rule) {
-
-                typeText("Option 1")
-                pressSave()
-            }
-
-            checkDecideDisabled()
+            checkClearAllHidden()
 
             pressAdd()
 
             addDialog(rule) {
 
-                typeText("Option 2")
+                typeText(SystemClock.uptimeMillis().toString())
                 pressSave()
             }
 
-            checkNumberOfOptions(2)
-            checkDecideEnabled()
+            checkClearAllShown()
 
-            pressDelete(0)
+            pressAdd()
 
-            checkNumberOfOptions(1)
+            addDialog(rule) {
+
+                typeText(SystemClock.uptimeMillis().toString())
+                pressSave()
+            }
+
+            checkClearAllShown()
+
+            pressClearAll()
+
+            checkNumberOfOptions(0)
             checkDecideDisabled()
+            checkClearAllHidden()
         }
     }
 

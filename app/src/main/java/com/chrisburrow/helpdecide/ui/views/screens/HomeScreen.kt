@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,7 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -57,6 +61,7 @@ class HomeTags {
         const val BASE_VIEW_TAG = "HomeView"
         const val ADD_TEXT_TAG = "HomeAddTextButton"
         const val ADD_VOICE_TAG = "HomeAddVoiceButton"
+        const val CLEAR_ALL_TAG = "ClearAllButton"
         const val SETTINGS_TAG = "HomeSettingsButton"
         const val DECIDE_BUTTON_TAG = "HomeDecideFAB"
     }
@@ -92,18 +97,25 @@ fun HomeScreen(
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-//                actions = {
-//
-//                    IconButton(
-//                        modifier = Modifier.testTag(HomeTags.SETTINGS_TAG),
-//                        onClick = { viewModel.showAddDialog() },
-//                    ) {
-//                        Icon(
-//                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
-//                            painter = painterResource(R.drawable.settings_icon),
-//                            contentDescription = stringResource(id = R.string.settings))
-//                    }
-//                }
+                actions = {
+
+                    if(viewModel.view.clearAllShown) {
+
+                        Button(
+                            modifier = Modifier
+                                .testTag(HomeTags.CLEAR_ALL_TAG)
+                                .wrapContentSize(),
+                            onClick = { viewModel.clearOptions() },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        ) {
+                            Text(
+                                modifier = Modifier.wrapContentSize(),
+                                color = Color(MaterialTheme.colorScheme.secondary.toArgb()),
+                                text = stringResource(R.string.clear_all),
+                            )
+                        }
+                    }
+                }
             )
         },
         bottomBar = {
@@ -115,7 +127,7 @@ fun HomeScreen(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.text_icon),
-                            contentDescription = stringResource(id = R.string.add_text_option))
+                            contentDescription = stringResource(R.string.add_text_option))
                     }
 
                     if(viewModel.view.voiceButton) {
@@ -262,8 +274,7 @@ fun EmptyHomeInstructions(modifier: Modifier) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "Got a few ideas but undecided which to pick? " +
-                        "\n Let the app pick for you.\n\n"
+                text = stringResource(R.string.got_a_few_ideas_but_undecided_which_to_pick)
             )
 
             val buildTypeText = buildAnnotatedString {

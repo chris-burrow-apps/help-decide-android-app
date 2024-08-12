@@ -7,10 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.chrisburrow.helpdecide.utils.OptionObject
 
 data class HomeViewState(
-    val decideOption: Boolean = false,
     val voiceButton: Boolean = false,
     val options: List<OptionObject> = listOf(),
-    val emptyView: Boolean = options.isEmpty(),
+    val clearAllShown: Boolean = false,
+    val decideOption: Boolean = false,
+    val emptyView: Boolean = true,
 )
 
 data class HomeDialogState(
@@ -33,34 +34,32 @@ class HomeViewModel(
     var dialogs by mutableStateOf(HomeDialogState())
         private set
 
-    init {
-
-        checkDecideEnabled()
-        checkEmptyShown()
-    }
-
     fun addOption(option: OptionObject) {
 
         view = view.copy(options = view.options.plus(option))
 
-        checkDecideEnabled()
-        checkEmptyShown()
+        checkButtonsState()
     }
 
     fun deleteOption(option: OptionObject) {
 
         view = view.copy(options = view.options.minus(option))
 
-        checkDecideEnabled()
-        checkEmptyShown()
+        checkButtonsState()
     }
 
     fun clearOptions() {
 
         view = view.copy(options = listOf())
 
+        checkButtonsState()
+    }
+
+    private fun checkButtonsState() {
+
         checkDecideEnabled()
         checkEmptyShown()
+        checkClearAllShown()
     }
 
     private fun checkDecideEnabled() {
@@ -71,6 +70,11 @@ class HomeViewModel(
     private fun checkEmptyShown() {
 
         view = view.copy(emptyView = view.options.isEmpty())
+    }
+
+    private fun checkClearAllShown() {
+
+        view = view.copy(clearAllShown = view.options.isNotEmpty())
     }
 
     fun showAddDialog() {

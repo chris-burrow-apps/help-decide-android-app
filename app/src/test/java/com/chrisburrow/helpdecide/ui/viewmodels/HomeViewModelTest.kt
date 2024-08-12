@@ -16,6 +16,7 @@ class HomeViewModelTest {
 
         assertFalse(homeViewModel.dialogs.addOption)
         assertFalse(homeViewModel.view.decideOption)
+        assertFalse(homeViewModel.view.clearAllShown)
         assertTrue(homeViewModel.view.emptyView)
 
         assertEquals(0, homeViewModel.view.options.size)
@@ -33,6 +34,7 @@ class HomeViewModelTest {
         assertTrue(homeViewModel.view.options.contains(newOption))
         assertFalse(homeViewModel.view.decideOption)
         assertFalse(homeViewModel.view.emptyView)
+        assertTrue(homeViewModel.view.clearAllShown)
 
         val anotherOption = OptionObject(text = "Option 2")
 
@@ -41,6 +43,7 @@ class HomeViewModelTest {
         assertTrue(homeViewModel.view.options.contains(anotherOption))
         assertTrue(homeViewModel.view.decideOption)
         assertFalse(homeViewModel.view.emptyView)
+        assertTrue(homeViewModel.view.clearAllShown)
     }
 
     @Test
@@ -79,6 +82,7 @@ class HomeViewModelTest {
         assertEquals(0, homeViewModel.view.options.size)
         assertFalse(homeViewModel.view.decideOption)
         assertTrue(homeViewModel.view.emptyView)
+        assertFalse(homeViewModel.view.clearAllShown)
     }
 
     @Test

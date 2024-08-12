@@ -3,6 +3,7 @@ package com.chrisburrow.helpdecide.ui.robots
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -20,11 +21,7 @@ class HomeRobot(private val rule: ComposeContentTestRule) {
 
     fun pressAdd() { rule.onNodeWithTag(HomeTags.ADD_TEXT_TAG).performClick() }
 
-    fun pressDelete(position: Int) {
-
-        rule.onNodeWithTag(OptionListTags.DELETE_BUTTON_TAG + position)
-            .performClick()
-    }
+    fun pressClearAll() { rule.onNodeWithTag(HomeTags.CLEAR_ALL_TAG).performClick() }
 
     fun checkNumberOfOptions(size: Int) {
 
@@ -36,6 +33,10 @@ class HomeRobot(private val rule: ComposeContentTestRule) {
     fun checkDecideEnabled() { rule.onNodeWithTag(HomeTags.DECIDE_BUTTON_TAG).assertIsEnabled() }
 
     fun checkDecideDisabled() { rule.onNodeWithTag(HomeTags.DECIDE_BUTTON_TAG).assertIsNotEnabled() }
+
+    fun checkClearAllShown() { rule.onNodeWithTag(HomeTags.CLEAR_ALL_TAG).assertIsDisplayed() }
+
+    fun checkClearAllHidden() { rule.onNodeWithTag(HomeTags.CLEAR_ALL_TAG).assertDoesNotExist() }
 
     fun optionShown(position: Int, text: String) {
 
