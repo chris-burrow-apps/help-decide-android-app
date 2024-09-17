@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.views.screens
+package com.chrisburrow.helpdecide.ui.views.screens.options
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -30,7 +30,6 @@ import com.chrisburrow.helpdecide.utils.OptionObject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OptionRowView(
-    modifier: Modifier = Modifier,
     position: Int,
     option: OptionObject,
     removeOption: (OptionObject) -> Unit
@@ -58,8 +57,8 @@ fun OptionRowView(
         )
         SwipeToDismissBox(
             state = dismissState,
-            modifier = modifier.testTag(OptionListTags.ROW_VIEW + position),
-            backgroundContent = { DismissBackground(dismissState)},
+            modifier = Modifier.testTag(OptionListTags.ROW_VIEW + position),
+            backgroundContent = { DismissBackground(dismissState) },
             content = {
                 OptionTextView(position = position, option = option)
             }

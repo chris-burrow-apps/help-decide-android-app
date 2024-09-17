@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -49,6 +48,7 @@ import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
+import com.chrisburrow.helpdecide.ui.views.screens.options.OptionList
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToText
 import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextToTextRequest
@@ -112,6 +112,21 @@ fun HomeScreen(
                                 modifier = Modifier.wrapContentSize(),
                                 color = Color(MaterialTheme.colorScheme.secondary.toArgb()),
                                 text = stringResource(R.string.clear_all),
+                            )
+                        }
+                    } else {
+
+                        Button(
+                            modifier = Modifier
+                                .testTag(HomeTags.CLEAR_ALL_TAG)
+                                .wrapContentSize(),
+                            onClick = { throw RuntimeException("Test Crash") },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        ) {
+                            Text(
+                                modifier = Modifier.wrapContentSize(),
+                                color = Color(MaterialTheme.colorScheme.secondary.toArgb()),
+                                text = "Crash",
                             )
                         }
                     }

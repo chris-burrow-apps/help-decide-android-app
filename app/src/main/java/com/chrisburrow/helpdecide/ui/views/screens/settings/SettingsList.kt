@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.views.screens
+package com.chrisburrow.helpdecide.ui.views.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -10,55 +10,39 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.chrisburrow.helpdecide.ui.ThemePreviews
-import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.utils.OptionObject
+import com.chrisburrow.helpdecide.utils.SettingsRow
 
-class OptionListTags {
+class SettingsListTags {
 
     companion object {
 
         const val ROW_VIEW = "RowView"
         const val BASE_VIEW = "BaseView"
-        const val TEXT_TAG = "TextOption"
+        const val TITLE_TAG = "TitleOption"
+        const val DESCRIPTION_TAG = "DescriptionOption"
     }
 }
 
 @Composable
-fun OptionList(
-    modifier: Modifier = Modifier,
-    options: List<OptionObject>,
-    onDeleteClicked: (OptionObject) -> Unit
+fun SettingsList(
+    options: List<SettingsRow>,
 ) {
 
-    LazyColumn(modifier = modifier.fillMaxWidth()) {
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
 
         itemsIndexed(options) { position, option ->
 
-            OptionRowView(position = position, option = option) {
-
-                onDeleteClicked(option)
-            }
+            SettingsRowView(position = position, option = option)
 
             if(position < options.size - 1) {
 
                 Spacer(
                     modifier = Modifier
-                        .height(2.dp)
+                        .height(1.dp)
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.secondary)
                 )
             }
         }
-    }
-}
-
-@ThemePreviews
-@Composable
-fun OptionTextListPreview() {
-
-    HelpDecideTheme {
-
-        OptionList(options = listOf(OptionObject(text = "Option 1"), OptionObject(text = "Option 2"))) {}
     }
 }
