@@ -22,6 +22,8 @@ class HomeRobot(private val rule: ComposeContentTestRule) {
 
     fun pressClearAll() { rule.onNodeWithTag(HomeTags.CLEAR_ALL_TAG).performClick() }
 
+    fun pressSettings() { rule.onNodeWithTag(HomeTags.SETTINGS_TAG).performClick() }
+
     fun checkNumberOfOptions(size: Int) {
 
         rule.onAllNodesWithTag(OptionListTags.BASE_VIEW).assertCountEquals(size)

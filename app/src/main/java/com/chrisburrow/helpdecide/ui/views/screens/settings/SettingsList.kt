@@ -9,30 +9,31 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
 import com.chrisburrow.helpdecide.utils.SettingsRow
 
-class SettingsListTags {
-
-    companion object {
-
-        const val ROW_VIEW = "RowView"
-        const val BASE_VIEW = "BaseView"
-        const val TITLE_TAG = "TitleOption"
-        const val DESCRIPTION_TAG = "DescriptionOption"
-    }
-}
 
 @Composable
 fun SettingsList(
     options: List<SettingsRow>,
 ) {
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+    LazyColumn(modifier = Modifier
+        .fillMaxWidth()
+        .testTag(SettingsListTags.BASE_VIEW)
+    ) {
 
         itemsIndexed(options) { position, option ->
 
-            SettingsRowView(position = position, option = option)
+            when(option) {
+
+                is SettingsBooleanRow -> {
+
+                    SettingsBooleanView(position, option)
+                }
+            }
 
             if(position < options.size - 1) {
 

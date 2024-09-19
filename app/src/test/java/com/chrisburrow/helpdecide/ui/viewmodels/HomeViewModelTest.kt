@@ -156,6 +156,20 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun showSettingsDialog() {
+
+        val homeViewModel = HomeViewModel()
+
+        assertFalse(homeViewModel.dialogs.settings)
+
+        homeViewModel.showSettingsDialog()
+        assertTrue(homeViewModel.dialogs.settings)
+
+        homeViewModel.hideSettingsDialog()
+        assertFalse(homeViewModel.dialogs.settings)
+    }
+
+    @Test
     fun speechButtonEnabled_whenDeviceCompatible() {
 
         val homeViewModel = HomeViewModel(

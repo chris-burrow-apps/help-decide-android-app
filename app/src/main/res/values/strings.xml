@@ -17,4 +17,11 @@
     <string name="go">Go</string>
     <string name="clear_all">Clear All</string>
     <string name="got_a_few_ideas_but_undecided_which_to_pick">"Got a few ideas but undecided which to pick?\nLet the app pick for you.\n\n"</string>
+
+    <string name="decision_preference">Decision preference</string>
+    <string name="decision_preference_desc">If you specified a decision type as default, the window will no longer show. This is where you can change it.</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_desc">Allowing me to see what parts of the app is used so I can improve it in future with extra features.</string>
+    <string name="crashalytics">Crashalytics</string>
+    <string name="crashalytics_desc">If the app crashes, a crash report will be auto sent to me so I can diagnose what happened.</string>
 </resources>

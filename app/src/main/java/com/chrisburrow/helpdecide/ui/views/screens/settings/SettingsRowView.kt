@@ -5,9 +5,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -17,33 +29,15 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
 import com.chrisburrow.helpdecide.utils.SettingsRow
 
-@Composable
-fun SettingsRowView(
-    position: Int,
-    option: SettingsRow,
-) {
+class SettingsListTags {
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(SettingsListTags.BASE_VIEW)
-            .background(MaterialTheme.colorScheme.surface)
-            .testTag(SettingsListTags.ROW_VIEW)
-            .padding(15.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    companion object {
 
-        when(option) {
-
-            is SettingsBooleanRow -> {
-
-                SettingsBooleanView(position, option)
-            }
-            else -> {
-
-                TitleDescriptionView(position, option)
-            }
-        }
+        const val ROW_VIEW = "RowView"
+        const val BASE_VIEW = "BaseView"
+        const val TITLE_TAG = "TitleOption"
+        const val DESCRIPTION_TAG = "DescriptionOption"
+        const val SWITCH_TAG = "SwitchOption"
     }
 }
 
@@ -68,16 +62,49 @@ private fun TitleDescriptionView(position: Int, option: SettingsRow) {
 }
 
 @Composable
-private fun SettingsBooleanView(position: Int, option: SettingsRow) {
+fun SettingsBooleanView(position: Int, option: SettingsBooleanRow) {
 
-    Column {
+    var checked by remember { mutableStateOf(option.enabled) }
 
-        TitleDescriptionView(position, option)
-    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
+            .testTag(SettingsListTags.ROW_VIEW + position)
+            .padding(15.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
 
-    Column {
+        Column(
+            modifier = Modifier.weight(0.8f)
+        ) {
 
+            TitleDescriptionView(position, option)
+        }
 
+        Column {
+
+            Switch(
+                modifier = Modifier
+                    .testTag(SettingsListTags.SWITCH_TAG + position)
+                    .weight(0.2f),
+                checked = checked,
+                onCheckedChange = {
+                    checked = it
+                    option.enabled = it
+
+                    option.toggled.invoke(it)
+                },
+                thumbContent =
+                {
+                    Icon(
+                        imageVector = if (option.enabled) Icons.Filled.Check else Icons.Filled.Clear,
+                        contentDescription = null,
+                        modifier = Modifier.size(SwitchDefaults.IconSize),
+                    )
+                }
+            )
+        }
     }
 }
 
@@ -93,6 +120,11 @@ fun SettingsTextListPreview() {
                     title = "Option 1",
                     description = "Description 1",
                     false
+                ) { },
+                SettingsBooleanRow(
+                    title = "Option 2",
+                    description = "Description 2",
+                    true
                 ) { }
             )
         )

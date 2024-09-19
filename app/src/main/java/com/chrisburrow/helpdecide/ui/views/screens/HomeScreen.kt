@@ -116,19 +116,7 @@ fun HomeScreen(
                         }
                     } else {
 
-                        Button(
-                            modifier = Modifier
-                                .testTag(HomeTags.CLEAR_ALL_TAG)
-                                .wrapContentSize(),
-                            onClick = { throw RuntimeException("Test Crash") },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                        ) {
-                            Text(
-                                modifier = Modifier.wrapContentSize(),
-                                color = Color(MaterialTheme.colorScheme.secondary.toArgb()),
-                                text = "Crash",
-                            )
-                        }
+
                     }
                 }
             )
@@ -137,8 +125,25 @@ fun HomeScreen(
             BottomAppBar(
                 actions = {
                     IconButton(
+                        modifier = Modifier
+                            .testTag(HomeTags.SETTINGS_TAG)
+                            .wrapContentSize(),
+                        onClick = {
+
+
+                        },
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.settings_icon),
+                            contentDescription = stringResource(R.string.settings))
+                    }
+
+                    IconButton(
                         modifier = Modifier.testTag(HomeTags.ADD_TEXT_TAG),
-                        onClick = { viewModel.showAddDialog() },
+                        onClick = {
+
+                            viewModel.showAddDialog()
+                        },
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.text_icon),
@@ -149,7 +154,10 @@ fun HomeScreen(
 
                         IconButton(
                             modifier = Modifier.testTag(HomeTags.ADD_VOICE_TAG),
-                            onClick = { viewModel.showVoiceDialog() },
+                            onClick = {
+
+                                viewModel.showVoiceDialog()
+                            },
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.voice_icon),
