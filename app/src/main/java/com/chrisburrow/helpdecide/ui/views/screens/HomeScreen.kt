@@ -42,12 +42,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.libraries.AnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.StorageLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
+import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialog
 import com.chrisburrow.helpdecide.ui.views.screens.options.OptionList
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToText
@@ -76,6 +80,7 @@ fun HomeScreen(
 ) {
 
     val viewModel = remember { model }
+    val storageLibrary = StorageLibrary(LocalContext.current)
 
     Scaffold(
         modifier = Modifier.testTag(HomeTags.BASE_VIEW_TAG),
@@ -130,7 +135,7 @@ fun HomeScreen(
                             .wrapContentSize(),
                         onClick = {
 
-
+                            viewModel.showSettingsDialog()
                         },
                     ) {
                         Icon(
@@ -276,6 +281,14 @@ fun HomeScreen(
                     }
                 }
             )
+        }
+
+        if(viewModel.dialogs.settings) {
+
+            SettingsDialog(SettingsViewModel(AnalyticsLibrary(storageLibrary = storageLibrary))) {
+
+                viewModel.hideSettingsDialog()
+            }
         }
     }
 }

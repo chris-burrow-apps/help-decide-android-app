@@ -18,6 +18,7 @@ open class SettingsRow (
 class SettingsBooleanRow(
     title: String,
     description: String,
-    var enabled: Boolean,
+    var enabled: Boolean = false,
+    var loading: Boolean = false,
     val toggled: (Boolean) -> Unit,
 ) : SettingsRow(title, description)

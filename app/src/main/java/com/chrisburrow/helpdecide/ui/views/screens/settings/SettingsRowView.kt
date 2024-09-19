@@ -1,14 +1,19 @@
 package com.chrisburrow.helpdecide.ui.views.screens.settings
 
+import android.widget.Spinner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -64,8 +69,6 @@ private fun TitleDescriptionView(position: Int, option: SettingsRow) {
 @Composable
 fun SettingsBooleanView(position: Int, option: SettingsBooleanRow) {
 
-    var checked by remember { mutableStateOf(option.enabled) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,28 +85,37 @@ fun SettingsBooleanView(position: Int, option: SettingsBooleanRow) {
             TitleDescriptionView(position, option)
         }
 
-        Column {
+        Column(
+            modifier = Modifier.weight(0.2f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-            Switch(
-                modifier = Modifier
-                    .testTag(SettingsListTags.SWITCH_TAG + position)
-                    .weight(0.2f),
-                checked = checked,
-                onCheckedChange = {
-                    checked = it
-                    option.enabled = it
+            if(option.loading) {
 
-                    option.toggled.invoke(it)
-                },
-                thumbContent =
-                {
-                    Icon(
-                        imageVector = if (option.enabled) Icons.Filled.Check else Icons.Filled.Clear,
-                        contentDescription = null,
-                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                    )
-                }
-            )
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.secondary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                )
+            } else {
+
+                Switch(
+                    modifier = Modifier
+                        .testTag(SettingsListTags.SWITCH_TAG + position),
+                    checked = option.enabled,
+                    onCheckedChange = {
+                        option.enabled = it
+                        option.toggled.invoke(it)
+                    },
+                    thumbContent =
+                    {
+                        Icon(
+                            imageVector = if (option.enabled) Icons.Filled.Check else Icons.Filled.Clear,
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -119,13 +131,19 @@ fun SettingsTextListPreview() {
                 SettingsBooleanRow(
                     title = "Option 1",
                     description = "Description 1",
-                    false
+                    enabled = false,
                 ) { },
                 SettingsBooleanRow(
                     title = "Option 2",
                     description = "Description 2",
-                    true
-                ) { }
+                    enabled = true
+                ) { },
+                SettingsBooleanRow(
+                    title = "Option 3",
+                    description = "Description 1",
+                    enabled = false,
+                    loading = true
+                ) { },
             )
         )
     }

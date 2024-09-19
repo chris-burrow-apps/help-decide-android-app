@@ -6,31 +6,43 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.AnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.AnalyticsLibraryInterface
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    val analyticsLibrary: AnalyticsLibrary
+    val analyticsLibrary: AnalyticsLibraryInterface
 ): ViewModel() {
 
-    var googleAnalyticsEnabled by mutableStateOf(false)
+    var googleAnalyticsLoading : Boolean by mutableStateOf(true)
         private set
 
-    var crashalyticsEnabled by mutableStateOf(false)
+    var crashalyticsLoading : Boolean by mutableStateOf(true)
         private set
 
-    init {
+    var googleAnalyticsEnabled : Boolean by mutableStateOf(false)
+        private set
+
+    var crashalyticsEnabled : Boolean by mutableStateOf(false)
+        private set
+
+    fun refreshAnalytics() {
 
         viewModelScope.launch {
 
-            analyticsLibrary.getCrashalyticsState().collect {
+            val analyticsLibraryState =
+                analyticsLibrary.getCrashalyticsState().combine(analyticsLibrary.getAnalyticsState()) { crashState, analyticsState ->
 
-                crashalyticsEnabled = it
-            }
+                    crashalyticsEnabled = crashState
+                    googleAnalyticsEnabled = analyticsState
 
-            analyticsLibrary.getAnalyticsState().collect {
+                    crashalyticsLoading = false
+                    googleAnalyticsLoading = false
+                }
 
-                googleAnalyticsEnabled = it
-            }
+            analyticsLibraryState.launchIn(this)
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialogTags
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialogTags
+import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialogTags
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsListTags
 
 class SettingsRobot(private val rule: ComposeContentTestRule) {
@@ -33,6 +34,8 @@ class SettingsRobot(private val rule: ComposeContentTestRule) {
     }
 
     fun pressToggle(position: Int) { rule.onNodeWithTag(SettingsListTags.SWITCH_TAG + position).performClick() }
+
+    fun pressDone() { rule.onNodeWithTag(SettingsDialogTags.DONE_BUTTON_TAG).performClick() }
 }
 
 fun settings(rule: ComposeContentTestRule, block: SettingsRobot.() -> Unit) = SettingsRobot(rule).apply(block)

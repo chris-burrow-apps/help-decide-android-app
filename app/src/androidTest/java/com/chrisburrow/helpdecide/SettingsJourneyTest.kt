@@ -44,9 +44,27 @@ class SettingsJourneyTest {
 
         settings(rule) {
 
-            checkText(0, "Decision preference", "If you specified a decision type as default, the window will no longer show. This is where you can change it.")
-            checkText(1, "Analytics", "Allowing me to see what parts of the app is used so I can improve it in future with extra features.")
-            checkText(2, "Crashalytics", "If the app crashes, a crash report will be auto sent to me so I can diagnose what happened.")
+            checkText(0, "Analytics", "Allowing me to see what parts of the app is used so I can improve it in future with extra features.")
+            checkText(1, "Crashalytics", "If the app crashes, a crash report will be auto sent to me so I can diagnose what happened.")
+        }
+    }
+
+    @Test
+    fun doneClosesDialog() {
+
+        home(rule) {
+
+            pressSettings()
+        }
+
+        settings(rule) {
+
+            pressDone()
+        }
+
+        home(rule) {
+
+            // Closes menu and goes back to home
         }
     }
 }
