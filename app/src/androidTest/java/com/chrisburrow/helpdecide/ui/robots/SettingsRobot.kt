@@ -25,12 +25,14 @@ class SettingsRobot(private val rule: ComposeContentTestRule) {
         rule.onNodeWithTag(SettingsListTags.DESCRIPTION_TAG + position).assertTextEquals(desc)
     }
 
-    fun checkToggle(position: Int, toggle: Boolean) {
+    fun checkToggleOn(position: Int) {
 
-        if(toggle)
-            rule.onNodeWithTag(SettingsListTags.SWITCH_TAG + position).assertIsOn()
-        else
-            rule.onNodeWithTag(SettingsListTags.SWITCH_TAG + position).assertIsOff()
+        rule.onNodeWithTag(SettingsListTags.SWITCH_TAG + position).assertIsOn()
+    }
+
+    fun checkToggleOff(position: Int) {
+
+        rule.onNodeWithTag(SettingsListTags.SWITCH_TAG + position).assertIsOff()
     }
 
     fun pressToggle(position: Int) { rule.onNodeWithTag(SettingsListTags.SWITCH_TAG + position).performClick() }

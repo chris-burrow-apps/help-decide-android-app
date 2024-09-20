@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.chrisburrow.helpdecide.ui.libraries.StorageLibrary
 import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 
@@ -18,6 +20,8 @@ class DecideActivity : ComponentActivity() {
 
         setContent {
 
+            val storageLibrary = StorageLibrary(LocalContext.current)
+
             HelpDecideTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -25,7 +29,7 @@ class DecideActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.surface
                 ) {
 
-                    HomeScreen()
+                    HomeScreen(storageLibrary)
                 }
             }
         }

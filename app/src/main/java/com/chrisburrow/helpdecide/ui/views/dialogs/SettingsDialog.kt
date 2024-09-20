@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -77,7 +78,7 @@ fun SettingsDialog(
     ) {
 
         Surface(
-            modifier = Modifier.testTag(AddDialogTags.BASE_VIEW_TAG),
+            modifier = Modifier.testTag(SettingsDialogTags.BASE_VIEW_TAG),
             shape = RoundedCornerShape(8.dp),
         ) {
             Column(
@@ -113,7 +114,8 @@ fun SettingsDialog(
                         viewModel.toggleCrashalytics(toggled)
                     }
                 ))
-                TextButton(
+                Spacer(modifier = Modifier.height(16.dp))
+                ElevatedButton(
                     modifier = Modifier
                         .testTag(SettingsDialogTags.DONE_BUTTON_TAG),
                     onClick = { onDismissRequested() },

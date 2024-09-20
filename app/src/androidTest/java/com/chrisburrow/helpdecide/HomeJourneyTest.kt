@@ -1,8 +1,11 @@
 package com.chrisburrow.helpdecide
 
 import android.os.SystemClock
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.chrisburrow.helpdecide.ui.libraries.StorageLibrary
+import com.chrisburrow.helpdecide.ui.mock.MockStorage
 import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
@@ -28,7 +31,7 @@ class HomeJourneyTest {
 
             HelpDecideTheme {
 
-                HomeScreen()
+                HomeScreen(MockStorage())
             }
         }
     }

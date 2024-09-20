@@ -1,30 +1,21 @@
 package com.chrisburrow.helpdecide.ui.views.screens.settings
 
-import android.widget.Spinner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -43,6 +34,7 @@ class SettingsListTags {
         const val TITLE_TAG = "TitleOption"
         const val DESCRIPTION_TAG = "DescriptionOption"
         const val SWITCH_TAG = "SwitchOption"
+        const val LOADING_TAG = "LoadingView"
     }
 }
 
@@ -93,14 +85,14 @@ fun SettingsBooleanView(position: Int, option: SettingsBooleanRow) {
             if(option.loading) {
 
                 CircularProgressIndicator(
+                    modifier = Modifier.testTag(SettingsListTags.LOADING_TAG + position),
                     color = MaterialTheme.colorScheme.secondary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             } else {
 
                 Switch(
-                    modifier = Modifier
-                        .testTag(SettingsListTags.SWITCH_TAG + position),
+                    modifier = Modifier.testTag(SettingsListTags.SWITCH_TAG + position),
                     checked = option.enabled,
                     onCheckedChange = {
                         option.enabled = it

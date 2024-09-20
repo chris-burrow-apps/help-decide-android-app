@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -73,7 +74,7 @@ fun DecisionDialog(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row {
-                    TextButton(
+                    ElevatedButton(
                         modifier = Modifier
                             .testTag(DecisionDialogTags.CLEAR_BUTTON_TAG)
                             .weight(1.0f),
@@ -83,7 +84,7 @@ fun DecisionDialog(
                         Text(text = stringResource(R.string.clear))
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    TextButton(
+                    ElevatedButton(
                         modifier = Modifier
                             .testTag(DecisionDialogTags.DONE_BUTTON_TAG)
                             .weight(1.0f),

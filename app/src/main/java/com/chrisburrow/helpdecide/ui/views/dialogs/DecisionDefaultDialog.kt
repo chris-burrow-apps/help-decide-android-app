@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -139,41 +140,7 @@ fun DecisionDefaultDialog(
                         }
                     }
 
-
-//                LazyColumn(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .wrapContentSize()
-//                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-//                        .align(Alignment.CenterHorizontally)
-//                ) {
-//
-//
-//                    items(options.size) { position ->
-//
-//                        FilterChip(
-//                            modifier = Modifier
-//                                .testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
-//                            label = {
-//                                Text(
-//                                    color = Color.DarkGray,
-//                                    text = options[position]
-//                                )
-//                            },
-//                            leadingIcon = {
-//                                Icon(
-//                                    imageVector = Icons.Outlined.LocationOn,
-//                                    modifier = Modifier.size(FilterChipDefaults.IconSize),
-//                                    contentDescription = ""
-//                                )
-//                            },
-//                            onClick = { selectedPosition = position },
-//                            selected = selectedPosition == position
-//                        )
-//                    }
-//                }
-
-                TextButton(
+                ElevatedButton(
                     modifier = Modifier
                         .testTag(DecisionDefaultDialogTags.GO_BUTTON_TAG)
                         .align(Alignment.CenterHorizontally)

@@ -44,6 +44,7 @@ import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.AnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.StorageLibrary
+import com.chrisburrow.helpdecide.ui.libraries.StorageLibraryInterface
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
@@ -74,13 +75,13 @@ class HomeTags {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    storage: StorageLibraryInterface,
     model: HomeViewModel = HomeViewModel(
         isSpeechCompatible = SpeechToTextToTextRequest(LocalContext.current).isSpeechCompatible()
     )
 ) {
 
     val viewModel = remember { model }
-    val storageLibrary = StorageLibrary(LocalContext.current)
 
     Scaffold(
         modifier = Modifier.testTag(HomeTags.BASE_VIEW_TAG),
@@ -285,7 +286,7 @@ fun HomeScreen(
 
         if(viewModel.dialogs.settings) {
 
-            SettingsDialog(SettingsViewModel(AnalyticsLibrary(storageLibrary = storageLibrary))) {
+            SettingsDialog(SettingsViewModel(AnalyticsLibrary(storageLibrary = storage))) {
 
                 viewModel.hideSettingsDialog()
             }
@@ -362,6 +363,6 @@ fun HomeScreenPreview() {
 
     HelpDecideTheme {
 
-        HomeScreen(HomeViewModel(isSpeechCompatible = true))
+        HomeScreen(StorageLibrary(LocalContext.current), HomeViewModel(isSpeechCompatible = true))
     }
 }

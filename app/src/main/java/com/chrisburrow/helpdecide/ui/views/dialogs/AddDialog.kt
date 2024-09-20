@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -111,7 +112,7 @@ fun AddOptionDialog(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row {
-                    TextButton(
+                    ElevatedButton(
                         modifier = Modifier
                             .testTag(AddDialogTags.CANCEL_BUTTON_TAG)
                             .weight(1.0f),
@@ -121,7 +122,7 @@ fun AddOptionDialog(
                         Text(stringResource(R.string.cancel))
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    TextButton(
+                    ElevatedButton(
                         modifier = Modifier
                             .testTag(AddDialogTags.SAVE_BUTTON_TAG)
                             .weight(1.0f),
