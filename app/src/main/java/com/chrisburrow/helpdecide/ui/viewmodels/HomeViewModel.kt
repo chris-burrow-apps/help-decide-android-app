@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.utils.OptionObject
 
 data class HomeViewState(
@@ -25,9 +26,10 @@ data class HomeDialogState(
 )
 
 class HomeViewModel(
+    analyticsLibrary: AnalyticsLibraryInterface,
     isSpeechCompatible: Boolean = false,
     initialOptions: List<OptionObject> = listOf(),
-): ViewModel() {
+): AnalyticsViewModel(analyticsLibrary) {
 
     var view by mutableStateOf(HomeViewState(voiceButton = isSpeechCompatible, options = initialOptions))
         private set

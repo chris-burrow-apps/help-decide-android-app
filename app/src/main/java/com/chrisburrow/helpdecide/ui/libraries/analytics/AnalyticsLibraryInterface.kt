@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.libraries
+package com.chrisburrow.helpdecide.ui.libraries.analytics
 
 import kotlinx.coroutines.flow.Flow
 
@@ -9,4 +9,7 @@ interface AnalyticsLibraryInterface {
 
     suspend fun setCrashalyticsState(enabled: Boolean)
     suspend fun setAnalyticsState(enabled: Boolean)
+
+    fun logScreenView(screenName: String)
+    fun logButtonPressed(buttonText: String)
 }

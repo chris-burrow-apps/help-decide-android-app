@@ -5,16 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chrisburrow.helpdecide.ui.libraries.AnalyticsLibrary
-import com.chrisburrow.helpdecide.ui.libraries.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface
-): ViewModel() {
+): AnalyticsViewModel(analyticsLibrary) {
 
     var googleAnalyticsLoading : Boolean by mutableStateOf(true)
         private set

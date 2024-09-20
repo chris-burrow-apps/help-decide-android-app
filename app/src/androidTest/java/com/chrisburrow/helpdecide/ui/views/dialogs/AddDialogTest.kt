@@ -1,10 +1,13 @@
-package com.chrisburrow.helpdecide.ui
+package com.chrisburrow.helpdecide.ui.views.dialogs
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
+import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Rule
@@ -24,7 +27,7 @@ class AddDialogTest {
 
             HelpDecideTheme {
 
-                AddOptionDialog()
+                AddOptionDialog(model = AddOptionViewModel(MockAnalyticsLibrary()))
             }
         }
 
@@ -57,7 +60,10 @@ class AddDialogTest {
 
             HelpDecideTheme {
 
-                AddOptionDialog(optionSaved = { returnedString = it })
+                AddOptionDialog(
+                    model = AddOptionViewModel(MockAnalyticsLibrary()),
+                    optionSaved = { returnedString = it }
+                )
             }
         }
 
@@ -82,7 +88,10 @@ class AddDialogTest {
 
             HelpDecideTheme {
 
-                AddOptionDialog(optionCancelled = { cancelledCalled = true })
+                AddOptionDialog(
+                    model = AddOptionViewModel(MockAnalyticsLibrary()),
+                    optionCancelled = { cancelledCalled = true }
+                )
             }
         }
 
@@ -107,7 +116,10 @@ class AddDialogTest {
 
             HelpDecideTheme {
 
-                AddOptionDialog(optionSaved = { returnedString = it })
+                AddOptionDialog(
+                    model = AddOptionViewModel(MockAnalyticsLibrary()),
+                    optionSaved = { returnedString = it }
+                )
             }
         }
 
@@ -122,5 +134,38 @@ class AddDialogTest {
         }
 
         assertEquals(expectedTextInput, returnedString)
+    }
+
+    @Test
+    fun analyticsLogged() {
+
+        val analyticsLibrary = MockAnalyticsLibrary()
+
+        rule.setContent {
+
+            HelpDecideTheme {
+
+                AddOptionDialog(
+                    model = AddOptionViewModel(analyticsLibrary),
+                    optionSaved = { }
+                )
+            }
+        }
+
+        addDialog(rule) {
+
+            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.AddText))
+
+            typeText("Option 1")
+
+            pressSave()
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Save))
+
+            pressClear()
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Clear))
+
+            pressCancel()
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Cancel))
+        }
     }
 }

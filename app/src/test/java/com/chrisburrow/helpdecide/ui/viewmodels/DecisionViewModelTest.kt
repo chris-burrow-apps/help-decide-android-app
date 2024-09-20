@@ -1,5 +1,6 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.RandomNumberInterface
 import junit.framework.TestCase.assertEquals
@@ -16,6 +17,7 @@ class DecisionViewModelTest {
         val randomGenerator = MockRandomGenerator()
 
         val decisionViewModel = DecisionViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
             randomGenerator = randomGenerator,
             options = options,
         )
@@ -33,6 +35,7 @@ class DecisionViewModelTest {
 
         val randomGenerator = MockRandomGenerator()
         val decisionViewModel = DecisionViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
             randomGenerator = randomGenerator,
             options = options,
         )
@@ -51,6 +54,7 @@ class DecisionViewModelTest {
 
         val randomGenerator = MockRandomGenerator()
         val decisionViewModel = DecisionViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
             randomGenerator = randomGenerator,
             options = options,
         )

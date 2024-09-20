@@ -23,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,10 +43,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
-import com.chrisburrow.helpdecide.ui.libraries.AnalyticsLibrary
-import com.chrisburrow.helpdecide.ui.libraries.StorageLibrary
-import com.chrisburrow.helpdecide.ui.libraries.StorageLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibrary
+import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryInterface
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
+import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
@@ -75,9 +83,10 @@ class HomeTags {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    storage: StorageLibraryInterface,
+    analyticsLibrary: AnalyticsLibraryInterface,
     model: HomeViewModel = HomeViewModel(
-        isSpeechCompatible = SpeechToTextToTextRequest(LocalContext.current).isSpeechCompatible()
+        analyticsLibrary,
+        isSpeechCompatible = false
     )
 ) {
 
@@ -111,7 +120,10 @@ fun HomeScreen(
                             modifier = Modifier
                                 .testTag(HomeTags.CLEAR_ALL_TAG)
                                 .wrapContentSize(),
-                            onClick = { viewModel.clearOptions() },
+                            onClick = {
+                                viewModel.logButtonPressed(AnalyticsActions.Clear)
+                                viewModel.clearOptions()
+                                      },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         ) {
                             Text(
@@ -120,9 +132,6 @@ fun HomeScreen(
                                 text = stringResource(R.string.clear_all),
                             )
                         }
-                    } else {
-
-
                     }
                 }
             )
@@ -161,7 +170,7 @@ fun HomeScreen(
                         IconButton(
                             modifier = Modifier.testTag(HomeTags.ADD_VOICE_TAG),
                             onClick = {
-
+                                viewModel.logButtonPressed(AnalyticsActions.Voice)
                                 viewModel.showVoiceDialog()
                             },
                         ) {
@@ -181,6 +190,7 @@ fun HomeScreen(
                         shape = CircleShape,
                         onClick = {
 
+                            viewModel.logButtonPressed(AnalyticsActions.Decide)
                             viewModel.showDefaultDialog()
                         },
                     ){
@@ -209,6 +219,7 @@ fun HomeScreen(
         if(viewModel.dialogs.addOption) {
 
             AddOptionDialog(
+                model = AddOptionViewModel(analyticsLibrary),
                 optionSaved = {
 
                     viewModel.hideAddDialog()
@@ -236,7 +247,10 @@ fun HomeScreen(
         if(viewModel.dialogs.showOption) {
 
             DecisionDialog(
-                options = viewModel.view.options,
+                DecisionViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    options = viewModel.view.options
+                ),
                 clearPressed = {
 
                     viewModel.hideDecisionDialog()
@@ -252,7 +266,10 @@ fun HomeScreen(
         if(viewModel.dialogs.showWheelOption) {
 
             DecideWheelDialog(
-                options = viewModel.view.options,
+                DecideWheelViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    options = viewModel.view.options
+                ),
                 clearPressed = {
 
                     viewModel.hideWheelDecisionDialog()
@@ -268,6 +285,7 @@ fun HomeScreen(
         if(viewModel.dialogs.defaultChoice) {
 
             DecisionDefaultDialog(
+                analyticsLibrary = analyticsLibrary,
                 previouslySelected = 0,
                 selected = { position ->
 
@@ -286,21 +304,23 @@ fun HomeScreen(
 
         if(viewModel.dialogs.settings) {
 
-            SettingsDialog(SettingsViewModel(AnalyticsLibrary(storageLibrary = storage))) {
+            SettingsDialog(model = SettingsViewModel(analyticsLibrary)) {
 
                 viewModel.hideSettingsDialog()
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+
+        viewModel.logScreenView(AnalyticsScreens.Home)
     }
 }
 
 @Composable
 fun EmptyHomeInstructions(modifier: Modifier) {
 
-    Surface(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
+    Surface(modifier = modifier.fillMaxSize()) {
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -363,6 +383,7 @@ fun HomeScreenPreview() {
 
     HelpDecideTheme {
 
-        HomeScreen(StorageLibrary(LocalContext.current), HomeViewModel(isSpeechCompatible = true))
+        val analyticsLibrary = MockAnalyticsLibrary()
+        HomeScreen(analyticsLibrary = MockAnalyticsLibrary(), HomeViewModel(analyticsLibrary, isSpeechCompatible = true))
     }
 }

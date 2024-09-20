@@ -14,6 +14,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +25,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
 import com.chrisburrow.helpdecide.ui.views.DecideSpinWheel
@@ -41,8 +46,7 @@ class DecideWheelDialogTags {
 }
 @Composable
 fun DecideWheelDialog(
-    options: List<OptionObject>,
-    model: DecideWheelViewModel = DecideWheelViewModel(options),
+    model: DecideWheelViewModel,
     dismissPressed: () -> Unit,
     clearPressed: () -> Unit
 ) {
@@ -90,7 +94,10 @@ fun DecideWheelDialog(
                         modifier = Modifier
                             .testTag(DecideWheelDialogTags.CLEAR_BUTTON_TAG)
                             .weight(1.0f),
-                        onClick = { clearPressed() },
+                        onClick = {
+                            viewModel.logButtonPressed(AnalyticsActions.Clear)
+                            clearPressed()
+                                  },
                     ) {
 
                         Text(text = stringResource(R.string.clear))
@@ -100,7 +107,10 @@ fun DecideWheelDialog(
                         modifier = Modifier
                             .testTag(DecideWheelDialogTags.DONE_BUTTON_TAG)
                             .weight(1.0f),
-                        onClick = { dismissPressed() },
+                        onClick = {
+                            viewModel.logButtonPressed(AnalyticsActions.Done)
+                            dismissPressed()
+                                  },
                     ) {
 
                         Text(stringResource(R.string.done))
@@ -108,6 +118,11 @@ fun DecideWheelDialog(
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+
+        viewModel.logScreenView(AnalyticsScreens.Wheel)
     }
 }
 
@@ -118,10 +133,10 @@ fun DecideSpinWheelPreview() {
     HelpDecideTheme {
 
         DecideWheelDialog(
-            options = listOf(
+            DecideWheelViewModel(MockAnalyticsLibrary(), listOf(
                 OptionObject(text = "Option 1"),
                 OptionObject(text = "Option 2")
-            ),
+            )),
             dismissPressed = {},
             clearPressed = {},
         )

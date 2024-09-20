@@ -3,9 +3,12 @@ package com.chrisburrow.helpdecide.ui.viewmodels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 
-class AddOptionViewModel(initialText: String = ""): ViewModel() {
+class AddOptionViewModel(
+    analyticsLibrary: AnalyticsLibraryInterface,
+    initialText: String = ""
+): AnalyticsViewModel(analyticsLibrary) {
 
     var optionText by mutableStateOf(initialText)
         private set

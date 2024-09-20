@@ -24,10 +24,14 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.RandomGenerator
+import com.chrisburrow.helpdecide.utils.RandomStringGenerator
 
 class DecisionDialogTags {
 
@@ -42,8 +46,7 @@ class DecisionDialogTags {
 
 @Composable
 fun DecisionDialog(
-    options: List<OptionObject>,
-    model: DecisionViewModel = DecisionViewModel(randomGenerator = RandomGenerator(), options = options),
+    model: DecisionViewModel,
     donePressed: () -> Unit = {},
     clearPressed: () -> Unit = {}
 ) {
@@ -78,7 +81,10 @@ fun DecisionDialog(
                         modifier = Modifier
                             .testTag(DecisionDialogTags.CLEAR_BUTTON_TAG)
                             .weight(1.0f),
-                        onClick = { clearPressed() },
+                        onClick = {
+                            viewModel.logButtonPressed(AnalyticsActions.Clear)
+                            clearPressed()
+                                  },
                     ) {
 
                         Text(text = stringResource(R.string.clear))
@@ -88,7 +94,10 @@ fun DecisionDialog(
                         modifier = Modifier
                             .testTag(DecisionDialogTags.DONE_BUTTON_TAG)
                             .weight(1.0f),
-                        onClick = { donePressed() },
+                        onClick = {
+                            viewModel.logButtonPressed(AnalyticsActions.Done)
+                            donePressed()
+                                  },
                     ) {
 
                         Text(stringResource(R.string.done))
@@ -101,6 +110,7 @@ fun DecisionDialog(
 
     LaunchedEffect(Unit) {
 
+        viewModel.logScreenView(AnalyticsScreens.Instant)
         viewModel.chooseOption()
     }
 }
@@ -111,6 +121,14 @@ fun DecisionDialogPreview() {
 
     HelpDecideTheme {
 
-        DecisionDialog(listOf(OptionObject(text = "Option")), clearPressed = {}, donePressed = {})
+        DecisionDialog(
+            DecisionViewModel(
+                MockAnalyticsLibrary(),
+                RandomGenerator(),
+                listOf(OptionObject(text = "Option"))
+            ),
+            clearPressed = {},
+            donePressed = {}
+        )
     }
 }

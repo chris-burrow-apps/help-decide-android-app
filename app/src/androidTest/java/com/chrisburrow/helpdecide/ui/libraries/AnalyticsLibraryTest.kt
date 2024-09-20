@@ -1,6 +1,9 @@
 package com.chrisburrow.helpdecide.ui.libraries
 
-import com.chrisburrow.helpdecide.ui.mock.MockStorage
+import androidx.test.platform.app.InstrumentationRegistry
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.storage.MockStorage
+import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryKeys
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +21,11 @@ class AnalyticsLibraryTest {
     fun setUp() {
 
         fakeStorage = MockStorage()
-        analyticsLibrary = AnalyticsLibrary(true, fakeStorage)
+        analyticsLibrary = AnalyticsLibrary(
+            context = InstrumentationRegistry.getInstrumentation().context,
+            debug = true,
+            storageLibrary = fakeStorage
+        )
     }
 
     @Test

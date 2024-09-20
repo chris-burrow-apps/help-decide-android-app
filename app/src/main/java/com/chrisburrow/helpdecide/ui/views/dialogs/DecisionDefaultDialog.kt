@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 
 class DecisionDefaultDialogTags {
 
@@ -59,6 +65,7 @@ class DecisionDefaultDialogTags {
 }
 @Composable
 fun DecisionDefaultDialog(
+    analyticsLibrary: AnalyticsLibraryInterface,
     options: List<String> = listOf(
         stringResource(R.string.spin_the_wheel),
         stringResource(R.string.instant_decision),
@@ -145,7 +152,10 @@ fun DecisionDefaultDialog(
                         .testTag(DecisionDefaultDialogTags.GO_BUTTON_TAG)
                         .align(Alignment.CenterHorizontally)
                         .padding(8.dp),
-                    onClick = { selected(selectedPosition) },
+                    onClick = {
+                        analyticsLibrary.logButtonPressed(AnalyticsActions.Done)
+                        selected(selectedPosition)
+                              },
                 ) {
 
                     Text(
@@ -156,6 +166,11 @@ fun DecisionDefaultDialog(
             }
         }
     }
+
+    LaunchedEffect(Unit) {
+
+        analyticsLibrary.logScreenView(AnalyticsScreens.DecisionType)
+    }
 }
 
 @ThemePreviews
@@ -163,6 +178,7 @@ fun DecisionDefaultDialog(
 fun DecisionDefaultBottomSheetPreview() {
 
     DecisionDefaultDialog(
+        analyticsLibrary = MockAnalyticsLibrary(),
         previouslySelected = 0,
         selected = {})
 }

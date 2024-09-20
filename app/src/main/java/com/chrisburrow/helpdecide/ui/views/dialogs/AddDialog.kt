@@ -17,7 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +34,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 
@@ -52,7 +55,7 @@ class AddDialogTags {
 
 @Composable
 fun AddOptionDialog(
-    model: AddOptionViewModel = AddOptionViewModel(),
+    model: AddOptionViewModel,
     optionSaved: (String) -> Unit = {},
     optionCancelled: () -> Unit = {}
 ) {
@@ -91,7 +94,7 @@ fun AddOptionDialog(
                             modifier = Modifier.testTag(AddDialogTags.CLEAR_BUTTON_TAG),
                             enabled = viewModel.clearEnabled,
                             onClick = {
-
+                                viewModel.logButtonPressed(AnalyticsActions.Clear)
                                 viewModel.onTextCleared()
                             },
                         ) {
@@ -116,7 +119,10 @@ fun AddOptionDialog(
                         modifier = Modifier
                             .testTag(AddDialogTags.CANCEL_BUTTON_TAG)
                             .weight(1.0f),
-                        onClick = { optionCancelled() },
+                        onClick = {
+                            viewModel.logButtonPressed(AnalyticsActions.Cancel)
+                            optionCancelled()
+                                  },
                     ) {
 
                         Text(stringResource(R.string.cancel))
@@ -127,7 +133,10 @@ fun AddOptionDialog(
                             .testTag(AddDialogTags.SAVE_BUTTON_TAG)
                             .weight(1.0f),
                         enabled = viewModel.saveEnabled,
-                        onClick = { optionSaved(viewModel.optionText) },
+                        onClick = {
+                            viewModel.logButtonPressed(AnalyticsActions.Save)
+                            optionSaved(viewModel.optionText)
+                                  },
                     ) {
 
                         Text(text = stringResource(R.string.save))
@@ -138,6 +147,7 @@ fun AddOptionDialog(
 
         LaunchedEffect(Unit) {
 
+            viewModel.logScreenView(AnalyticsScreens.AddText)
             focusRequester.requestFocus()
         }
     }
@@ -149,6 +159,10 @@ fun AddDialogPreview() {
 
     HelpDecideTheme {
 
-        AddOptionDialog(optionSaved = {}, optionCancelled = {})
+        AddOptionDialog(
+            model = AddOptionViewModel(MockAnalyticsLibrary()),
+            optionSaved = {},
+            optionCancelled = {}
+        )
     }
 }
