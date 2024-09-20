@@ -61,23 +61,4 @@ class MockStorage(
             return keyCalledWithDefaultBoolean[key] == value
         }
 
-        fun didStoreStringCalled(key: String) : Boolean {
-
-            return stringValues.contains(key)
-        }
-
-        fun didStoreBooleanCalled(key: String) : Boolean {
-
-            return booleanValues.contains(key)
-        }
-
-        fun didStoreStringCalledWithValue(key: String, value: String) : Boolean {
-
-            return stringValues[key].equals(value)
-        }
-
-        fun didStoreBooleanCalledWithValue(key: String, value: Boolean) : Boolean {
-
-            return booleanValues[key] == value
-        }
-    }
+}
