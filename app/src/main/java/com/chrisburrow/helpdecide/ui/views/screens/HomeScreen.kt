@@ -314,6 +314,8 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
 
         viewModel.logScreenView(AnalyticsScreens.Home)
+
+        viewModel.checkSettingsShown()
     }
 }
 

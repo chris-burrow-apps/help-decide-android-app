@@ -63,4 +63,12 @@ class SettingsViewModel(
             analyticsLibrary.setCrashalyticsState(toggled)
         }
     }
+
+    fun settingsShown() {
+
+        viewModelScope.launch {
+
+            analyticsLibrary.settingsShown()
+        }
+    }
 }

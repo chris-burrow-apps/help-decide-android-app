@@ -4,8 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.utils.OptionObject
+import kotlinx.coroutines.launch
 
 data class HomeViewState(
     val voiceButton: Boolean = false,
@@ -26,7 +28,7 @@ data class HomeDialogState(
 )
 
 class HomeViewModel(
-    analyticsLibrary: AnalyticsLibraryInterface,
+    val analyticsLibrary: AnalyticsLibraryInterface,
     isSpeechCompatible: Boolean = false,
     initialOptions: List<OptionObject> = listOf(),
 ): AnalyticsViewModel(analyticsLibrary) {
@@ -138,5 +140,19 @@ class HomeViewModel(
     fun hideSettingsDialog() {
 
         dialogs = dialogs.copy(settings = false)
+    }
+
+    fun checkSettingsShown() {
+
+        viewModelScope.launch {
+
+            analyticsLibrary.checkSettingsShown().collect { shown ->
+
+                if(!shown) {
+
+                    showSettingsDialog()
+                }
+            }
+        }
     }
 }

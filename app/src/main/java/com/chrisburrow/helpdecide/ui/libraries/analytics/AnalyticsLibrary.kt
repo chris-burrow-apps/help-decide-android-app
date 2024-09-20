@@ -37,6 +37,16 @@ class AnalyticsLibrary(
     private val storageLibrary: StorageLibraryInterface
 ) : AnalyticsLibraryInterface {
 
+    override suspend fun checkSettingsShown(): Flow<Boolean> {
+
+        return storageLibrary.getBoolean(StorageLibraryKeys.SettingsShown)
+    }
+
+    override suspend fun settingsShown() {
+
+        storageLibrary.storeBoolean(StorageLibraryKeys.SettingsShown, true)
+    }
+
     override suspend fun getCrashalyticsState(): Flow<Boolean> {
 
         return storageLibrary.getBoolean(StorageLibraryKeys.CrashalyicsEnabled)
@@ -76,6 +86,8 @@ class AnalyticsLibrary(
             }
         }
     }
+
+
 
     override fun logScreenView(screenName: String) {
 

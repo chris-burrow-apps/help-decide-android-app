@@ -10,6 +10,9 @@ interface AnalyticsLibraryInterface {
     suspend fun setCrashalyticsState(enabled: Boolean)
     suspend fun setAnalyticsState(enabled: Boolean)
 
+    suspend fun checkSettingsShown(): Flow<Boolean>
+    suspend fun settingsShown()
+
     fun logScreenView(screenName: String)
     fun logButtonPressed(buttonText: String)
 }

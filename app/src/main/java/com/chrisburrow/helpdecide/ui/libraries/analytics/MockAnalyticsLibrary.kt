@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class MockAnalyticsLibrary(
+    var settingsShown: Boolean = true,
     var analyticsState: Boolean = false,
     var crashayticsState: Boolean = false,
 ) : AnalyticsLibraryInterface {
@@ -53,6 +54,16 @@ class MockAnalyticsLibrary(
     override fun logButtonPressed(buttonText: String) {
 
         analyticsButtonsPressed.add(buttonText)
+    }
+
+    override suspend fun checkSettingsShown(): Flow<Boolean> {
+
+        return flow { emit(settingsShown) }
+    }
+
+    override suspend fun settingsShown() {
+
+        settingsShown = true
     }
 
     fun logScreenCalledWith(screenName: String) : Boolean {

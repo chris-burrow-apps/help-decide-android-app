@@ -17,7 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.chrisburrow.helpdecide.R
@@ -69,17 +72,19 @@ fun SettingsDialog(
             shape = RoundedCornerShape(8.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
                     modifier = Modifier.testTag(SettingsDialogTags.TITLE_VIEW_TAG),
-                    text = stringResource(id = R.string.settings)
+                    text = stringResource(id = R.string.settings),
+                    fontSize = 35.sp,
+                    fontFamily = FontFamily.Cursive,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
                 SettingsList(options = listOf(
 
                     SettingsBooleanRow(
@@ -113,6 +118,7 @@ fun SettingsDialog(
 
                     Text(stringResource(R.string.done))
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
@@ -120,6 +126,7 @@ fun SettingsDialog(
     LaunchedEffect(Unit) {
 
         viewModel.logScreenView(AnalyticsScreens.Settings)
+        viewModel.settingsShown()
         viewModel.refreshAnalytics()
     }
 }

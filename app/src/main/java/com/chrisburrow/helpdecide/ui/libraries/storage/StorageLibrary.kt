@@ -15,6 +15,7 @@ object StorageLibraryKeys {
     val CrashalyicsEnabled = "crashalyics_enabled"
     val AnalyticsEnabled = "analytics_enabled"
     val decisionPreference = "decision_preference"
+    val SettingsShown = "settings_shown"
 }
 
 interface StorageLibraryInterface {
