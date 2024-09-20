@@ -153,7 +153,7 @@ fun DecisionDefaultDialog(
                         .align(Alignment.CenterHorizontally)
                         .padding(8.dp),
                     onClick = {
-                        analyticsLibrary.logButtonPressed(AnalyticsActions.Done)
+                        analyticsLibrary.logButtonPressed(AnalyticsActions.Go)
                         selected(selectedPosition)
                               },
                 ) {
