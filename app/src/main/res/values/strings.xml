@@ -25,4 +25,6 @@
     <string name="analytics_desc">Permission to allow the developer to see what is used in the app. This makes it easier in future to know what extra features can be made depending upon features currently used.</string>
     <string name="crashalytics">Crashalytics</string>
     <string name="crashalytics_desc">If the app crashes, a crash report will be auto sent so the developer can diagnose what happened.</string>
+    <string name="confirm_delete_desc">Are you sure you want to delete all options?\n\nTip: To remove one option, swipe the option you would like to remove</string>
+    <string name="delete_all_button">Delete All</string>
 </resources>

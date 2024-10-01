@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.utils.OptionObject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,7 +82,6 @@ fun OptionTextView(position: Int, option: OptionObject) {
 
         Text(
             modifier = Modifier
-                .testTag("${OptionListTags.TEXT_TAG}$position")
                 .fillMaxWidth()
                 .padding(15.dp)
                 .weight(1.0f),
@@ -114,5 +116,15 @@ fun DismissBackground(dismissState: SwipeToDismissBoxState) {
             Icons.Default.Delete,
             contentDescription = "delete"
         )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun OptionTextListPreview() {
+
+    HelpDecideTheme {
+
+        OptionList(modifier = Modifier, options = listOf(OptionObject(text = "Option 1"), OptionObject(text = "Option 2"))) {}
     }
 }

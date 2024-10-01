@@ -25,6 +25,7 @@ data class HomeDialogState(
     val showWheelOption: Boolean = false,
     val defaultChoice: Boolean = false,
     val settings: Boolean = false,
+    val deleteAll: Boolean = false,
 )
 
 class HomeViewModel(
@@ -140,6 +141,16 @@ class HomeViewModel(
     fun hideSettingsDialog() {
 
         dialogs = dialogs.copy(settings = false)
+    }
+
+    fun showDeleteAllDialog() {
+
+        dialogs = dialogs.copy(deleteAll = true)
+    }
+
+    fun hideDeleteAllDialog() {
+
+        dialogs = dialogs.copy(deleteAll = false)
     }
 
     fun checkSettingsShown() {

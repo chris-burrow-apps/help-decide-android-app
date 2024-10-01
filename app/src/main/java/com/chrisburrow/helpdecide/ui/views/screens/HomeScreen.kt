@@ -54,12 +54,15 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogConfig
+import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
+import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialog
 import com.chrisburrow.helpdecide.ui.views.screens.options.OptionList
 import com.chrisburrow.helpdecide.utils.OptionObject
@@ -121,9 +124,10 @@ fun HomeScreen(
                                 .testTag(HomeTags.CLEAR_ALL_TAG)
                                 .wrapContentSize(),
                             onClick = {
+
                                 viewModel.logButtonPressed(AnalyticsActions.Clear)
-                                viewModel.clearOptions()
-                                      },
+                                viewModel.showDeleteAllDialog()
+                            },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         ) {
                             Text(
@@ -299,6 +303,28 @@ fun HomeScreen(
                         viewModel.showDecisionDialog()
                     }
                 }
+            )
+        }
+
+        if(viewModel.dialogs.deleteAll) {
+
+            GeneralDialog(
+                viewModel = GeneralDialogViewModel(
+                    configuration = GeneralDialogConfig(
+                        screenName = AnalyticsScreens.RemoveAll,
+                        description = stringResource(id = R.string.confirm_delete_desc),
+                        confirmText = stringResource(id = R.string.delete_all_button),
+                        confirmPressed = {
+                            viewModel.clearOptions()
+                            viewModel.hideDeleteAllDialog()
+                        },
+                        cancelText = stringResource(id = R.string.cancel),
+                        cancelPressed = {
+                            viewModel.hideDeleteAllDialog()
+                        },
+                    ),
+                    analyticsLibrary = analyticsLibrary,
+                )
             )
         }
 

@@ -1,6 +1,7 @@
 package com.chrisburrow.helpdecide
 
 import android.os.SystemClock
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
@@ -8,6 +9,7 @@ import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
+import com.chrisburrow.helpdecide.ui.robots.generalDialog
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
@@ -140,8 +142,16 @@ class HomeJourneyTest {
             }
 
             checkClearAllShown()
-
             pressClearAll()
+
+            generalDialog(rule) {
+
+                checkDescription("Are you sure you want to delete all options?\n\nTip: To remove one option, swipe the option you would like to remove")
+                checkConfirm("Delete All")
+                checkCancel("Cancel")
+
+                pressConfirm()
+            }
 
             checkNumberOfOptions(0)
             checkDecideDisabled()

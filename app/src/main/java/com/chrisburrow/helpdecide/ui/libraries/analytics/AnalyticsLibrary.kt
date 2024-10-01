@@ -19,6 +19,7 @@ object AnalyticsScreens {
     val AddText = "add_text_screen"
     val Wheel = "wheel_screen"
     val Instant = "instant_screen"
+    val RemoveAll = "remove_all_screen"
 }
 
 object AnalyticsActions {
