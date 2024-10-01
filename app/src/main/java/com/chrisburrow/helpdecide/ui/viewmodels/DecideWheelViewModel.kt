@@ -14,7 +14,7 @@ class DecideWheelViewModel(
     var options by mutableStateOf(options)
         private set
 
-    var decidedOption by mutableStateOf("In progress")
+    var decidedOption by mutableStateOf("...")
         private set
 
     fun chooseOption(index: Int) {

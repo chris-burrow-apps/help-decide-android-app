@@ -12,19 +12,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,8 +35,8 @@ import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.viewmodels.OnboardingPage
-import com.chrisburrow.helpdecide.ui.viewmodels.OnboardingViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 class OnboardingTags {
@@ -52,44 +49,24 @@ class OnboardingTags {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+data class OnboardingPage(
+    var viewTitle: String,
+    var viewDescription: String,
+    var viewImage: Int,
+    var viewNextButton: String,
+    var viewNextPressed: () -> Unit,
+    var viewSkipButton: String = "",
+    var viewSkipPressed: () -> Unit = {}
+)
+
 @Composable
 fun OnboardingScreen(
     analyticsLibrary: AnalyticsLibraryInterface,
-    model: OnboardingViewModel = OnboardingViewModel(
-        analyticsLibrary,
-        listOf()
-    )
+    navigateToNextScreen: () -> Unit
 ) {
-
-    val viewModel = remember { model }
 
     Scaffold(
         modifier = Modifier.testTag(OnboardingTags.BASE_VIEW_TAG),
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    actionIconContentColor = Color.Unspecified,
-                    navigationIconContentColor = Color.Unspecified,
-                    scrolledContainerColor = Color.Unspecified,
-                    titleContentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                ),
-                title = {
-                    Text(
-                        stringResource(id = R.string.app_name),
-                        fontSize = 35.sp,
-                        fontFamily = FontFamily.Cursive,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                actions = {
-
-                }
-            )
-        }
-
     ) {  innerPadding ->
 
         val modifier = Modifier
@@ -98,17 +75,77 @@ fun OnboardingScreen(
                 bottom = innerPadding.calculateBottomPadding() + 12.dp
             )
 
-        val pagerState = rememberPagerState(pageCount = {
-            viewModel.pages.size
-        })
+        val pagerState = rememberPagerState(pageCount = { 3 })
 
-        HorizontalPager(modifier = modifier, state = pagerState) { position ->
+        val scope = rememberCoroutineScope()
 
-            OnboardingView(
-                page = viewModel.getPageDetails(position),
-                onSkipPressed = viewModel.onSkipPressed(position),
-                onNextPressed = viewModel.onNextPressed(position),
-            )
+        val onboardingScreens = listOf(
+
+            OnboardingPage(
+                viewTitle = stringResource(R.string.onboarding_welcome_title),
+                viewDescription = stringResource(R.string.onboarding_welcome_desc),
+                viewImage = R.drawable.mock_spin_the_wheel,
+                viewNextButton = "Next",
+                viewNextPressed = {
+
+                    animateToPage(scope, pagerState, 1)
+                }
+            ),
+            OnboardingPage(
+                viewTitle = stringResource(id = R.string.crashalytics),
+                viewDescription = stringResource(id = R.string.crashalytics_desc),
+                viewImage = R.drawable.crash_reporting,
+                viewNextButton = "Enable",
+                viewNextPressed = {
+
+                    scope.launch {
+
+                        analyticsLibrary.setCrashalyticsState(true)
+                    }
+
+                    animateToPage(scope, pagerState, 2)
+                },
+                viewSkipButton = "Disable",
+                viewSkipPressed = {
+
+                    scope.launch {
+
+                        analyticsLibrary.setCrashalyticsState(false)
+                    }
+                }
+            ),
+            OnboardingPage(
+                viewTitle = stringResource(id = R.string.analytics),
+                viewDescription = stringResource(id = R.string.analytics_desc),
+                viewImage = R.drawable.analytics,
+                viewNextButton = "Enable",
+                viewNextPressed = {
+
+                    scope.launch {
+
+                        analyticsLibrary.setAnalyticsState(true)
+                    }
+
+                    navigateToNextScreen()
+                },
+                viewSkipButton = "Disable",
+                viewSkipPressed = {
+
+                    scope.launch {
+
+                        analyticsLibrary.setAnalyticsState(false)
+                    }
+
+                    navigateToNextScreen()
+                }
+            ),
+        )
+
+        HorizontalPager(modifier = modifier, state = pagerState, userScrollEnabled = false) { position ->
+
+            val page = onboardingScreens[position]
+
+            OnboardingView(page = page)
         }
     }
 }
@@ -116,27 +153,31 @@ fun OnboardingScreen(
 @Composable
 fun OnboardingView(
     page: OnboardingPage,
-    onSkipPressed: () -> Unit,
-    onNextPressed: () -> Unit,
 ) {
 
-    Column {
+    Column(
+        modifier = Modifier.padding(all = 16.dp)
+    ) {
 
         Text(
-            text = page.viewTitle,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.1f),
-            textAlign = TextAlign.Center,
+            text = page.viewTitle,
+            fontSize = 35.sp,
+            fontFamily = FontFamily.Cursive,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center
         )
 
         Text(
             text = page.viewDescription,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.1f),
+            modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Image(
             modifier = Modifier
@@ -144,26 +185,31 @@ fun OnboardingView(
                 .weight(0.7f),
             painter = painterResource(page.viewImage),
             contentDescription = "",
+            contentScale = ContentScale.FillWidth,
+            alignment = Alignment.TopStart
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row {
 
-            Spacer(modifier = Modifier.width(12.dp))
+            if(page.viewSkipButton.isNotEmpty()) {
 
-            ElevatedButton(
-                modifier = Modifier
-                    .testTag(OnboardingTags.SKIP_VIEW_TAG)
-                    .weight(0.1f),
-                onClick = {
+                ElevatedButton(
+                    modifier = Modifier
+                        .testTag(OnboardingTags.SKIP_VIEW_TAG)
+                        .weight(0.1f),
+                    onClick = {
 
-                    onSkipPressed()
-                },
-            ) {
+                        page.viewSkipPressed()
+                    },
+                ) {
 
-                Text(text = page.viewSkipButton)
+                    Text(text = page.viewSkipButton)
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
             }
-
-            Spacer(modifier = Modifier.width(12.dp))
 
             ElevatedButton(
                 modifier = Modifier
@@ -171,15 +217,23 @@ fun OnboardingView(
                     .weight(0.1f),
                 onClick = {
 
-                    onNextPressed()
+                    page.viewNextPressed()
                 },
             ) {
 
                 Text(text = page.viewNextButton)
             }
-
-            Spacer(modifier = Modifier.width(12.dp))
         }
+    }
+}
+
+fun animateToPage(scope: CoroutineScope, pagerState: PagerState, pageNumber: Int) {
+
+    scope.launch {
+
+        pagerState.animateScrollToPage(
+            page = pageNumber
+        )
     }
 }
 
@@ -189,23 +243,9 @@ fun OnboardingPreview() {
 
     HelpDecideTheme {
 
-        val analyticsLibrary = MockAnalyticsLibrary()
         OnboardingScreen(
             analyticsLibrary = MockAnalyticsLibrary(),
-            model = OnboardingViewModel(
-                analyticsLibrary,
-                listOf(
-                    OnboardingPage(
-                        viewTitle = "Title 1",
-                        viewDescription = "Description 1",
-                        viewImage = R.drawable.text_icon,
-                        viewNextButton = "Action 1",
-                        viewNextPressed = {},
-                        viewSkipButton = "Skip 1",
-                        viewSkipPressed = {},
-                    )
-                )
-            )
+            navigateToNextScreen = {}
         )
     }
 }

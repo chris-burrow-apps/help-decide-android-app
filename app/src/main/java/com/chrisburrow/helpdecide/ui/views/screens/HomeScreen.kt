@@ -119,7 +119,7 @@ fun HomeScreen(
 
                     if(viewModel.view.clearAllShown) {
 
-                        Button(
+                        IconButton(
                             modifier = Modifier
                                 .testTag(HomeTags.CLEAR_ALL_TAG)
                                 .wrapContentSize(),
@@ -127,14 +127,12 @@ fun HomeScreen(
 
                                 viewModel.logButtonPressed(AnalyticsActions.Clear)
                                 viewModel.showDeleteAllDialog()
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                            }
                         ) {
-                            Text(
-                                modifier = Modifier.wrapContentSize(),
-                                color = Color(MaterialTheme.colorScheme.secondary.toArgb()),
-                                text = stringResource(R.string.clear_all),
-                            )
+                            Icon(
+                                tint = Color(MaterialTheme.colorScheme.secondary.toArgb()),
+                                painter = painterResource(R.drawable.delete_icon),
+                                contentDescription = stringResource(R.string.clear_all))
                         }
                     }
                 }
@@ -340,8 +338,6 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
 
         viewModel.logScreenView(AnalyticsScreens.Home)
-
-        viewModel.checkSettingsShown()
     }
 }
 
