@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,13 +22,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,15 +41,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
+import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogConfig
+import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.PermissionsViewModel
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
+import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialog
+import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialog
+import com.chrisburrow.helpdecide.ui.views.screens.options.OptionList
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToText
-import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextToTextRequest
 
 
 class HomeTags {
@@ -70,8 +80,10 @@ class HomeTags {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    analyticsLibrary: AnalyticsLibraryInterface,
     model: HomeViewModel = HomeViewModel(
-        isSpeechCompatible = SpeechToTextToTextRequest(LocalContext.current).isSpeechCompatible()
+        analyticsLibrary,
+        isSpeechCompatible = false
     )
 ) {
 
@@ -101,18 +113,20 @@ fun HomeScreen(
 
                     if(viewModel.view.clearAllShown) {
 
-                        Button(
+                        IconButton(
                             modifier = Modifier
                                 .testTag(HomeTags.CLEAR_ALL_TAG)
                                 .wrapContentSize(),
-                            onClick = { viewModel.clearOptions() },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                            onClick = {
+
+                                viewModel.logButtonPressed(AnalyticsActions.Clear)
+                                viewModel.showDeleteAllDialog()
+                            }
                         ) {
-                            Text(
-                                modifier = Modifier.wrapContentSize(),
-                                color = Color(MaterialTheme.colorScheme.secondary.toArgb()),
-                                text = stringResource(R.string.clear_all),
-                            )
+                            Icon(
+                                tint = Color(MaterialTheme.colorScheme.secondary.toArgb()),
+                                painter = painterResource(R.drawable.delete_icon),
+                                contentDescription = stringResource(R.string.clear_all))
                         }
                     }
                 }
@@ -122,8 +136,25 @@ fun HomeScreen(
             BottomAppBar(
                 actions = {
                     IconButton(
+                        modifier = Modifier
+                            .testTag(HomeTags.SETTINGS_TAG)
+                            .wrapContentSize(),
+                        onClick = {
+
+                            viewModel.showSettingsDialog()
+                        },
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.settings_icon),
+                            contentDescription = stringResource(R.string.settings))
+                    }
+
+                    IconButton(
                         modifier = Modifier.testTag(HomeTags.ADD_TEXT_TAG),
-                        onClick = { viewModel.showAddDialog() },
+                        onClick = {
+
+                            viewModel.showAddDialog()
+                        },
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.text_icon),
@@ -134,7 +165,10 @@ fun HomeScreen(
 
                         IconButton(
                             modifier = Modifier.testTag(HomeTags.ADD_VOICE_TAG),
-                            onClick = { viewModel.showVoiceDialog() },
+                            onClick = {
+                                viewModel.logButtonPressed(AnalyticsActions.Voice)
+                                viewModel.showVoiceDialog()
+                            },
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.voice_icon),
@@ -152,6 +186,7 @@ fun HomeScreen(
                         shape = CircleShape,
                         onClick = {
 
+                            viewModel.logButtonPressed(AnalyticsActions.Decide)
                             viewModel.showDefaultDialog()
                         },
                     ){
@@ -180,6 +215,7 @@ fun HomeScreen(
         if(viewModel.dialogs.addOption) {
 
             AddOptionDialog(
+                model = AddOptionViewModel(analyticsLibrary),
                 optionSaved = {
 
                     viewModel.hideAddDialog()
@@ -207,11 +243,14 @@ fun HomeScreen(
         if(viewModel.dialogs.showOption) {
 
             DecisionDialog(
-                options = viewModel.view.options,
-                clearPressed = {
+                DecisionViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    options = viewModel.view.options
+                ),
+                removePressed = { option ->
 
                     viewModel.hideDecisionDialog()
-                    viewModel.clearOptions()
+                    viewModel.deleteOption(option)
                 },
                 donePressed = {
 
@@ -223,11 +262,14 @@ fun HomeScreen(
         if(viewModel.dialogs.showWheelOption) {
 
             DecideWheelDialog(
-                options = viewModel.view.options,
-                clearPressed = {
+                DecideWheelViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    options = viewModel.view.options
+                ),
+                removePressed = { option ->
 
                     viewModel.hideWheelDecisionDialog()
-                    viewModel.clearOptions()
+                    viewModel.deleteOption(option)
                 },
                 dismissPressed = {
 
@@ -239,6 +281,7 @@ fun HomeScreen(
         if(viewModel.dialogs.defaultChoice) {
 
             DecisionDefaultDialog(
+                analyticsLibrary = analyticsLibrary,
                 previouslySelected = 0,
                 selected = { position ->
 
@@ -254,16 +297,48 @@ fun HomeScreen(
                 }
             )
         }
+
+        if(viewModel.dialogs.deleteAll) {
+
+            GeneralDialog(
+                viewModel = GeneralDialogViewModel(
+                    configuration = GeneralDialogConfig(
+                        screenName = AnalyticsScreens.RemoveAll,
+                        description = stringResource(id = R.string.confirm_delete_desc),
+                        confirmText = stringResource(id = R.string.delete_all_button),
+                        confirmPressed = {
+                            viewModel.clearOptions()
+                            viewModel.hideDeleteAllDialog()
+                        },
+                        cancelText = stringResource(id = R.string.cancel),
+                        cancelPressed = {
+                            viewModel.hideDeleteAllDialog()
+                        },
+                    ),
+                    analyticsLibrary = analyticsLibrary,
+                )
+            )
+        }
+
+        if(viewModel.dialogs.settings) {
+
+            SettingsDialog(model = PermissionsViewModel(analyticsLibrary)) {
+
+                viewModel.hideSettingsDialog()
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+
+        viewModel.logScreenView(AnalyticsScreens.Home)
     }
 }
 
 @Composable
 fun EmptyHomeInstructions(modifier: Modifier) {
 
-    Surface(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
+    Surface(modifier = modifier.fillMaxSize()) {
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -326,6 +401,7 @@ fun HomeScreenPreview() {
 
     HelpDecideTheme {
 
-        HomeScreen(HomeViewModel(isSpeechCompatible = true))
+        val analyticsLibrary = MockAnalyticsLibrary()
+        HomeScreen(analyticsLibrary = MockAnalyticsLibrary(), HomeViewModel(analyticsLibrary, isSpeechCompatible = true))
     }
 }

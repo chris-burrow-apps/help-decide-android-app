@@ -3,7 +3,6 @@ package com.chrisburrow.helpdecide.ui.robots
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -11,7 +10,7 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.chrisburrow.helpdecide.ui.views.screens.HomeTags
-import com.chrisburrow.helpdecide.ui.views.screens.OptionListTags
+import com.chrisburrow.helpdecide.ui.views.screens.options.OptionListTags
 
 class HomeRobot(private val rule: ComposeContentTestRule) {
 
@@ -22,6 +21,8 @@ class HomeRobot(private val rule: ComposeContentTestRule) {
     fun pressAdd() { rule.onNodeWithTag(HomeTags.ADD_TEXT_TAG).performClick() }
 
     fun pressClearAll() { rule.onNodeWithTag(HomeTags.CLEAR_ALL_TAG).performClick() }
+
+    fun pressSettings() { rule.onNodeWithTag(HomeTags.SETTINGS_TAG).performClick() }
 
     fun checkNumberOfOptions(size: Int) {
 

@@ -17,7 +17,7 @@ class DecisionDialogRobot(private val rule: ComposeContentTestRule) {
 
     fun pressDone() { rule.onNodeWithTag(DecisionDialogTags.DONE_BUTTON_TAG).performClick() }
 
-    fun pressClear() { rule.onNodeWithTag(DecisionDialogTags.CLEAR_BUTTON_TAG).performClick() }
+    fun pressRemove() { rule.onNodeWithTag(DecisionDialogTags.REMOVE_BUTTON_TAG).performClick() }
 }
 
 fun decisionDialog(rule: ComposeContentTestRule, block: DecisionDialogRobot.() -> Unit) = DecisionDialogRobot(rule).apply(block)

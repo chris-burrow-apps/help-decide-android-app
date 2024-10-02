@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -18,11 +18,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
 import com.chrisburrow.helpdecide.utils.OptionObject
@@ -34,17 +38,16 @@ class DecisionDialogTags {
 
         const val BASE_VIEW_TAG = "DecisionDialog"
         const val DECISION_TEXT_TAG = "DecisionTextDialog"
-        const val CLEAR_BUTTON_TAG = "ClearButtonDialog"
+        const val REMOVE_BUTTON_TAG = "ClearButtonDialog"
         const val DONE_BUTTON_TAG = "DoneButtonDialog"
     }
 }
 
 @Composable
 fun DecisionDialog(
-    options: List<OptionObject>,
-    model: DecisionViewModel = DecisionViewModel(randomGenerator = RandomGenerator(), options = options),
+    model: DecisionViewModel,
     donePressed: () -> Unit = {},
-    clearPressed: () -> Unit = {}
+    removePressed: (OptionObject) -> Unit = {}
 ) {
     val viewModel = remember { model }
 
@@ -73,24 +76,31 @@ fun DecisionDialog(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row {
-                    TextButton(
+                    ElevatedButton(
                         modifier = Modifier
-                            .testTag(DecisionDialogTags.CLEAR_BUTTON_TAG)
+                            .testTag(DecisionDialogTags.REMOVE_BUTTON_TAG)
                             .weight(1.0f),
-                        onClick = { clearPressed() },
+                        onClick = {
+                            viewModel.logButtonPressed(AnalyticsActions.RemoveOption)
+                            removePressed(viewModel.decidedOption)
+                        },
                     ) {
 
-                        Text(text = stringResource(R.string.clear))
+                        Text(text = stringResource(R.string.remove_option), textAlign = TextAlign.Center)
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    TextButton(
+                    ElevatedButton(
                         modifier = Modifier
                             .testTag(DecisionDialogTags.DONE_BUTTON_TAG)
+                            .align(Alignment.CenterVertically)
                             .weight(1.0f),
-                        onClick = { donePressed() },
+                        onClick = {
+                            viewModel.logButtonPressed(AnalyticsActions.Done)
+                            donePressed()
+                        },
                     ) {
 
-                        Text(stringResource(R.string.done))
+                        Text(text = stringResource(R.string.done), textAlign = TextAlign.Center)
                     }
                     
                 }
@@ -100,6 +110,7 @@ fun DecisionDialog(
 
     LaunchedEffect(Unit) {
 
+        viewModel.logScreenView(AnalyticsScreens.Instant)
         viewModel.chooseOption()
     }
 }
@@ -110,6 +121,14 @@ fun DecisionDialogPreview() {
 
     HelpDecideTheme {
 
-        DecisionDialog(listOf(OptionObject(text = "Option")), clearPressed = {}, donePressed = {})
+        DecisionDialog(
+            DecisionViewModel(
+                MockAnalyticsLibrary(),
+                RandomGenerator(),
+                listOf(OptionObject(text = "Option"))
+            ),
+            removePressed = {},
+            donePressed = {}
+        )
     }
 }

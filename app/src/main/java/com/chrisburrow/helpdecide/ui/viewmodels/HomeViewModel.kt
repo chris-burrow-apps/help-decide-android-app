@@ -4,7 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.utils.OptionObject
+import kotlinx.coroutines.launch
 
 data class HomeViewState(
     val voiceButton: Boolean = false,
@@ -20,13 +23,16 @@ data class HomeDialogState(
 
     val showOption: Boolean = false,
     val showWheelOption: Boolean = false,
-    val defaultChoice: Boolean = false
+    val defaultChoice: Boolean = false,
+    val settings: Boolean = false,
+    val deleteAll: Boolean = false,
 )
 
 class HomeViewModel(
+    val analyticsLibrary: AnalyticsLibraryInterface,
     isSpeechCompatible: Boolean = false,
     initialOptions: List<OptionObject> = listOf(),
-): ViewModel() {
+): AnalyticsViewModel(analyticsLibrary) {
 
     var view by mutableStateOf(HomeViewState(voiceButton = isSpeechCompatible, options = initialOptions))
         private set
@@ -125,5 +131,39 @@ class HomeViewModel(
     fun hideDefaultDialog() {
 
         dialogs = dialogs.copy(defaultChoice = false)
+    }
+
+    fun showSettingsDialog() {
+
+        dialogs = dialogs.copy(settings = true)
+    }
+
+    fun hideSettingsDialog() {
+
+        dialogs = dialogs.copy(settings = false)
+    }
+
+    fun showDeleteAllDialog() {
+
+        dialogs = dialogs.copy(deleteAll = true)
+    }
+
+    fun hideDeleteAllDialog() {
+
+        dialogs = dialogs.copy(deleteAll = false)
+    }
+
+    fun checkSettingsShown() {
+
+        viewModelScope.launch {
+
+            analyticsLibrary.checkSettingsShown().collect { shown ->
+
+                if(!shown) {
+
+                    showSettingsDialog()
+                }
+            }
+        }
     }
 }

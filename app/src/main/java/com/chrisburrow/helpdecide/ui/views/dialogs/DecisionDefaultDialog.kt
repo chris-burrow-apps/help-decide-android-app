@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -28,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +47,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 
 class DecisionDefaultDialogTags {
 
@@ -58,6 +65,7 @@ class DecisionDefaultDialogTags {
 }
 @Composable
 fun DecisionDefaultDialog(
+    analyticsLibrary: AnalyticsLibraryInterface,
     options: List<String> = listOf(
         stringResource(R.string.spin_the_wheel),
         stringResource(R.string.instant_decision),
@@ -139,46 +147,15 @@ fun DecisionDefaultDialog(
                         }
                     }
 
-
-//                LazyColumn(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .wrapContentSize()
-//                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-//                        .align(Alignment.CenterHorizontally)
-//                ) {
-//
-//
-//                    items(options.size) { position ->
-//
-//                        FilterChip(
-//                            modifier = Modifier
-//                                .testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
-//                            label = {
-//                                Text(
-//                                    color = Color.DarkGray,
-//                                    text = options[position]
-//                                )
-//                            },
-//                            leadingIcon = {
-//                                Icon(
-//                                    imageVector = Icons.Outlined.LocationOn,
-//                                    modifier = Modifier.size(FilterChipDefaults.IconSize),
-//                                    contentDescription = ""
-//                                )
-//                            },
-//                            onClick = { selectedPosition = position },
-//                            selected = selectedPosition == position
-//                        )
-//                    }
-//                }
-
-                TextButton(
+                ElevatedButton(
                     modifier = Modifier
                         .testTag(DecisionDefaultDialogTags.GO_BUTTON_TAG)
                         .align(Alignment.CenterHorizontally)
                         .padding(8.dp),
-                    onClick = { selected(selectedPosition) },
+                    onClick = {
+                        analyticsLibrary.logButtonPressed(AnalyticsActions.Go)
+                        selected(selectedPosition)
+                              },
                 ) {
 
                     Text(
@@ -189,6 +166,11 @@ fun DecisionDefaultDialog(
             }
         }
     }
+
+    LaunchedEffect(Unit) {
+
+        analyticsLibrary.logScreenView(AnalyticsScreens.DecisionType)
+    }
 }
 
 @ThemePreviews
@@ -196,6 +178,7 @@ fun DecisionDefaultDialog(
 fun DecisionDefaultBottomSheetPreview() {
 
     DecisionDefaultDialog(
+        analyticsLibrary = MockAnalyticsLibrary(),
         previouslySelected = 0,
         selected = {})
 }

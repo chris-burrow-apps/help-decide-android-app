@@ -1,7 +1,7 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.utils.OptionObject
-import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextInterface
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
@@ -12,7 +12,7 @@ class HomeViewModelTest {
     @Test
     fun defaultState() {
 
-        val homeViewModel = HomeViewModel()
+        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
         assertFalse(homeViewModel.dialogs.addOption)
         assertFalse(homeViewModel.view.decideOption)
@@ -25,7 +25,7 @@ class HomeViewModelTest {
     @Test
     fun addOption() {
 
-        val homeViewModel = HomeViewModel()
+        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
         val newOption = OptionObject(text = "Option 1")
 
@@ -52,6 +52,7 @@ class HomeViewModelTest {
         val options = List(5) { OptionObject(text = "$it") }
 
         val homeViewModel = HomeViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
             initialOptions = options
         )
 
@@ -72,6 +73,7 @@ class HomeViewModelTest {
         val options = List(5) { OptionObject(text = "$it") }
 
         val homeViewModel = HomeViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
             initialOptions = options
         )
 
@@ -88,7 +90,7 @@ class HomeViewModelTest {
     @Test
     fun addDialog() {
 
-        val homeViewModel = HomeViewModel()
+        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
         assertFalse(homeViewModel.dialogs.addOption)
 
@@ -102,7 +104,7 @@ class HomeViewModelTest {
     @Test
     fun voiceDialog() {
 
-        val homeViewModel = HomeViewModel()
+        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
         assertFalse(homeViewModel.dialogs.voiceOption)
 
@@ -116,7 +118,7 @@ class HomeViewModelTest {
     @Test
     fun showOptionDialog() {
 
-        val homeViewModel = HomeViewModel()
+        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
         assertFalse(homeViewModel.dialogs.showOption)
 
@@ -130,7 +132,7 @@ class HomeViewModelTest {
     @Test
     fun showWheelOptionDialog() {
 
-        val homeViewModel = HomeViewModel()
+        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
         assertFalse(homeViewModel.dialogs.showWheelOption)
 
@@ -144,7 +146,7 @@ class HomeViewModelTest {
     @Test
     fun showDefaultDialog() {
 
-        val homeViewModel = HomeViewModel()
+        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
         assertFalse(homeViewModel.dialogs.defaultChoice)
 
@@ -156,9 +158,24 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun showSettingsDialog() {
+
+        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
+
+        assertFalse(homeViewModel.dialogs.settings)
+
+        homeViewModel.showSettingsDialog()
+        assertTrue(homeViewModel.dialogs.settings)
+
+        homeViewModel.hideSettingsDialog()
+        assertFalse(homeViewModel.dialogs.settings)
+    }
+
+    @Test
     fun speechButtonEnabled_whenDeviceCompatible() {
 
         val homeViewModel = HomeViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
             isSpeechCompatible = true
         )
 
@@ -169,6 +186,7 @@ class HomeViewModelTest {
     fun speechButtonDisabled_whenDeviceIsNotCompatible() {
 
         val homeViewModel = HomeViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
             isSpeechCompatible = false
         )
 

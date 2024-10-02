@@ -1,15 +1,20 @@
 package com.chrisburrow.helpdecide
 
+import android.content.Context
 import android.os.SystemClock
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
+import androidx.test.platform.app.InstrumentationRegistry
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
+import com.chrisburrow.helpdecide.ui.robots.generalDialog
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
+import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
+import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -21,6 +26,8 @@ class HomeJourneyTest {
     @get:Rule
     val rule = createComposeRule()
 
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+
     @Before
     fun setup() {
 
@@ -28,7 +35,14 @@ class HomeJourneyTest {
 
             HelpDecideTheme {
 
-                HomeScreen()
+                HomeScreen(
+                    MockAnalyticsLibrary(),
+                    HomeViewModel(
+                        analyticsLibrary = MockAnalyticsLibrary(),
+                        isSpeechCompatible = false,
+                        initialOptions = emptyList()
+                    )
+                )
             }
         }
     }
@@ -131,8 +145,16 @@ class HomeJourneyTest {
             }
 
             checkClearAllShown()
-
             pressClearAll()
+
+            generalDialog(rule) {
+
+                checkDescription(context.getString(R.string.confirm_delete_desc))
+                checkConfirm(context.getString(R.string.delete_all_button))
+                checkCancel(context.getString(R.string.cancel))
+
+                pressConfirm()
+            }
 
             checkNumberOfOptions(0)
             checkDecideDisabled()
@@ -190,7 +212,7 @@ class HomeJourneyTest {
             decisionDialog(rule) {
 
                 checkText(optionText)
-                pressClear()
+                pressRemove()
             }
 
             checkDecideDisabled()
@@ -247,7 +269,7 @@ class HomeJourneyTest {
             decisionWheel(rule) {
 
                 checkText(optionText)
-                pressClear()
+                pressRemove()
             }
 
             checkDecideDisabled()

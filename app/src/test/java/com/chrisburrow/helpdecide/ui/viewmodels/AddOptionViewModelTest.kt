@@ -1,5 +1,6 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
@@ -10,7 +11,7 @@ class AddOptionViewModelTest {
     @Test
     fun defaultView() {
 
-        val viewModel = AddOptionViewModel()
+        val viewModel = AddOptionViewModel(MockAnalyticsLibrary())
 
         val defaultValue = ""
 
@@ -22,7 +23,7 @@ class AddOptionViewModelTest {
     @Test
     fun clearEnabledWithText() {
 
-        val viewModel = AddOptionViewModel()
+        val viewModel = AddOptionViewModel(MockAnalyticsLibrary())
 
         val modifiedText = "Option 1"
         viewModel.onTextChanged(modifiedText)
@@ -35,7 +36,7 @@ class AddOptionViewModelTest {
     @Test
     fun clearDisabledWithEmptyText() {
 
-        val viewModel = AddOptionViewModel()
+        val viewModel = AddOptionViewModel(MockAnalyticsLibrary())
 
         val emptyText = ""
         viewModel.onTextChanged(emptyText)
@@ -48,7 +49,7 @@ class AddOptionViewModelTest {
     @Test
     fun onTextCleared() {
 
-        val viewModel = AddOptionViewModel(initialText = "Option 1")
+        val viewModel = AddOptionViewModel(MockAnalyticsLibrary(), initialText = "Option 1")
 
         viewModel.onTextCleared()
 
@@ -60,7 +61,7 @@ class AddOptionViewModelTest {
     @Test
     fun removeExtraWhiteSpaces() {
 
-        val viewModel = AddOptionViewModel()
+        val viewModel = AddOptionViewModel(MockAnalyticsLibrary())
 
         val modifiedText = "Option 1"
         viewModel.onTextChanged("          $modifiedText            ")

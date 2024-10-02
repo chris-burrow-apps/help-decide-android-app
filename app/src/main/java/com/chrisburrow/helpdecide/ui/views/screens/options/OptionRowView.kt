@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.views.screens
+package com.chrisburrow.helpdecide.ui.views.screens.options
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -25,12 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.utils.OptionObject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OptionRowView(
-    modifier: Modifier = Modifier,
     position: Int,
     option: OptionObject,
     removeOption: (OptionObject) -> Unit
@@ -58,8 +58,8 @@ fun OptionRowView(
         )
         SwipeToDismissBox(
             state = dismissState,
-            modifier = modifier.testTag(OptionListTags.ROW_VIEW + position),
-            backgroundContent = { DismissBackground(dismissState)},
+            modifier = Modifier.testTag(OptionListTags.ROW_VIEW + position),
+            backgroundContent = { DismissBackground(dismissState) },
             content = {
                 OptionTextView(position = position, option = option)
             }
@@ -80,10 +80,10 @@ fun OptionTextView(position: Int, option: OptionObject) {
 
         Text(
             modifier = Modifier
-                .testTag("${OptionListTags.TEXT_TAG}$position")
                 .fillMaxWidth()
                 .padding(15.dp)
-                .weight(1.0f),
+                .weight(1.0f)
+                .testTag(OptionListTags.TEXT_TAG + position),
             color = MaterialTheme.colorScheme.primary,
             text = option.text
         )
@@ -115,5 +115,15 @@ fun DismissBackground(dismissState: SwipeToDismissBoxState) {
             Icons.Default.Delete,
             contentDescription = "delete"
         )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun OptionTextListPreview() {
+
+    HelpDecideTheme {
+
+        OptionList(modifier = Modifier, options = listOf(OptionObject(text = "Option 1"), OptionObject(text = "Option 2"))) {}
     }
 }
