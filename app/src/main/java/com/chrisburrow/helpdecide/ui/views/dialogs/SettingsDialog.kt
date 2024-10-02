@@ -49,7 +49,7 @@ fun SettingsDialog(
     model: PermissionsViewModel = PermissionsViewModel(
         AnalyticsLibrary(
             context = LocalContext.current,
-            debug = BuildConfig.DEBUG,
+            test = BuildConfig.DEBUG,
             storageLibrary = StorageLibrary(LocalContext.current)
         )
     ),
