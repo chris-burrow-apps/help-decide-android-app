@@ -9,6 +9,7 @@ import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
 import com.chrisburrow.helpdecide.utils.OptionObject
+import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -36,7 +37,7 @@ class DecisionWheelDialogTest {
                         options = options
                     ),
                     dismissPressed = { },
-                    clearPressed = { }
+                    removePressed = { }
                 )
             }
         }
@@ -65,7 +66,7 @@ class DecisionWheelDialogTest {
                         options = options
                     ),
                     dismissPressed = { doneCalled = true },
-                    clearPressed = { }
+                    removePressed = { }
                 )
             }
         }
@@ -86,6 +87,8 @@ class DecisionWheelDialogTest {
 
         var clearCalled = false
 
+        var optionRemoved: OptionObject? = null
+
         rule.setContent {
 
             HelpDecideTheme {
@@ -96,17 +99,21 @@ class DecisionWheelDialogTest {
                         options = options
                     ),
                     dismissPressed = {  },
-                    clearPressed = { clearCalled = true }
+                    removePressed = {
+                        optionRemoved = it
+                        clearCalled = true
+                    }
                 )
             }
         }
 
         decisionWheel(rule) {
 
-            pressClear()
+            pressRemove()
         }
 
         assertTrue(clearCalled)
+        assertEquals(expectedObject, optionRemoved)
     }
 
     @Test
@@ -126,7 +133,7 @@ class DecisionWheelDialogTest {
                         options = options
                     ),
                     dismissPressed = { },
-                    clearPressed = { }
+                    removePressed = { }
                 )
             }
         }
@@ -138,8 +145,8 @@ class DecisionWheelDialogTest {
             pressDone()
             assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Done))
 
-            pressClear()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Clear))
+            pressRemove()
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.RemoveOption))
         }
     }
 }

@@ -10,6 +10,7 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.RandomGenerator
+import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -61,7 +62,7 @@ class DecisionDialogTest {
                         randomGenerator = RandomGenerator(),
                         options = listOf(OptionObject(text = "example 1"))
                     ),
-                    clearPressed = {},
+                    removePressed = {},
                     donePressed = { doneCalled = true }
                 )
             }
@@ -76,9 +77,12 @@ class DecisionDialogTest {
     }
 
     @Test
-    fun clearPressed() {
+    fun removePressed() {
 
         var clearCalled = false
+        var optionRemoved: OptionObject? = null
+
+        var option = OptionObject(text = "example 1")
 
         rule.setContent {
 
@@ -88,9 +92,12 @@ class DecisionDialogTest {
                     DecisionViewModel(
                         analyticsLibrary = MockAnalyticsLibrary(),
                         randomGenerator = RandomGenerator(),
-                        options = listOf(OptionObject(text = "example 1"))
+                        options = listOf(option)
                     ),
-                    clearPressed = { clearCalled = true },
+                    removePressed = {
+                        optionRemoved = it
+                        clearCalled = true
+                    },
                     donePressed = {}
                 )
             }
@@ -98,10 +105,11 @@ class DecisionDialogTest {
 
         decisionDialog(rule) {
 
-            pressClear()
+            pressRemove()
         }
 
         assertTrue(clearCalled)
+        assertEquals(option, optionRemoved)
     }
 
     @Test
@@ -130,8 +138,8 @@ class DecisionDialogTest {
             pressDone()
             assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Done))
 
-            pressClear()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Clear))
+            pressRemove()
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.RemoveOption))
         }
     }
 }

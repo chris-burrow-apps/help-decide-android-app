@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +29,6 @@ import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.utils.OptionObject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OptionRowView(
     position: Int,
@@ -84,7 +82,8 @@ fun OptionTextView(position: Int, option: OptionObject) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp)
-                .weight(1.0f),
+                .weight(1.0f)
+                .testTag(OptionListTags.TEXT_TAG + position),
             color = MaterialTheme.colorScheme.primary,
             text = option.text
         )

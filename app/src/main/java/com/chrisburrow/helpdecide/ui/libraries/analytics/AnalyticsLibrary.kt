@@ -26,6 +26,7 @@ object AnalyticsActions {
     val Save = "save_action"
     val Cancel = "cancel_action"
     val Clear = "clear_action"
+    val RemoveOption = "remove_option_action"
     val Done = "done_action"
     val Voice = "voice_action"
     val Decide = "decide_action"

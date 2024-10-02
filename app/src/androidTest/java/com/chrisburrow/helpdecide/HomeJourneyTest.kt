@@ -1,9 +1,10 @@
 package com.chrisburrow.helpdecide
 
+import android.content.Context
 import android.os.SystemClock
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
@@ -24,6 +25,8 @@ class HomeJourneyTest {
 
     @get:Rule
     val rule = createComposeRule()
+
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Before
     fun setup() {
@@ -146,9 +149,9 @@ class HomeJourneyTest {
 
             generalDialog(rule) {
 
-                checkDescription("Are you sure you want to delete all options?\n\nTip: To remove one option, swipe the option you would like to remove")
-                checkConfirm("Delete All")
-                checkCancel("Cancel")
+                checkDescription(context.getString(R.string.confirm_delete_desc))
+                checkConfirm(context.getString(R.string.delete_all_button))
+                checkCancel(context.getString(R.string.cancel))
 
                 pressConfirm()
             }
@@ -209,7 +212,7 @@ class HomeJourneyTest {
             decisionDialog(rule) {
 
                 checkText(optionText)
-                pressClear()
+                pressRemove()
             }
 
             checkDecideDisabled()
@@ -266,7 +269,7 @@ class HomeJourneyTest {
             decisionWheel(rule) {
 
                 checkText(optionText)
-                pressClear()
+                pressRemove()
             }
 
             checkDecideDisabled()

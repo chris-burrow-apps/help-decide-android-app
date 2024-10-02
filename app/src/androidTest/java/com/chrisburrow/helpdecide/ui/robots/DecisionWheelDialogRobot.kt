@@ -6,7 +6,6 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialogTags
-import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialogTags
 
 class DecisionWheelDialogRobot(private val rule: ComposeContentTestRule) {
 
@@ -18,7 +17,7 @@ class DecisionWheelDialogRobot(private val rule: ComposeContentTestRule) {
 
     fun pressDone() { rule.onNodeWithTag(DecideWheelDialogTags.DONE_BUTTON_TAG).performClick() }
 
-    fun pressClear() { rule.onNodeWithTag(DecideWheelDialogTags.CLEAR_BUTTON_TAG).performClick() }
+    fun pressRemove() { rule.onNodeWithTag(DecideWheelDialogTags.REMOVE_BUTTON_TAG).performClick() }
 }
 
 fun decisionWheel(rule: ComposeContentTestRule, block: DecisionWheelDialogRobot.() -> Unit) = DecisionWheelDialogRobot(rule).apply(block)

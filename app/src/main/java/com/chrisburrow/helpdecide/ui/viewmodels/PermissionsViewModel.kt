@@ -3,14 +3,13 @@ package com.chrisburrow.helpdecide.ui.viewmodels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 
-class SettingsViewModel(
+class PermissionsViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface
 ): AnalyticsViewModel(analyticsLibrary) {
 

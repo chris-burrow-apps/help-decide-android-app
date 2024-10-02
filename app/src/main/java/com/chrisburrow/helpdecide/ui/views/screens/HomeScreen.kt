@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,12 +42,9 @@ import androidx.compose.ui.unit.sp
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
-import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibrary
-import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryInterface
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
@@ -57,7 +52,7 @@ import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogConfig
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
-import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.PermissionsViewModel
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
@@ -67,7 +62,6 @@ import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialog
 import com.chrisburrow.helpdecide.ui.views.screens.options.OptionList
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToText
-import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextToTextRequest
 
 
 class HomeTags {
@@ -253,10 +247,10 @@ fun HomeScreen(
                     analyticsLibrary = analyticsLibrary,
                     options = viewModel.view.options
                 ),
-                clearPressed = {
+                removePressed = { option ->
 
                     viewModel.hideDecisionDialog()
-                    viewModel.clearOptions()
+                    viewModel.deleteOption(option)
                 },
                 donePressed = {
 
@@ -272,10 +266,10 @@ fun HomeScreen(
                     analyticsLibrary = analyticsLibrary,
                     options = viewModel.view.options
                 ),
-                clearPressed = {
+                removePressed = { option ->
 
                     viewModel.hideWheelDecisionDialog()
-                    viewModel.clearOptions()
+                    viewModel.deleteOption(option)
                 },
                 dismissPressed = {
 
@@ -328,7 +322,7 @@ fun HomeScreen(
 
         if(viewModel.dialogs.settings) {
 
-            SettingsDialog(model = SettingsViewModel(analyticsLibrary)) {
+            SettingsDialog(model = PermissionsViewModel(analyticsLibrary)) {
 
                 viewModel.hideSettingsDialog()
             }

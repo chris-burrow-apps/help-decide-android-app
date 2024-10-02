@@ -8,6 +8,7 @@
     <string name="settings">Settings</string>
 
     <string name="clear">Clear</string>
+    <string name="remove_option">Remove</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
@@ -21,15 +22,16 @@
     <string name="decision_preference">Decision preference</string>
     <string name="decision_preference_desc">If you specified a decision type as default, the window will no longer show. This is where you can change it.</string>
 
-    <string name="analytics">Analytics</string>
-    <string name="analytics_desc">Permission to allow the developer to see what is used in the app. This makes it easier in future to know what extra features can be made depending upon features currently used.</string>
     <string name="crashalytics">Crash Reporting</string>
-    <string name="crashalytics_desc">If the app crashes, a crash report will be auto sent so the developer can diagnose what happened.</string>
-    <string name="confirm_delete_desc">Are you sure you want to delete all options?\n\nTip: To remove one option, swipe the option you would like to remove</string>
+    <string name="crashalytics_desc">Do you give permission to the developer to allow crash reports to be automatically sent so they can diagnose what happened.</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_desc">Do you give permission to allow the developer to see what is used in the app. This makes it easier in future to know what extra features can be made depending upon features currently used.</string>
+
     <string name="delete_all_button">Delete All</string>
+    <string name="confirm_delete_desc">Are you sure you want to delete all options?\n\nTip: To remove one option, swipe the option you would like to remove</string>
 
     <string name="onboarding_welcome_title">Welcome to Help Decide</string>
-    <string name="onboarding_welcome_desc">Simple decision maker for when you are stuck between different options</string>
+    <string name="onboarding_welcome_desc">"Make your life easier by adding in your decisions and let the app decide for you.\n\nTo help the developer, the app needs to ask your permission to do 2 things."</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
     <string name="next">Next</string>

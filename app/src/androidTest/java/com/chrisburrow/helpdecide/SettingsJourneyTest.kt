@@ -1,7 +1,9 @@
 package com.chrisburrow.helpdecide
 
+import android.content.Context
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
@@ -24,6 +26,8 @@ class SettingsJourneyTest {
 
     @get:Rule
     val rule = createComposeRule()
+
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     val analyticsLibrary = MockAnalyticsLibrary(
         analyticsState = false,
@@ -87,8 +91,8 @@ class SettingsJourneyTest {
 
         settings(rule) {
 
-            checkText(0, "Analytics", "Permission to allow the developer to see what is used in the app. This makes it easier in future to know what extra features can be made depending upon features currently used.")
-            checkText(1, "Crashalytics", "If the app crashes, a crash report will be auto sent so the developer can diagnose what happened.")
+            checkText(0, context.getString(R.string.analytics), context.getString(R.string.analytics_desc))
+            checkText(1, context.getString(R.string.crashalytics), context.getString(R.string.crashalytics_desc))
         }
     }
 

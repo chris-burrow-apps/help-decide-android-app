@@ -14,11 +14,11 @@ class DecideWheelViewModel(
     var options by mutableStateOf(options)
         private set
 
-    var decidedOption by mutableStateOf("...")
+    var decidedOption by mutableStateOf(OptionObject("", ""))
         private set
 
     fun chooseOption(index: Int) {
 
-        decidedOption = options[index].text
+        decidedOption = options[index]
     }
 }

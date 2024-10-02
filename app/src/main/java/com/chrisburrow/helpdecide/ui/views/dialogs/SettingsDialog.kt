@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Surface
@@ -30,7 +29,7 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.PermissionsViewModel
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsList
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
 import com.google.firebase.ktx.BuildConfig
@@ -47,7 +46,7 @@ class SettingsDialogTags {
 
 @Composable
 fun SettingsDialog(
-    model: SettingsViewModel = SettingsViewModel(
+    model: PermissionsViewModel = PermissionsViewModel(
         AnalyticsLibrary(
             context = LocalContext.current,
             debug = BuildConfig.DEBUG,
