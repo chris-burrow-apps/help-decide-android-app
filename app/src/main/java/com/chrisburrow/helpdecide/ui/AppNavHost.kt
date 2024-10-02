@@ -5,11 +5,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.viewmodels.AppStartupViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.LoadingViewModel
 import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import com.chrisburrow.helpdecide.ui.views.screens.LoadingScreen
 import com.chrisburrow.helpdecide.ui.views.screens.OnboardingScreen
@@ -46,23 +49,7 @@ fun AppNavHost (
     {
         composable(NavigationItem.Loading.route) {
 
-            LoadingScreen()
-
-            LaunchedEffect(Unit) {
-
-                analyticsLibrary.checkSettingsShown().collect { settingsPreviouslyShown ->
-
-                    val navigateTo = if(settingsPreviouslyShown) {
-
-                        NavigationItem.Home.route
-                    } else {
-
-                        NavigationItem.Onboarding.route
-                    }
-
-                    navController.navigate(navigateTo)
-                }
-            }
+            LoadingScreen(AppStartupViewModel(navController, analyticsLibrary))
         }
 
         composable(NavigationItem.Onboarding.route) {
@@ -74,7 +61,7 @@ fun AppNavHost (
                     scope.launch {
 
                         analyticsLibrary.settingsShown()
-                        navController.navigate(NavigationItem.Home.route)
+                        navController.navigateAndPopUpTo(NavigationItem.Home.route)
                     }
                 }
             )
@@ -84,6 +71,19 @@ fun AppNavHost (
 
             val isSpeechCompatible = SpeechToTextToTextRequest(LocalContext.current).isSpeechCompatible()
             HomeScreen(analyticsLibrary, HomeViewModel(analyticsLibrary, isSpeechCompatible))
+        }
+    }
+}
+
+fun NavController.navigateAndPopUpTo(route: String) {
+
+    val navController = this
+
+    navController.navigate(route) {
+
+        popUpTo(navController.graph.id) {
+
+            inclusive = true
         }
     }
 }
