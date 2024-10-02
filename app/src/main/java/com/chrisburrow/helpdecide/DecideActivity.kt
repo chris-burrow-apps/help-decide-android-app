@@ -6,9 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -18,7 +15,6 @@ import com.chrisburrow.helpdecide.ui.NavigationItem
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import kotlinx.coroutines.launch
 
 
 class DecideActivity : ComponentActivity() {

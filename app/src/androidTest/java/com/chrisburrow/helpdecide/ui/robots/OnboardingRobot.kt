@@ -13,13 +13,17 @@ class OnboardingRobot(private val rule: ComposeContentTestRule) {
         rule.onNodeWithTag(OnboardingTags.BASE_VIEW_TAG).assertIsDisplayed()
     }
 
+    fun checkPageText(position: Int, title: String, description: String) {
+
+        rule.onNodeWithTag(OnboardingTags.TITLE_VIEW_TAG + position).assertTextContains(title)
+        rule.onNodeWithTag(OnboardingTags.DESCRIPTION_VIEW_TAG + position).assertTextContains(description)
+    }
+
     fun pressSkip(position: Int) { rule.onNodeWithTag(OnboardingTags.SKIP_VIEW_TAG + position).performClick() }
 
     fun pressNext(position: Int) { rule.onNodeWithTag(OnboardingTags.NEXT_VIEW_TAG + position).performClick() }
 
     fun checkSkipHidden(position: Int) { rule.onNodeWithTag(OnboardingTags.SKIP_VIEW_TAG + position).assertDoesNotExist() }
-
-    fun checkNextHidden(position: Int) { rule.onNodeWithTag(OnboardingTags.NEXT_VIEW_TAG + position).assertDoesNotExist() }
 
     fun checkNextText(position: Int, text: String) {
 

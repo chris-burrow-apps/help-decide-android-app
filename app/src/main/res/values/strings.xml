@@ -30,4 +30,7 @@
 
     <string name="onboarding_welcome_title">Welcome to Help Decide</string>
     <string name="onboarding_welcome_desc">Simple decision maker for when you are stuck between different options</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="next">Next</string>
 </resources>

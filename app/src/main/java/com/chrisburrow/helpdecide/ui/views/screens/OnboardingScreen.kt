@@ -44,6 +44,8 @@ class OnboardingTags {
     companion object {
 
         const val BASE_VIEW_TAG = "OnboardingView"
+        const val TITLE_VIEW_TAG = "OnboardingTitleView"
+        const val DESCRIPTION_VIEW_TAG = "OnboardingDescView"
         const val SKIP_VIEW_TAG = "OnboardingSkipButton"
         const val NEXT_VIEW_TAG = "OnboardingNextButton"
     }
@@ -85,7 +87,7 @@ fun OnboardingScreen(
                 viewTitle = stringResource(R.string.onboarding_welcome_title),
                 viewDescription = stringResource(R.string.onboarding_welcome_desc),
                 viewImage = R.drawable.mock_spin_the_wheel,
-                viewNextButton = "Next",
+                viewNextButton = stringResource(R.string.next),
                 viewNextPressed = {
 
                     animateToPage(scope, pagerState, 1)
@@ -95,7 +97,7 @@ fun OnboardingScreen(
                 viewTitle = stringResource(id = R.string.crashalytics),
                 viewDescription = stringResource(id = R.string.crashalytics_desc),
                 viewImage = R.drawable.crash_reporting,
-                viewNextButton = "Enable",
+                viewNextButton = stringResource(R.string.enable),
                 viewNextPressed = {
 
                     scope.launch {
@@ -105,20 +107,22 @@ fun OnboardingScreen(
 
                     animateToPage(scope, pagerState, 2)
                 },
-                viewSkipButton = "Disable",
+                viewSkipButton = stringResource(R.string.disable),
                 viewSkipPressed = {
 
                     scope.launch {
 
                         analyticsLibrary.setCrashalyticsState(false)
                     }
+
+                    animateToPage(scope, pagerState, 2)
                 }
             ),
             OnboardingPage(
                 viewTitle = stringResource(id = R.string.analytics),
                 viewDescription = stringResource(id = R.string.analytics_desc),
                 viewImage = R.drawable.analytics,
-                viewNextButton = "Enable",
+                viewNextButton = stringResource(R.string.enable),
                 viewNextPressed = {
 
                     scope.launch {
@@ -128,7 +132,7 @@ fun OnboardingScreen(
 
                     navigateToNextScreen()
                 },
-                viewSkipButton = "Disable",
+                viewSkipButton = stringResource(R.string.disable),
                 viewSkipPressed = {
 
                     scope.launch {
@@ -145,13 +149,14 @@ fun OnboardingScreen(
 
             val page = onboardingScreens[position]
 
-            OnboardingView(page = page)
+            OnboardingView(position, page)
         }
     }
 }
 
 @Composable
 fun OnboardingView(
+    position: Int,
     page: OnboardingPage,
 ) {
 
@@ -162,7 +167,8 @@ fun OnboardingView(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.1f),
+                .weight(0.1f)
+                .testTag(OnboardingTags.TITLE_VIEW_TAG + position),
             text = page.viewTitle,
             fontSize = 35.sp,
             fontFamily = FontFamily.Cursive,
@@ -173,7 +179,9 @@ fun OnboardingView(
 
         Text(
             text = page.viewDescription,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(OnboardingTags.DESCRIPTION_VIEW_TAG + position),
             textAlign = TextAlign.Center,
         )
 
@@ -197,7 +205,7 @@ fun OnboardingView(
 
                 ElevatedButton(
                     modifier = Modifier
-                        .testTag(OnboardingTags.SKIP_VIEW_TAG)
+                        .testTag(OnboardingTags.SKIP_VIEW_TAG + position)
                         .weight(0.1f),
                     onClick = {
 
@@ -213,7 +221,7 @@ fun OnboardingView(
 
             ElevatedButton(
                 modifier = Modifier
-                    .testTag(OnboardingTags.NEXT_VIEW_TAG)
+                    .testTag(OnboardingTags.NEXT_VIEW_TAG + position)
                     .weight(0.1f),
                 onClick = {
 
