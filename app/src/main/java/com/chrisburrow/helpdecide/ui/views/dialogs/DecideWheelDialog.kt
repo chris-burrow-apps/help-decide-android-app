@@ -44,12 +44,12 @@ class DecideWheelDialogTags {
 }
 @Composable
 fun DecideWheelDialog(
-    model: DecideWheelViewModel,
+    viewModel: DecideWheelViewModel,
     dismissPressed: () -> Unit,
     removePressed: (OptionObject) -> Unit
 ) {
 
-    val viewModel = remember { model }
+    val uiState = remember { viewModel.uiState }
 
     Dialog(
         properties = DialogProperties(
@@ -73,7 +73,7 @@ fun DecideWheelDialog(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 DecideSpinWheel(
-                    size = viewModel.options.size,
+                    size = uiState.options.size,
                     stopped = { viewModel.chooseOption(it) }
                 )
 
@@ -82,7 +82,7 @@ fun DecideWheelDialog(
                 Text(
                     modifier = Modifier.testTag(DecideWheelDialogTags.DECISION_TEXT_TAG),
                     color = MaterialTheme.colorScheme.primary,
-                    text = viewModel.decidedOption.text
+                    text = uiState.decidedOption.text
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -94,7 +94,7 @@ fun DecideWheelDialog(
                             .weight(1.0f),
                         onClick = {
                             viewModel.logButtonPressed(AnalyticsActions.RemoveOption)
-                            removePressed(viewModel.decidedOption)
+                            removePressed(uiState.decidedOption)
                         },
                     ) {
 
@@ -116,11 +116,11 @@ fun DecideWheelDialog(
                 }
             }
         }
-    }
 
-    LaunchedEffect(Unit) {
+        LaunchedEffect(Unit) {
 
-        viewModel.logScreenView(AnalyticsScreens.Wheel)
+            viewModel.logScreenView(AnalyticsScreens.Wheel)
+        }
     }
 }
 

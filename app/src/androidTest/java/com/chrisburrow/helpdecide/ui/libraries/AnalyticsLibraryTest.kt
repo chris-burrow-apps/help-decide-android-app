@@ -23,7 +23,7 @@ class AnalyticsLibraryTest {
         fakeStorage = MockStorage()
         analyticsLibrary = AnalyticsLibrary(
             context = InstrumentationRegistry.getInstrumentation().context,
-            debug = true,
+            test = true,
             storageLibrary = fakeStorage
         )
     }

@@ -3,10 +3,13 @@ package com.chrisburrow.helpdecide.ui.viewmodels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.utils.OptionObject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class HomeViewState(
@@ -81,89 +84,5 @@ class HomeViewModel(
     private fun checkClearAllShown() {
 
         view = view.copy(clearAllShown = view.options.isNotEmpty())
-    }
-
-    fun showAddDialog() {
-
-        dialogs = dialogs.copy(addOption = true)
-    }
-
-    fun hideAddDialog() {
-
-        dialogs = dialogs.copy(addOption = false)
-    }
-
-    fun showVoiceDialog() {
-
-        dialogs = dialogs.copy(voiceOption = true)
-    }
-
-    fun hideVoiceDialog() {
-
-        dialogs = dialogs.copy(voiceOption = false)
-    }
-
-    fun showDecisionDialog() {
-
-        dialogs = dialogs.copy(showOption = true)
-    }
-
-    fun hideDecisionDialog() {
-
-        dialogs = dialogs.copy(showOption = false)
-    }
-
-    fun showWheelDecisionDialog() {
-
-        dialogs = dialogs.copy(showWheelOption = true)
-    }
-
-    fun hideWheelDecisionDialog() {
-
-        dialogs = dialogs.copy(showWheelOption = false)
-    }
-
-    fun showDefaultDialog() {
-
-        dialogs = dialogs.copy(defaultChoice = true)
-    }
-
-    fun hideDefaultDialog() {
-
-        dialogs = dialogs.copy(defaultChoice = false)
-    }
-
-    fun showSettingsDialog() {
-
-        dialogs = dialogs.copy(settings = true)
-    }
-
-    fun hideSettingsDialog() {
-
-        dialogs = dialogs.copy(settings = false)
-    }
-
-    fun showDeleteAllDialog() {
-
-        dialogs = dialogs.copy(deleteAll = true)
-    }
-
-    fun hideDeleteAllDialog() {
-
-        dialogs = dialogs.copy(deleteAll = false)
-    }
-
-    fun checkSettingsShown() {
-
-        viewModelScope.launch {
-
-            analyticsLibrary.checkSettingsShown().collect { shown ->
-
-                if(!shown) {
-
-                    showSettingsDialog()
-                }
-            }
-        }
     }
 }

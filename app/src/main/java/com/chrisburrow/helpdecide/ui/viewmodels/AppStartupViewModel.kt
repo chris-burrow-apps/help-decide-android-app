@@ -3,8 +3,7 @@ package com.chrisburrow.helpdecide.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
-import com.chrisburrow.helpdecide.ui.NavigationItem
+import com.chrisburrow.helpdecide.ui.NavigationScreenItem
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.navigateAndPopUpTo
 import kotlinx.coroutines.launch
@@ -27,10 +26,10 @@ class AppStartupViewModel(
 
                 val navigateTo = if (settingsPreviouslyShown) {
 
-                    NavigationItem.Home.route
+                    NavigationScreenItem.Home.route
                 } else {
 
-                    NavigationItem.Onboarding.route
+                    NavigationScreenItem.Onboarding.route
                 }
 
                 navController.navigateAndPopUpTo(navigateTo)

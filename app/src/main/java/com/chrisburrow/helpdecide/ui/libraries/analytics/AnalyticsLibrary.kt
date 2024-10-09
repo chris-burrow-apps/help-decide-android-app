@@ -43,7 +43,7 @@ class AnalyticsLibrary(
         return storageLibrary.getBoolean(StorageLibraryKeys.SettingsShown)
     }
 
-    override suspend fun settingsShown() {
+    override suspend fun permissionsRequested() {
 
         storageLibrary.storeBoolean(StorageLibraryKeys.SettingsShown, true)
     }

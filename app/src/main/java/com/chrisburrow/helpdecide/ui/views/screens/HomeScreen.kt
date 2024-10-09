@@ -23,6 +23,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,29 +41,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.chrisburrow.helpdecide.R
+import com.chrisburrow.helpdecide.ui.NavigationDialogItem
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
-import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
-import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
-import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogConfig
-import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
-import com.chrisburrow.helpdecide.ui.viewmodels.PermissionsViewModel
-import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
-import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialog
-import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
-import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
-import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialog
-import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialog
 import com.chrisburrow.helpdecide.ui.views.screens.options.OptionList
-import com.chrisburrow.helpdecide.utils.OptionObject
-import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToText
 
 
 class HomeTags {
@@ -80,11 +71,8 @@ class HomeTags {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    analyticsLibrary: AnalyticsLibraryInterface,
-    model: HomeViewModel = HomeViewModel(
-        analyticsLibrary,
-        isSpeechCompatible = false
-    )
+    navController: NavController,
+    model: HomeViewModel
 ) {
 
     val viewModel = remember { model }
@@ -120,7 +108,7 @@ fun HomeScreen(
                             onClick = {
 
                                 viewModel.logButtonPressed(AnalyticsActions.Clear)
-                                viewModel.showDeleteAllDialog()
+                                navController.navigate(NavigationDialogItem.DeleteAll.route)
                             }
                         ) {
                             Icon(
@@ -141,7 +129,7 @@ fun HomeScreen(
                             .wrapContentSize(),
                         onClick = {
 
-                            viewModel.showSettingsDialog()
+                            navController.navigate(NavigationDialogItem.Settings.route)
                         },
                     ) {
                         Icon(
@@ -153,7 +141,7 @@ fun HomeScreen(
                         modifier = Modifier.testTag(HomeTags.ADD_TEXT_TAG),
                         onClick = {
 
-                            viewModel.showAddDialog()
+                            navController.navigate(NavigationDialogItem.AddOption.route)
                         },
                     ) {
                         Icon(
@@ -167,7 +155,7 @@ fun HomeScreen(
                             modifier = Modifier.testTag(HomeTags.ADD_VOICE_TAG),
                             onClick = {
                                 viewModel.logButtonPressed(AnalyticsActions.Voice)
-                                viewModel.showVoiceDialog()
+                                navController.navigate(NavigationDialogItem.SpeechToText.route)
                             },
                         ) {
                             Icon(
@@ -187,7 +175,7 @@ fun HomeScreen(
                         onClick = {
 
                             viewModel.logButtonPressed(AnalyticsActions.Decide)
-                            viewModel.showDefaultDialog()
+                            navController.navigate(NavigationDialogItem.DecideType.route)
                         },
                     ){
                         Text(
@@ -210,122 +198,6 @@ fun HomeScreen(
         if(viewModel.view.emptyView) {
 
             EmptyHomeInstructions(modifier = Modifier.padding(top = innerPadding.calculateTopPadding()))
-        }
-
-        if(viewModel.dialogs.addOption) {
-
-            AddOptionDialog(
-                model = AddOptionViewModel(analyticsLibrary),
-                optionSaved = {
-
-                    viewModel.hideAddDialog()
-                    viewModel.addOption(OptionObject(text = it))
-                },
-                optionCancelled = {
-
-                    viewModel.hideAddDialog()
-                }
-            )
-        }
-
-        if(viewModel.dialogs.voiceOption) {
-
-            SpeechToText(response = {
-
-                viewModel.addOption(OptionObject(text = it))
-                viewModel.hideVoiceDialog()
-            }, cancelled = {
-
-                viewModel.hideVoiceDialog()
-            })
-        }
-
-        if(viewModel.dialogs.showOption) {
-
-            DecisionDialog(
-                DecisionViewModel(
-                    analyticsLibrary = analyticsLibrary,
-                    options = viewModel.view.options
-                ),
-                removePressed = { option ->
-
-                    viewModel.hideDecisionDialog()
-                    viewModel.deleteOption(option)
-                },
-                donePressed = {
-
-                    viewModel.hideDecisionDialog()
-                }
-            )
-        }
-
-        if(viewModel.dialogs.showWheelOption) {
-
-            DecideWheelDialog(
-                DecideWheelViewModel(
-                    analyticsLibrary = analyticsLibrary,
-                    options = viewModel.view.options
-                ),
-                removePressed = { option ->
-
-                    viewModel.hideWheelDecisionDialog()
-                    viewModel.deleteOption(option)
-                },
-                dismissPressed = {
-
-                    viewModel.hideWheelDecisionDialog()
-                }
-            )
-        }
-
-        if(viewModel.dialogs.defaultChoice) {
-
-            DecisionDefaultDialog(
-                analyticsLibrary = analyticsLibrary,
-                previouslySelected = 0,
-                selected = { position ->
-
-                    viewModel.hideDefaultDialog()
-
-                    if(position == 0) {
-
-                        viewModel.showWheelDecisionDialog()
-                    } else if(position == 1) {
-
-                        viewModel.showDecisionDialog()
-                    }
-                }
-            )
-        }
-
-        if(viewModel.dialogs.deleteAll) {
-
-            GeneralDialog(
-                viewModel = GeneralDialogViewModel(
-                    configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.RemoveAll,
-                        description = stringResource(id = R.string.confirm_delete_desc),
-                        confirmText = stringResource(id = R.string.delete_all_button),
-                        confirmPressed = {
-                            viewModel.clearOptions()
-                            viewModel.hideDeleteAllDialog()
-                        },
-                        cancelText = stringResource(id = R.string.cancel),
-                        cancelPressed = {
-                            viewModel.hideDeleteAllDialog()
-                        },
-                    ),
-                    analyticsLibrary = analyticsLibrary,
-                )
-            )
-        }
-
-        if(viewModel.dialogs.settings) {
-
-            SettingsDialog(model = PermissionsViewModel(analyticsLibrary)) {
-
-                viewModel.hideSettingsDialog()
-            }
         }
     }
 
@@ -389,7 +261,6 @@ fun EmptyHomeInstructions(modifier: Modifier) {
                 inlineContent = inlineContentMap,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-
             )
         }
     }
@@ -402,6 +273,8 @@ fun HomeScreenPreview() {
     HelpDecideTheme {
 
         val analyticsLibrary = MockAnalyticsLibrary()
-        HomeScreen(analyticsLibrary = MockAnalyticsLibrary(), HomeViewModel(analyticsLibrary, isSpeechCompatible = true))
+        val navController = rememberNavController()
+
+        HomeScreen(navController, HomeViewModel(analyticsLibrary, isSpeechCompatible = true))
     }
 }

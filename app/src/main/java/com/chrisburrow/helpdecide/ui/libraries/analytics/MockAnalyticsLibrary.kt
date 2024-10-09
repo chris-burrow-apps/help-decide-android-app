@@ -61,7 +61,7 @@ class MockAnalyticsLibrary(
         return flow { emit(settingsShown) }
     }
 
-    override suspend fun settingsShown() {
+    override suspend fun permissionsRequested() {
 
         settingsShown = true
     }

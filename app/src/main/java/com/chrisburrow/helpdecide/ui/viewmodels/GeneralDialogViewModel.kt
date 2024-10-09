@@ -19,23 +19,23 @@ class GeneralDialogViewModel(
     analyticsLibrary: AnalyticsLibraryInterface,
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var dialog by mutableStateOf(configuration)
+    var uiState by mutableStateOf(configuration)
         private set
 
     fun onConfirmPressed() {
 
-        logButtonPressed(dialog.confirmText)
-        dialog.confirmPressed()
+        logButtonPressed(uiState.confirmText)
+        uiState.confirmPressed()
     }
 
     fun onCancelPressed() {
 
-        logButtonPressed(dialog.cancelText)
-        dialog.cancelPressed()
+        logButtonPressed(uiState.cancelText)
+        uiState.cancelPressed()
     }
 
     fun trackScreenView() {
 
-        logScreenView(dialog.screenName)
+        logScreenView(uiState.screenName)
     }
 }

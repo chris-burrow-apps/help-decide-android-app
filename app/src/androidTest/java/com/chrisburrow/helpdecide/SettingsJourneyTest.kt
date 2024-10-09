@@ -4,16 +4,13 @@ import android.content.Context
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
-import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryKeys
-import com.chrisburrow.helpdecide.ui.libraries.storage.MockStorage
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.robots.settings
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
-import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
@@ -31,7 +28,8 @@ class SettingsJourneyTest {
 
     val analyticsLibrary = MockAnalyticsLibrary(
         analyticsState = false,
-        crashayticsState = true
+        crashayticsState = true,
+        settingsShown = true
     )
 
     @Before
@@ -41,14 +39,7 @@ class SettingsJourneyTest {
 
             HelpDecideTheme {
 
-                HomeScreen(
-                    analyticsLibrary = analyticsLibrary,
-                    model = HomeViewModel(
-                        analyticsLibrary = analyticsLibrary,
-                        isSpeechCompatible = false,
-                        initialOptions = emptyList()
-                    )
-                )
+                HelpDecideApp(analyticsLibrary = analyticsLibrary)
             }
         }
     }

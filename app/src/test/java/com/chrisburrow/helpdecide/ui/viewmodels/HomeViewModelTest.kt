@@ -14,7 +14,6 @@ class HomeViewModelTest {
 
         val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
-        assertFalse(homeViewModel.dialogs.addOption)
         assertFalse(homeViewModel.view.decideOption)
         assertFalse(homeViewModel.view.clearAllShown)
         assertTrue(homeViewModel.view.emptyView)
@@ -85,90 +84,6 @@ class HomeViewModelTest {
         assertFalse(homeViewModel.view.decideOption)
         assertTrue(homeViewModel.view.emptyView)
         assertFalse(homeViewModel.view.clearAllShown)
-    }
-
-    @Test
-    fun addDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.addOption)
-
-        homeViewModel.showAddDialog()
-        assertTrue(homeViewModel.dialogs.addOption)
-
-        homeViewModel.hideAddDialog()
-        assertFalse(homeViewModel.dialogs.addOption)
-    }
-
-    @Test
-    fun voiceDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.voiceOption)
-
-        homeViewModel.showVoiceDialog()
-        assertTrue(homeViewModel.dialogs.voiceOption)
-
-        homeViewModel.hideVoiceDialog()
-        assertFalse(homeViewModel.dialogs.voiceOption)
-    }
-
-    @Test
-    fun showOptionDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.showOption)
-
-        homeViewModel.showDecisionDialog()
-        assertTrue(homeViewModel.dialogs.showOption)
-
-        homeViewModel.hideDecisionDialog()
-        assertFalse(homeViewModel.dialogs.showOption)
-    }
-
-    @Test
-    fun showWheelOptionDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.showWheelOption)
-
-        homeViewModel.showWheelDecisionDialog()
-        assertTrue(homeViewModel.dialogs.showWheelOption)
-
-        homeViewModel.hideWheelDecisionDialog()
-        assertFalse(homeViewModel.dialogs.showWheelOption)
-    }
-
-    @Test
-    fun showDefaultDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.defaultChoice)
-
-        homeViewModel.showDefaultDialog()
-        assertTrue(homeViewModel.dialogs.defaultChoice)
-
-        homeViewModel.hideDefaultDialog()
-        assertFalse(homeViewModel.dialogs.defaultChoice)
-    }
-
-    @Test
-    fun showSettingsDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.settings)
-
-        homeViewModel.showSettingsDialog()
-        assertTrue(homeViewModel.dialogs.settings)
-
-        homeViewModel.hideSettingsDialog()
-        assertFalse(homeViewModel.dialogs.settings)
     }
 
     @Test

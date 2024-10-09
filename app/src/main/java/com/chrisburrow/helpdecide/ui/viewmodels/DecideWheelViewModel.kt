@@ -6,19 +6,23 @@ import androidx.compose.runtime.setValue
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.utils.OptionObject
 
+data class DecideWheelState(
+    val options: List<OptionObject> = listOf(),
+    val decidedOption: OptionObject = OptionObject("", ""),
+)
+
 class DecideWheelViewModel(
     analyticsLibrary: AnalyticsLibraryInterface,
     options: List<OptionObject>
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var options by mutableStateOf(options)
-        private set
-
-    var decidedOption by mutableStateOf(OptionObject("", ""))
+    var uiState by mutableStateOf(DecideWheelState(options = options))
         private set
 
     fun chooseOption(index: Int) {
 
-        decidedOption = options[index]
+        uiState = uiState.copy(
+            decidedOption = uiState.options[index]
+        )
     }
 }

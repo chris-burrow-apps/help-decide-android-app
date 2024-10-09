@@ -27,7 +27,7 @@ class AddDialogTest {
 
             HelpDecideTheme {
 
-                AddOptionDialog(model = AddOptionViewModel(MockAnalyticsLibrary()))
+                AddOptionDialog(viewModel = AddOptionViewModel(MockAnalyticsLibrary()))
             }
         }
 
@@ -61,7 +61,7 @@ class AddDialogTest {
             HelpDecideTheme {
 
                 AddOptionDialog(
-                    model = AddOptionViewModel(MockAnalyticsLibrary()),
+                    viewModel = AddOptionViewModel(MockAnalyticsLibrary()),
                     optionSaved = { returnedString = it }
                 )
             }
@@ -89,7 +89,7 @@ class AddDialogTest {
             HelpDecideTheme {
 
                 AddOptionDialog(
-                    model = AddOptionViewModel(MockAnalyticsLibrary()),
+                    viewModel = AddOptionViewModel(MockAnalyticsLibrary()),
                     optionCancelled = { cancelledCalled = true }
                 )
             }
@@ -117,7 +117,7 @@ class AddDialogTest {
             HelpDecideTheme {
 
                 AddOptionDialog(
-                    model = AddOptionViewModel(MockAnalyticsLibrary()),
+                    viewModel = AddOptionViewModel(MockAnalyticsLibrary()),
                     optionSaved = { returnedString = it }
                 )
             }
@@ -146,7 +146,7 @@ class AddDialogTest {
             HelpDecideTheme {
 
                 AddOptionDialog(
-                    model = AddOptionViewModel(analyticsLibrary),
+                    viewModel = AddOptionViewModel(analyticsLibrary),
                     optionSaved = { }
                 )
             }

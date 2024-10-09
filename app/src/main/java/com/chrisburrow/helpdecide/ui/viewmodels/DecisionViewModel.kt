@@ -8,25 +8,29 @@ import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.RandomGenerator
 import com.chrisburrow.helpdecide.utils.RandomNumberInterface
 
+data class DecisionDialogState(
+    val options: List<OptionObject> = listOf(),
+    val decidedOption: OptionObject = OptionObject(text = ""),
+)
+
 class DecisionViewModel(
     analyticsLibrary: AnalyticsLibraryInterface,
     private val randomGenerator: RandomNumberInterface = RandomGenerator(),
     options: List<OptionObject>
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var options by mutableStateOf(options)
-        private set
-
-    var decidedOption by mutableStateOf(OptionObject(text = "???"))
+    var uiState by mutableStateOf(DecisionDialogState(options = options))
         private set
 
     fun chooseOption() {
 
-        if(options.isNotEmpty()) {
+        if(uiState.options.isNotEmpty()) {
 
-            val generateNumber = randomGenerator.generateNumber(options.size - 1)
+            val generateNumber = randomGenerator.generateNumber(uiState.options.size - 1)
 
-            decidedOption = options[generateNumber]
+            uiState = uiState.copy(
+                decidedOption = uiState.options[generateNumber]
+            )
         }
     }
 }

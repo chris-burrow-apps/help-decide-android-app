@@ -11,7 +11,7 @@ interface AnalyticsLibraryInterface {
     suspend fun setAnalyticsState(enabled: Boolean)
 
     suspend fun checkSettingsShown(): Flow<Boolean>
-    suspend fun settingsShown()
+    suspend fun permissionsRequested()
 
     fun logScreenView(screenName: String)
     fun logButtonPressed(buttonText: String)

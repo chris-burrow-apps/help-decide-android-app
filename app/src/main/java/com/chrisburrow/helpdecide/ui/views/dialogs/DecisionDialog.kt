@@ -45,11 +45,10 @@ class DecisionDialogTags {
 
 @Composable
 fun DecisionDialog(
-    model: DecisionViewModel,
+    viewModel: DecisionViewModel,
     donePressed: () -> Unit = {},
     removePressed: (OptionObject) -> Unit = {}
 ) {
-    val viewModel = remember { model }
 
     Dialog(
         onDismissRequest = { },
@@ -58,6 +57,8 @@ fun DecisionDialog(
             dismissOnClickOutside = true
         )
     ) {
+
+        val uiState = remember { viewModel.uiState }
 
         Surface(
             modifier = Modifier.testTag(DecisionDialogTags.BASE_VIEW_TAG),
@@ -72,7 +73,7 @@ fun DecisionDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     modifier = Modifier.testTag(DecisionDialogTags.DECISION_TEXT_TAG),
-                    text = viewModel.decidedOption.text
+                    text = uiState.decidedOption.text
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row {
@@ -82,7 +83,7 @@ fun DecisionDialog(
                             .weight(1.0f),
                         onClick = {
                             viewModel.logButtonPressed(AnalyticsActions.RemoveOption)
-                            removePressed(viewModel.decidedOption)
+                            removePressed(uiState.decidedOption)
                         },
                     ) {
 
@@ -106,12 +107,12 @@ fun DecisionDialog(
                 }
             }
         }
-    }
 
-    LaunchedEffect(Unit) {
+        LaunchedEffect(Unit) {
 
-        viewModel.logScreenView(AnalyticsScreens.Instant)
-        viewModel.chooseOption()
+            viewModel.logScreenView(AnalyticsScreens.Instant)
+            viewModel.chooseOption()
+        }
     }
 }
 

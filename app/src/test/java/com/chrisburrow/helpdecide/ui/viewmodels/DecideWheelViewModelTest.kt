@@ -15,8 +15,8 @@ class DecideWheelViewModelTest {
 
         val viewModel = DecideWheelViewModel(MockAnalyticsLibrary(), options)
 
-        assertEquals(OptionObject("", ""), viewModel.decidedOption)
-        assertEquals(options, viewModel.options)
+        assertEquals(OptionObject("", ""), viewModel.uiState.decidedOption)
+        assertEquals(options, viewModel.uiState.options)
     }
 
     @Test
@@ -30,6 +30,6 @@ class DecideWheelViewModelTest {
 
         viewModel.chooseOption(0)
 
-        assertEquals(option, viewModel.decidedOption)
+        assertEquals(option, viewModel.uiState.decidedOption)
     }
 }

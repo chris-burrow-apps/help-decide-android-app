@@ -5,6 +5,7 @@ import android.os.SystemClock
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
@@ -13,8 +14,6 @@ import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.robots.generalDialog
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
-import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,14 +34,7 @@ class HomeJourneyTest {
 
             HelpDecideTheme {
 
-                HomeScreen(
-                    MockAnalyticsLibrary(),
-                    HomeViewModel(
-                        analyticsLibrary = MockAnalyticsLibrary(),
-                        isSpeechCompatible = false,
-                        initialOptions = emptyList()
-                    )
-                )
+                HelpDecideApp(analyticsLibrary = MockAnalyticsLibrary(settingsShown = true))
             }
         }
     }
