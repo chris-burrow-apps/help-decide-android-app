@@ -10,6 +10,7 @@ import com.google.firebase.analytics.logEvent
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 object AnalyticsScreens {
     val DecisionType = "decisiontype_screen"
@@ -38,9 +39,9 @@ class AnalyticsLibrary(
     private val storageLibrary: StorageLibraryInterface
 ) : AnalyticsLibraryInterface {
 
-    override suspend fun checkSettingsShown(): Flow<Boolean> {
+    override suspend fun checkSettingsShown(): Boolean {
 
-        return storageLibrary.getBoolean(StorageLibraryKeys.SettingsShown)
+        return storageLibrary.getBoolean(StorageLibraryKeys.SettingsShown).first()
     }
 
     override suspend fun permissionsRequested() {
@@ -48,14 +49,14 @@ class AnalyticsLibrary(
         storageLibrary.storeBoolean(StorageLibraryKeys.SettingsShown, true)
     }
 
-    override suspend fun getCrashalyticsState(): Flow<Boolean> {
+    override suspend fun getCrashalyticsState(): Boolean {
 
-        return storageLibrary.getBoolean(StorageLibraryKeys.CrashalyicsEnabled)
+        return storageLibrary.getBoolean(StorageLibraryKeys.CrashalyicsEnabled).first()
     }
 
-    override suspend fun getAnalyticsState(): Flow<Boolean> {
+    override suspend fun getAnalyticsState(): Boolean {
 
-        return storageLibrary.getBoolean(StorageLibraryKeys.AnalyticsEnabled)
+        return storageLibrary.getBoolean(StorageLibraryKeys.AnalyticsEnabled).first()
     }
 
     override suspend fun setCrashalyticsState(enabled: Boolean) {
@@ -87,8 +88,6 @@ class AnalyticsLibrary(
             }
         }
     }
-
-
 
     override fun logScreenView(screenName: String) {
 

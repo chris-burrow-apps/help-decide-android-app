@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -16,7 +17,9 @@ import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsListTags
 class SettingsRobot(private val rule: ComposeContentTestRule) {
 
     init {
-        rule.onNodeWithTag(SettingsListTags.BASE_VIEW).assertIsDisplayed()
+        rule.waitUntil {
+            rule.onNodeWithTag(SettingsListTags.BASE_VIEW).isDisplayed()
+        }
     }
 
     fun checkText(position: Int, title: String = "", desc: String = "") {

@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -15,7 +16,10 @@ import com.chrisburrow.helpdecide.ui.views.screens.options.OptionListTags
 class HomeRobot(private val rule: ComposeContentTestRule) {
 
     init {
-        rule.onNodeWithTag(HomeTags.BASE_VIEW_TAG).assertIsDisplayed()
+
+        rule.waitUntil {
+            rule.onNodeWithTag(HomeTags.BASE_VIEW_TAG).isDisplayed()
+        }
     }
 
     fun pressAdd() { rule.onNodeWithTag(HomeTags.ADD_TEXT_TAG).performClick() }

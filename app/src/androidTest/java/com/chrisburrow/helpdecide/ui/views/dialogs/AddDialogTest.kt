@@ -10,6 +10,7 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,7 +22,7 @@ class AddDialogTest {
     val rule = createComposeRule()
 
     @Test
-    fun textShown() {
+    fun textShown() = runTest {
 
         rule.setContent {
 
@@ -52,7 +53,7 @@ class AddDialogTest {
     }
 
     @Test
-    fun optionAdded() {
+    fun optionAdded() = runTest {
 
         var returnedString = ""
 
@@ -80,7 +81,7 @@ class AddDialogTest {
     }
 
     @Test
-    fun optionCancelled() {
+    fun optionCancelled() = runTest {
 
         var cancelledCalled = false
 
@@ -108,7 +109,7 @@ class AddDialogTest {
     }
 
     @Test
-    fun optionTextPaddingRemoved() {
+    fun optionTextPaddingRemoved() = runTest {
 
         var returnedString = ""
 
@@ -137,7 +138,7 @@ class AddDialogTest {
     }
 
     @Test
-    fun analyticsLogged() {
+    fun analyticsLogged() = runTest {
 
         val analyticsLibrary = MockAnalyticsLibrary()
 

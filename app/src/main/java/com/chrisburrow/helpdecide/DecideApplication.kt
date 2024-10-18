@@ -12,12 +12,10 @@ class DecideApplication : Application() {
         super.onCreate()
 
         storageLibrary = StorageLibrary(this)
-        analyticsLibrary = AnalyticsLibrary(this, storageLibrary = storageLibrary)
     }
 
     companion object {
 
         lateinit var storageLibrary: StorageLibraryInterface
-        lateinit var analyticsLibrary: AnalyticsLibraryInterface
     }
 }

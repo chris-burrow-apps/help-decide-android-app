@@ -4,6 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 data class GeneralDialogConfig(
     var screenName: String,
@@ -19,23 +21,23 @@ class GeneralDialogViewModel(
     analyticsLibrary: AnalyticsLibraryInterface,
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var uiState by mutableStateOf(configuration)
-        private set
+    private var _uiState = MutableStateFlow(configuration)
+    var uiState = _uiState.asStateFlow()
 
     fun onConfirmPressed() {
 
-        logButtonPressed(uiState.confirmText)
-        uiState.confirmPressed()
+        logButtonPressed(uiState.value.confirmText)
+        uiState.value.confirmPressed()
     }
 
     fun onCancelPressed() {
 
-        logButtonPressed(uiState.cancelText)
-        uiState.cancelPressed()
+        logButtonPressed(uiState.value.cancelText)
+        uiState.value.cancelPressed()
     }
 
     fun trackScreenView() {
 
-        logScreenView(uiState.screenName)
+        logScreenView(uiState.value.screenName)
     }
 }

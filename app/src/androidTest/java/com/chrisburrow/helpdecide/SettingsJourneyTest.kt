@@ -13,6 +13,7 @@ import com.chrisburrow.helpdecide.ui.robots.settings
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,7 +46,7 @@ class SettingsJourneyTest {
     }
 
     @Test
-    fun checkSettingsScreen() {
+    fun checkSettingsScreen() = runTest {
 
         home(rule) {
 
@@ -73,7 +74,7 @@ class SettingsJourneyTest {
     }
 
     @Test
-    fun checkSettingsShown() {
+    fun checkSettingsShown() = runTest {
 
         home(rule) {
 
@@ -88,7 +89,7 @@ class SettingsJourneyTest {
     }
 
     @Test
-    fun doneClosesDialog() {
+    fun doneClosesDialog() = runTest {
 
         home(rule) {
 
@@ -107,7 +108,7 @@ class SettingsJourneyTest {
     }
 
     @Test
-    fun analyticsLogged() {
+    fun analyticsLogged() = runTest {
 
         home(rule) {
 

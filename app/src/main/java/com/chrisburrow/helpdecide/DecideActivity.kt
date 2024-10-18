@@ -6,9 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
-import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibrary
-import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryInterface
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 
 
@@ -22,7 +19,7 @@ class DecideActivity : ComponentActivity() {
 
             HelpDecideTheme {
                 // A surface container using the 'background' color from the theme
-                HelpDecideApp(analyticsLibrary = DecideApplication.analyticsLibrary)
+                HelpDecideApp(analyticsLibrary = AnalyticsLibrary(context = this.applicationContext, storageLibrary = DecideApplication.storageLibrary))
             }
         }
     }

@@ -14,11 +14,11 @@ class HomeViewModelTest {
 
         val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
-        assertFalse(homeViewModel.view.decideOption)
-        assertFalse(homeViewModel.view.clearAllShown)
-        assertTrue(homeViewModel.view.emptyView)
+        assertFalse(homeViewModel.view.value.decideOption)
+        assertFalse(homeViewModel.view.value.clearAllShown)
+        assertTrue(homeViewModel.view.value.emptyView)
 
-        assertEquals(0, homeViewModel.view.options.size)
+        assertEquals(0, homeViewModel.view.value.options.size)
     }
 
     @Test
@@ -30,19 +30,19 @@ class HomeViewModelTest {
 
         homeViewModel.addOption(newOption)
 
-        assertTrue(homeViewModel.view.options.contains(newOption))
-        assertFalse(homeViewModel.view.decideOption)
-        assertFalse(homeViewModel.view.emptyView)
-        assertTrue(homeViewModel.view.clearAllShown)
+        assertTrue(homeViewModel.view.value.options.contains(newOption))
+        assertFalse(homeViewModel.view.value.decideOption)
+        assertFalse(homeViewModel.view.value.emptyView)
+        assertTrue(homeViewModel.view.value.clearAllShown)
 
         val anotherOption = OptionObject(text = "Option 2")
 
         homeViewModel.addOption(anotherOption)
 
-        assertTrue(homeViewModel.view.options.contains(anotherOption))
-        assertTrue(homeViewModel.view.decideOption)
-        assertFalse(homeViewModel.view.emptyView)
-        assertTrue(homeViewModel.view.clearAllShown)
+        assertTrue(homeViewModel.view.value.options.contains(anotherOption))
+        assertTrue(homeViewModel.view.value.decideOption)
+        assertFalse(homeViewModel.view.value.emptyView)
+        assertTrue(homeViewModel.view.value.clearAllShown)
     }
 
     @Test
@@ -55,15 +55,15 @@ class HomeViewModelTest {
             initialOptions = options
         )
 
-        assertEquals(options, homeViewModel.view.options)
+        assertEquals(options, homeViewModel.view.value.options)
 
         val deleteOption = options[0]
 
         homeViewModel.deleteOption(deleteOption)
 
-        assertFalse(homeViewModel.view.options.contains(deleteOption))
-        assertTrue(homeViewModel.view.decideOption)
-        assertFalse(homeViewModel.view.emptyView)
+        assertFalse(homeViewModel.view.value.options.contains(deleteOption))
+        assertTrue(homeViewModel.view.value.decideOption)
+        assertFalse(homeViewModel.view.value.emptyView)
     }
 
     @Test
@@ -76,14 +76,14 @@ class HomeViewModelTest {
             initialOptions = options
         )
 
-        assertEquals(options, homeViewModel.view.options)
+        assertEquals(options, homeViewModel.view.value.options)
 
         homeViewModel.clearOptions()
 
-        assertEquals(0, homeViewModel.view.options.size)
-        assertFalse(homeViewModel.view.decideOption)
-        assertTrue(homeViewModel.view.emptyView)
-        assertFalse(homeViewModel.view.clearAllShown)
+        assertEquals(0, homeViewModel.view.value.options.size)
+        assertFalse(homeViewModel.view.value.decideOption)
+        assertTrue(homeViewModel.view.value.emptyView)
+        assertFalse(homeViewModel.view.value.clearAllShown)
     }
 
     @Test
@@ -94,7 +94,7 @@ class HomeViewModelTest {
             isSpeechCompatible = true
         )
 
-        assertTrue(homeViewModel.view.voiceButton)
+        assertTrue(homeViewModel.view.value.voiceButton)
     }
 
     @Test
@@ -105,6 +105,6 @@ class HomeViewModelTest {
             isSpeechCompatible = false
         )
 
-        assertFalse(homeViewModel.view.voiceButton)
+        assertFalse(homeViewModel.view.value.voiceButton)
     }
 }

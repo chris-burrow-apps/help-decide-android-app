@@ -10,7 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +35,7 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsList
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
+import kotlinx.coroutines.flow.collect
 
 class SettingsDialogTags {
 
@@ -49,7 +52,6 @@ fun SettingsDialog(
     viewModel: SettingsViewModel,
     onDismissRequested: () -> Unit
 ) {
-    val uiState = remember { viewModel.uiState }
 
     Dialog(
         onDismissRequest = {
@@ -60,6 +62,9 @@ fun SettingsDialog(
             dismissOnClickOutside = true
         )
     ) {
+
+        val state = remember { viewModel.uiState }
+        val uiState by state.collectAsState()
 
         Surface(
             modifier = Modifier.testTag(SettingsDialogTags.BASE_VIEW_TAG),
@@ -116,15 +121,13 @@ fun SettingsDialog(
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
-    }
 
+        LaunchedEffect(Unit) {
 
+            viewModel.logScreenView(AnalyticsScreens.Settings)
 
-    LaunchedEffect(Unit) {
-
-        viewModel.logScreenView(AnalyticsScreens.Settings)
-
-        viewModel.refreshAnalytics()
+            viewModel.refreshAnalytics()
+        }
     }
 }
 

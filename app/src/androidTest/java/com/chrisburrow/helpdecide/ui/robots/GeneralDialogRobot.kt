@@ -1,19 +1,19 @@
 package com.chrisburrow.helpdecide.ui.robots
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialogTags
 import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialogTags
 
 class GeneralDialogRobot(private val rule: ComposeContentTestRule) {
 
     init {
-        rule.onNodeWithTag(GeneralDialogTags.BASE_VIEW_TAG).assertIsDisplayed()
+        rule.waitUntil {
+            rule.onNodeWithTag(GeneralDialogTags.BASE_VIEW_TAG).isDisplayed()
+        }
     }
 
     fun checkDescription(text: String = "") { rule.onNodeWithTag(GeneralDialogTags.DESCRIPTION_TAG).assertTextEquals(text) }

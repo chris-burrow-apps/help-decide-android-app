@@ -15,9 +15,9 @@ class AddOptionViewModelTest {
 
         val defaultValue = ""
 
-        assertEquals(defaultValue, viewModel.uiState.optionText)
-        assertFalse(viewModel.uiState.clearEnabled)
-        assertFalse(viewModel.uiState.saveEnabled)
+        assertEquals(defaultValue, viewModel.uiState.value.optionText)
+        assertFalse(viewModel.uiState.value.clearEnabled)
+        assertFalse(viewModel.uiState.value.saveEnabled)
     }
 
     @Test
@@ -28,9 +28,9 @@ class AddOptionViewModelTest {
         val modifiedText = "Option 1"
         viewModel.onTextChanged(modifiedText)
 
-        assertEquals(modifiedText, viewModel.uiState.optionText)
-        assertTrue(viewModel.uiState.clearEnabled)
-        assertTrue(viewModel.uiState.saveEnabled)
+        assertEquals(modifiedText, viewModel.uiState.value.optionText)
+        assertTrue(viewModel.uiState.value.clearEnabled)
+        assertTrue(viewModel.uiState.value.saveEnabled)
     }
 
     @Test
@@ -41,9 +41,9 @@ class AddOptionViewModelTest {
         val emptyText = ""
         viewModel.onTextChanged(emptyText)
 
-        assertEquals(emptyText, viewModel.uiState.optionText)
-        assertFalse(viewModel.uiState.clearEnabled)
-        assertFalse(viewModel.uiState.saveEnabled)
+        assertEquals(emptyText, viewModel.uiState.value.optionText)
+        assertFalse(viewModel.uiState.value.clearEnabled)
+        assertFalse(viewModel.uiState.value.saveEnabled)
     }
 
     @Test
@@ -53,9 +53,9 @@ class AddOptionViewModelTest {
 
         viewModel.onTextCleared()
 
-        assertEquals("", viewModel.uiState.optionText)
-        assertFalse(viewModel.uiState.clearEnabled)
-        assertFalse(viewModel.uiState.saveEnabled)
+        assertEquals("", viewModel.uiState.value.optionText)
+        assertFalse(viewModel.uiState.value.clearEnabled)
+        assertFalse(viewModel.uiState.value.saveEnabled)
     }
 
     @Test
@@ -66,6 +66,6 @@ class AddOptionViewModelTest {
         val modifiedText = "Option 1"
         viewModel.onTextChanged("          $modifiedText            ")
 
-        assertEquals(modifiedText, viewModel.uiState.optionText)
+        assertEquals(modifiedText, viewModel.uiState.value.optionText)
     }
 }

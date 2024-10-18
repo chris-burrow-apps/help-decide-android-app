@@ -2,6 +2,7 @@ package com.chrisburrow.helpdecide.ui
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -185,12 +186,12 @@ fun AppNavHost (
 
         dialog(NavigationDialogItem.SpinTheWheel.route) {
 
-            val options = homeViewModel.view
+            val options = homeViewModel.view.collectAsState()
 
             DecideWheelDialog(
                 DecideWheelViewModel(
                     analyticsLibrary = analyticsLibrary,
-                    options = options.options
+                    options = options.value.options
                 ),
                 removePressed = { option ->
 
@@ -206,12 +207,12 @@ fun AppNavHost (
 
         dialog(NavigationDialogItem.InstantDecision.route) {
 
-            val options = homeViewModel.view
+            val options = homeViewModel.view.collectAsState()
 
             DecisionDialog(
                 DecisionViewModel(
                     analyticsLibrary = analyticsLibrary,
-                    options = options.options
+                    options = options.value.options
                 ),
                 removePressed = { option ->
 

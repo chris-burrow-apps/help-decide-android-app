@@ -25,7 +25,7 @@ class DecisionViewModelTest {
         decisionViewModel.chooseOption()
 
         assertTrue(randomGenerator.generateCalled)
-        assertEquals(options.first(), decisionViewModel.uiState.decidedOption)
+        assertEquals(options.first(), decisionViewModel.uiState.value.decidedOption)
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogConfig
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,7 +20,7 @@ class GeneralDialogTest {
     val rule = createComposeRule()
 
     @Test
-    fun textShown() {
+    fun textShown() = runTest {
 
         val confirmText = "Confirm 1"
         val cancelText = "Cancel 1"
@@ -53,7 +54,7 @@ class GeneralDialogTest {
     }
 
     @Test
-    fun callbacksTriggered() {
+    fun callbacksTriggered() = runTest {
 
         var confirmPressed = false
         var cancelPressed = false
@@ -88,7 +89,7 @@ class GeneralDialogTest {
     }
 
     @Test
-    fun analyticsLogged() {
+    fun analyticsLogged() = runTest {
 
         val confirmText = "Confirm 1"
         val cancelText = "Cancel 1"

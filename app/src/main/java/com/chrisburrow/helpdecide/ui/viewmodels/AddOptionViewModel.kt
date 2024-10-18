@@ -4,6 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 data class AddOptionState(
     val optionText: String = "",
@@ -16,12 +18,12 @@ class AddOptionViewModel(
     initialText: String = ""
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var uiState by mutableStateOf(AddOptionState(optionText = initialText))
-        private set
+    private var _uiState = MutableStateFlow(AddOptionState(optionText = initialText))
+    var uiState = _uiState.asStateFlow()
 
     fun onTextCleared() {
 
-        uiState = uiState.copy(
+        _uiState.value = uiState.value.copy(
             optionText = "",
             saveEnabled = false,
             clearEnabled = false
@@ -30,7 +32,7 @@ class AddOptionViewModel(
 
     fun onTextChanged(text: String) {
 
-        uiState = uiState.copy(
+        _uiState.value = uiState.value.copy(
             optionText = text.trim(),
             saveEnabled = text.isNotEmpty(),
             clearEnabled = text.isNotEmpty()

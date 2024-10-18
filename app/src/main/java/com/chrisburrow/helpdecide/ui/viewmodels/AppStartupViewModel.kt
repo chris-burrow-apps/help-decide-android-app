@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import com.chrisburrow.helpdecide.ui.NavigationScreenItem
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.navigateAndPopUpTo
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 abstract class LoadingViewModel : ViewModel() {
@@ -14,7 +15,7 @@ abstract class LoadingViewModel : ViewModel() {
 }
 
 class AppStartupViewModel(
-    val navController: NavController,
+    private val navController: NavController,
     val analyticsLibrary: AnalyticsLibraryInterface
 ) : LoadingViewModel() {
 
@@ -22,18 +23,15 @@ class AppStartupViewModel(
 
         viewModelScope.launch {
 
-            analyticsLibrary.checkSettingsShown().collect { settingsPreviouslyShown ->
+            val navigateTo = if (analyticsLibrary.checkSettingsShown()) {
 
-                val navigateTo = if (settingsPreviouslyShown) {
+                NavigationScreenItem.Home.route
+            } else {
 
-                    NavigationScreenItem.Home.route
-                } else {
-
-                    NavigationScreenItem.Onboarding.route
-                }
-
-                navController.navigateAndPopUpTo(navigateTo)
+                NavigationScreenItem.Onboarding.route
             }
+
+            navController.navigateAndPopUpTo(navigateTo)
         }
     }
 }

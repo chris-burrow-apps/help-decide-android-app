@@ -75,7 +75,8 @@ fun HomeScreen(
     model: HomeViewModel
 ) {
 
-    val viewModel = remember { model }
+    val state = remember { model.view }
+    val view = state.collectAsState()
 
     Scaffold(
         modifier = Modifier.testTag(HomeTags.BASE_VIEW_TAG),
@@ -99,7 +100,7 @@ fun HomeScreen(
                 },
                 actions = {
 
-                    if(viewModel.view.clearAllShown) {
+                    if(view.value.clearAllShown) {
 
                         IconButton(
                             modifier = Modifier
@@ -107,7 +108,7 @@ fun HomeScreen(
                                 .wrapContentSize(),
                             onClick = {
 
-                                viewModel.logButtonPressed(AnalyticsActions.Clear)
+                                model.logButtonPressed(AnalyticsActions.Clear)
                                 navController.navigate(NavigationDialogItem.DeleteAll.route)
                             }
                         ) {
@@ -149,12 +150,12 @@ fun HomeScreen(
                             contentDescription = stringResource(R.string.add_text_option))
                     }
 
-                    if(viewModel.view.voiceButton) {
+                    if(view.value.voiceButton) {
 
                         IconButton(
                             modifier = Modifier.testTag(HomeTags.ADD_VOICE_TAG),
                             onClick = {
-                                viewModel.logButtonPressed(AnalyticsActions.Voice)
+                                model.logButtonPressed(AnalyticsActions.Voice)
                                 navController.navigate(NavigationDialogItem.SpeechToText.route)
                             },
                         ) {
@@ -170,11 +171,11 @@ fun HomeScreen(
                         modifier = Modifier
                             .defaultMinSize(minWidth = 56.dp, minHeight = 56.dp)
                             .testTag(HomeTags.DECIDE_BUTTON_TAG),
-                        enabled = viewModel.view.decideOption,
+                        enabled = view.value.decideOption,
                         shape = CircleShape,
                         onClick = {
 
-                            viewModel.logButtonPressed(AnalyticsActions.Decide)
+                            model.logButtonPressed(AnalyticsActions.Decide)
                             navController.navigate(NavigationDialogItem.DecideType.route)
                         },
                     ){
@@ -191,11 +192,11 @@ fun HomeScreen(
 
         OptionList(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
-            options = viewModel.view.options,
-            onDeleteClicked = { viewModel.deleteOption(it) }
+            options = view.value.options,
+            onDeleteClicked = { model.deleteOption(it.id) }
         )
 
-        if(viewModel.view.emptyView) {
+        if(view.value.emptyView) {
 
             EmptyHomeInstructions(modifier = Modifier.padding(top = innerPadding.calculateTopPadding()))
         }
@@ -203,7 +204,7 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
 
-        viewModel.logScreenView(AnalyticsScreens.Home)
+        model.logScreenView(AnalyticsScreens.Home)
     }
 }
 

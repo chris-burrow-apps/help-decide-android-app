@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -14,7 +15,9 @@ import com.chrisburrow.helpdecide.ui.views.dialogs.AddDialogTags
 class AddDialogRobot(private val rule: ComposeContentTestRule) {
 
     init {
-        rule.onNodeWithTag(AddDialogTags.BASE_VIEW_TAG).assertIsDisplayed()
+        rule.waitUntil {
+            rule.onNodeWithTag(AddDialogTags.BASE_VIEW_TAG).isDisplayed()
+        }
     }
 
     fun isSaveEnabled() { rule.onNodeWithTag(AddDialogTags.SAVE_BUTTON_TAG).assertIsEnabled() }

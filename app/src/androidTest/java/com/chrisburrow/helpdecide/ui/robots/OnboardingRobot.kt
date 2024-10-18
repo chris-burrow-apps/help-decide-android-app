@@ -2,6 +2,7 @@ package com.chrisburrow.helpdecide.ui.robots
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -10,7 +11,9 @@ import com.chrisburrow.helpdecide.ui.views.screens.OnboardingTags
 class OnboardingRobot(private val rule: ComposeContentTestRule) {
 
     init {
-        rule.onNodeWithTag(OnboardingTags.BASE_VIEW_TAG).assertIsDisplayed()
+        rule.waitUntil {
+            rule.onNodeWithTag(OnboardingTags.BASE_VIEW_TAG).isDisplayed()
+        }
     }
 
     fun checkPageText(position: Int, title: String, description: String) {

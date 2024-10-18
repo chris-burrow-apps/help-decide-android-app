@@ -12,6 +12,7 @@ import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.RandomGenerator
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +24,7 @@ class DecisionDialogTest {
     val rule = createComposeRule()
 
     @Test
-    fun textShown() {
+    fun textShown() = runTest {
 
         val expectedObject = OptionObject(text = "example 1")
 
@@ -48,7 +49,7 @@ class DecisionDialogTest {
     }
 
     @Test
-    fun donePressed() {
+    fun donePressed() = runTest {
 
         var doneCalled = false
 
@@ -77,10 +78,10 @@ class DecisionDialogTest {
     }
 
     @Test
-    fun removePressed() {
+    fun removePressed() = runTest {
 
         var clearCalled = false
-        var optionRemoved: OptionObject? = null
+        var optionRemoved: String? = null
 
         var option = OptionObject(text = "example 1")
 
@@ -109,11 +110,11 @@ class DecisionDialogTest {
         }
 
         assertTrue(clearCalled)
-        assertEquals(option, optionRemoved)
+        assertEquals(option.id, optionRemoved)
     }
 
     @Test
-    fun analyticsLogged() {
+    fun analyticsLogged() = runTest {
 
         val analyticsLibrary = MockAnalyticsLibrary()
 

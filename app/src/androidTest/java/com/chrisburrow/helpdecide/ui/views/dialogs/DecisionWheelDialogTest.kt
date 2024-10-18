@@ -11,6 +11,7 @@ import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
 import com.chrisburrow.helpdecide.utils.OptionObject
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +23,7 @@ class DecisionWheelDialogTest {
     val rule = createComposeRule()
 
     @Test
-    fun optionShown() {
+    fun optionShown() = runTest {
 
         val expectedObject = OptionObject(text = "example 1")
         val options = listOf(expectedObject)
@@ -49,7 +50,7 @@ class DecisionWheelDialogTest {
     }
 
     @Test
-    fun donePressed() {
+    fun donePressed() = runTest {
 
         val expectedObject = OptionObject(text = "example 1")
         val options = listOf(expectedObject)
@@ -80,14 +81,14 @@ class DecisionWheelDialogTest {
     }
 
     @Test
-    fun clearPressed() {
+    fun clearPressed() = runTest {
 
         val expectedObject = OptionObject(text = "example 1")
         val options = listOf(expectedObject)
 
         var clearCalled = false
 
-        var optionRemoved: OptionObject? = null
+        var optionRemoved: String? = null
 
         rule.setContent {
 
@@ -113,11 +114,11 @@ class DecisionWheelDialogTest {
         }
 
         assertTrue(clearCalled)
-        assertEquals(expectedObject, optionRemoved)
+        assertEquals(expectedObject.id, optionRemoved)
     }
 
     @Test
-    fun analyticsCalled() {
+    fun analyticsCalled() = runTest {
 
         val options = listOf(OptionObject(text = "example 1"))
 

@@ -1,16 +1,9 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.utils.OptionObject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 data class HomeViewState(
     val voiceButton: Boolean = false,
@@ -20,46 +13,32 @@ data class HomeViewState(
     val emptyView: Boolean = true,
 )
 
-data class HomeDialogState(
-    val addOption: Boolean = false,
-    val voiceOption: Boolean = false,
-
-    val showOption: Boolean = false,
-    val showWheelOption: Boolean = false,
-    val defaultChoice: Boolean = false,
-    val settings: Boolean = false,
-    val deleteAll: Boolean = false,
-)
-
 class HomeViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface,
     isSpeechCompatible: Boolean = false,
     initialOptions: List<OptionObject> = listOf(),
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var view by mutableStateOf(HomeViewState(voiceButton = isSpeechCompatible, options = initialOptions))
-        private set
-
-    var dialogs by mutableStateOf(HomeDialogState())
-        private set
+    private var _view = MutableStateFlow(HomeViewState(voiceButton = isSpeechCompatible, options = initialOptions))
+    var view = _view.asStateFlow()
 
     fun addOption(option: OptionObject) {
 
-        view = view.copy(options = view.options.plus(option))
+        _view.value = view.value.copy(options = view.value.options.plus(option))
 
         checkButtonsState()
     }
 
-    fun deleteOption(option: OptionObject) {
+    fun deleteOption(id: String) {
 
-        view = view.copy(options = view.options.minus(option))
+        _view.value = view.value.copy(options = view.value.options.filterNot { it.id == id })
 
         checkButtonsState()
     }
 
     fun clearOptions() {
 
-        view = view.copy(options = listOf())
+        _view.value = view.value.copy(options = listOf())
 
         checkButtonsState()
     }
@@ -73,16 +52,16 @@ class HomeViewModel(
 
     private fun checkDecideEnabled() {
 
-        view = view.copy(decideOption = view.options.isNotEmpty() && view.options.size > 1)
+        _view.value = view.value.copy(decideOption = view.value.options.isNotEmpty() && view.value.options.size > 1)
     }
 
     private fun checkEmptyShown() {
 
-        view = view.copy(emptyView = view.options.isEmpty())
+        _view.value = view.value.copy(emptyView = view.value.options.isEmpty())
     }
 
     private fun checkClearAllShown() {
 
-        view = view.copy(clearAllShown = view.options.isNotEmpty())
+        _view.value = view.value.copy(clearAllShown = view.value.options.isNotEmpty())
     }
 }

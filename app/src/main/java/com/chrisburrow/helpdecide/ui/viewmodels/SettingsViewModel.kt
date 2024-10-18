@@ -5,12 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class ScreenUiState(
@@ -24,32 +23,26 @@ class SettingsViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var uiState by mutableStateOf(ScreenUiState())
-        private set
+    private var _uiState = MutableStateFlow(ScreenUiState())
+    var uiState = _uiState.asStateFlow()
 
     fun refreshAnalytics() {
 
         viewModelScope.launch {
 
-            val analyticsLibraryState =
-                analyticsLibrary.getCrashalyticsState().combine(analyticsLibrary.getAnalyticsState()) { crashState, analyticsState ->
+            _uiState.value = uiState.value.copy(
+                crashalyticsEnabled = analyticsLibrary.getCrashalyticsState(),
+                googleAnalyticsEnabled = analyticsLibrary.getAnalyticsState(),
 
-                    uiState = uiState.copy(
-                        crashalyticsEnabled = crashState,
-                        googleAnalyticsEnabled = analyticsState,
-
-                        crashalyticsLoading = false,
-                        googleAnalyticsLoading = false,
-                    )
-                }
-
-            analyticsLibraryState.launchIn(this)
+                crashalyticsLoading = false,
+                googleAnalyticsLoading = false,
+            )
         }
     }
 
     fun toggleGoogleAnalytics(toggled: Boolean) {
 
-        uiState = uiState.copy(googleAnalyticsEnabled = toggled)
+        _uiState.value = uiState.value.copy(googleAnalyticsEnabled = toggled)
 
         viewModelScope.launch {
 
@@ -59,7 +52,7 @@ class SettingsViewModel(
 
     fun toggleCrashalytics(toggled: Boolean) {
 
-        uiState = uiState.copy(crashalyticsEnabled = toggled)
+        _uiState.value = uiState.value.copy(crashalyticsEnabled = toggled)
 
         viewModelScope.launch {
 
