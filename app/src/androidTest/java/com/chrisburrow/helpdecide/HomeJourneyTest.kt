@@ -156,7 +156,7 @@ class HomeJourneyTest {
     }
 
     @Test
-    fun decisionDisabledWhenOneOptionShown() = runTest {
+    fun decisionDisabled_whenOneOptionShown() = runTest {
 
         val optionText = "Option 1"
 
