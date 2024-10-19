@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.utils
+package com.chrisburrow.helpdecide
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -10,9 +10,10 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestDispatcherRule(
+class MainDispatcherRule(
     private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-): TestWatcher() {
+) : TestWatcher() {
+
     override fun starting(description: Description) {
         Dispatchers.setMain(testDispatcher)
     }

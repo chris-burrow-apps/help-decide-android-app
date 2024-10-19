@@ -2,6 +2,7 @@ package com.chrisburrow.helpdecide.ui.robots
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -12,7 +13,9 @@ import java.text.FieldPosition
 class DecisionDefaultDialogRobot(private val rule: ComposeContentTestRule) {
 
     init {
-        rule.onNodeWithTag(DecisionDefaultDialogTags.BASE_VIEW_TAG).assertIsDisplayed()
+        rule.waitUntil {
+            rule.onNodeWithTag(DecisionDefaultDialogTags.BASE_VIEW_TAG).isDisplayed()
+        }
     }
 
     fun pressQuickOption() { pressOption(1) }

@@ -4,34 +4,38 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+data class AddOptionState(
+    val optionText: String = "",
+    val saveEnabled: Boolean = false,
+    val clearEnabled: Boolean = false,
+)
 
 class AddOptionViewModel(
     analyticsLibrary: AnalyticsLibraryInterface,
     initialText: String = ""
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var optionText by mutableStateOf(initialText)
-        private set
-
-    var saveEnabled by  mutableStateOf(false)
-        private set
-
-    var clearEnabled by mutableStateOf(false)
-        private set
+    private var _uiState = MutableStateFlow(AddOptionState(optionText = initialText))
+    var uiState = _uiState.asStateFlow()
 
     fun onTextCleared() {
 
-        optionText = ""
-
-        saveEnabled = false
-        clearEnabled = false
+        _uiState.value = uiState.value.copy(
+            optionText = "",
+            saveEnabled = false,
+            clearEnabled = false
+        )
     }
 
     fun onTextChanged(text: String) {
 
-        optionText = text.trim()
-
-        saveEnabled = text.isNotEmpty()
-        clearEnabled = text.isNotEmpty()
+        _uiState.value = uiState.value.copy(
+            optionText = text.trim(),
+            saveEnabled = text.isNotEmpty(),
+            clearEnabled = text.isNotEmpty()
+        )
     }
 }

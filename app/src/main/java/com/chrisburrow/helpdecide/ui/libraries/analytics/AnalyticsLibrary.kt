@@ -8,9 +8,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.logEvent
 import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.BuildConfig
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 object AnalyticsScreens {
     val DecisionType = "decisiontype_screen"
@@ -35,35 +35,35 @@ object AnalyticsActions {
 
 class AnalyticsLibrary(
     private val context: Context,
-    private val debug: Boolean = BuildConfig.DEBUG,
+    private val test: Boolean = false,
     private val storageLibrary: StorageLibraryInterface
 ) : AnalyticsLibraryInterface {
 
-    override suspend fun checkSettingsShown(): Flow<Boolean> {
+    override suspend fun checkSettingsShown(): Boolean {
 
-        return storageLibrary.getBoolean(StorageLibraryKeys.SettingsShown)
+        return storageLibrary.getBoolean(StorageLibraryKeys.SettingsShown).first()
     }
 
-    override suspend fun settingsShown() {
+    override suspend fun permissionsRequested() {
 
         storageLibrary.storeBoolean(StorageLibraryKeys.SettingsShown, true)
     }
 
-    override suspend fun getCrashalyticsState(): Flow<Boolean> {
+    override suspend fun getCrashalyticsState(): Boolean {
 
-        return storageLibrary.getBoolean(StorageLibraryKeys.CrashalyicsEnabled)
+        return storageLibrary.getBoolean(StorageLibraryKeys.CrashalyicsEnabled).first()
     }
 
-    override suspend fun getAnalyticsState(): Flow<Boolean> {
+    override suspend fun getAnalyticsState(): Boolean {
 
-        return storageLibrary.getBoolean(StorageLibraryKeys.AnalyticsEnabled)
+        return storageLibrary.getBoolean(StorageLibraryKeys.AnalyticsEnabled).first()
     }
 
     override suspend fun setCrashalyticsState(enabled: Boolean) {
 
         storageLibrary.storeBoolean(StorageLibraryKeys.CrashalyicsEnabled, enabled)
 
-        if(!debug) {
+        if(!test) {
 
             Firebase.crashlytics.isCrashlyticsCollectionEnabled = enabled
 
@@ -78,7 +78,7 @@ class AnalyticsLibrary(
 
         storageLibrary.storeBoolean(StorageLibraryKeys.AnalyticsEnabled, enabled)
 
-        if(!debug) {
+        if(!test) {
 
             Firebase.analytics.setAnalyticsCollectionEnabled(enabled)
 
@@ -89,11 +89,9 @@ class AnalyticsLibrary(
         }
     }
 
-
-
     override fun logScreenView(screenName: String) {
 
-        if(!debug) {
+        if(!test) {
 
             val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
@@ -111,7 +109,7 @@ class AnalyticsLibrary(
 
     override fun logButtonPressed(buttonText: String) {
 
-        if(debug) {
+        if(test) {
 
             val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 

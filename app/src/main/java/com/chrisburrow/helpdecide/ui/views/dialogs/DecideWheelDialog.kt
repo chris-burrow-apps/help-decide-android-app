@@ -14,6 +14,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
@@ -31,6 +34,7 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
 import com.chrisburrow.helpdecide.ui.views.DecideSpinWheel
 import com.chrisburrow.helpdecide.utils.OptionObject
+import kotlinx.coroutines.flow.collect
 
 class DecideWheelDialogTags {
 
@@ -44,12 +48,13 @@ class DecideWheelDialogTags {
 }
 @Composable
 fun DecideWheelDialog(
-    model: DecideWheelViewModel,
+    viewModel: DecideWheelViewModel,
     dismissPressed: () -> Unit,
-    removePressed: (OptionObject) -> Unit
+    removePressed: (String) -> Unit
 ) {
 
-    val viewModel = remember { model }
+    val state = remember { viewModel.uiState }
+    val uiState by state.collectAsStateWithLifecycle()
 
     Dialog(
         properties = DialogProperties(
@@ -73,8 +78,10 @@ fun DecideWheelDialog(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 DecideSpinWheel(
-                    size = viewModel.options.size,
-                    stopped = { viewModel.chooseOption(it) }
+                    size = uiState.options.size,
+                    stopped = {
+                        viewModel.chooseOption(it)
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -82,7 +89,7 @@ fun DecideWheelDialog(
                 Text(
                     modifier = Modifier.testTag(DecideWheelDialogTags.DECISION_TEXT_TAG),
                     color = MaterialTheme.colorScheme.primary,
-                    text = viewModel.decidedOption.text
+                    text = uiState.decidedOption.text
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -94,7 +101,7 @@ fun DecideWheelDialog(
                             .weight(1.0f),
                         onClick = {
                             viewModel.logButtonPressed(AnalyticsActions.RemoveOption)
-                            removePressed(viewModel.decidedOption)
+                            removePressed(uiState.decidedOption.id)
                         },
                     ) {
 
@@ -116,11 +123,11 @@ fun DecideWheelDialog(
                 }
             }
         }
-    }
 
-    LaunchedEffect(Unit) {
+        LaunchedEffect(Unit) {
 
-        viewModel.logScreenView(AnalyticsScreens.Wheel)
+            viewModel.logScreenView(AnalyticsScreens.Wheel)
+        }
     }
 }
 

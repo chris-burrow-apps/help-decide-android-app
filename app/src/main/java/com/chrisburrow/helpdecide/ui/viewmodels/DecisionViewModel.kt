@@ -7,6 +7,13 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterfa
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.RandomGenerator
 import com.chrisburrow.helpdecide.utils.RandomNumberInterface
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+data class DecisionDialogState(
+    val options: List<OptionObject> = listOf(),
+    val decidedOption: OptionObject = OptionObject(text = ""),
+)
 
 class DecisionViewModel(
     analyticsLibrary: AnalyticsLibraryInterface,
@@ -14,19 +21,18 @@ class DecisionViewModel(
     options: List<OptionObject>
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    var options by mutableStateOf(options)
-        private set
-
-    var decidedOption by mutableStateOf(OptionObject(text = "???"))
-        private set
+    private var _uiState = MutableStateFlow(DecisionDialogState(options = options))
+    var uiState = _uiState.asStateFlow()
 
     fun chooseOption() {
 
-        if(options.isNotEmpty()) {
+        if(uiState.value.options.isNotEmpty()) {
 
-            val generateNumber = randomGenerator.generateNumber(options.size - 1)
+            val generateNumber = randomGenerator.generateNumber(uiState.value.options.size - 1)
 
-            decidedOption = options[generateNumber]
+            _uiState.value = uiState.value.copy(
+                decidedOption = uiState.value.options[generateNumber]
+            )
         }
     }
 }

@@ -11,6 +11,7 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +23,7 @@ class DecisionDefaultDialogTest {
     val rule = createComposeRule()
 
     @Test
-    fun optionSelected() {
+    fun optionSelected() = runTest {
 
         var optionSelected: Int = 0
         var selectedCallbackCalled = false
@@ -55,7 +56,7 @@ class DecisionDefaultDialogTest {
     }
 
     @Test
-    fun analyticsTracked() {
+    fun analyticsTracked() = runTest {
 
         val  analyticsLibrary = MockAnalyticsLibrary()
 

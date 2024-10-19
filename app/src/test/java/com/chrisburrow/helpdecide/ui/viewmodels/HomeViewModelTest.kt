@@ -14,12 +14,11 @@ class HomeViewModelTest {
 
         val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
 
-        assertFalse(homeViewModel.dialogs.addOption)
-        assertFalse(homeViewModel.view.decideOption)
-        assertFalse(homeViewModel.view.clearAllShown)
-        assertTrue(homeViewModel.view.emptyView)
+        assertFalse(homeViewModel.view.value.decideOption)
+        assertFalse(homeViewModel.view.value.clearAllShown)
+        assertTrue(homeViewModel.view.value.emptyView)
 
-        assertEquals(0, homeViewModel.view.options.size)
+        assertEquals(0, homeViewModel.view.value.options.size)
     }
 
     @Test
@@ -31,19 +30,19 @@ class HomeViewModelTest {
 
         homeViewModel.addOption(newOption)
 
-        assertTrue(homeViewModel.view.options.contains(newOption))
-        assertFalse(homeViewModel.view.decideOption)
-        assertFalse(homeViewModel.view.emptyView)
-        assertTrue(homeViewModel.view.clearAllShown)
+        assertTrue(homeViewModel.view.value.options.contains(newOption))
+        assertFalse(homeViewModel.view.value.decideOption)
+        assertFalse(homeViewModel.view.value.emptyView)
+        assertTrue(homeViewModel.view.value.clearAllShown)
 
         val anotherOption = OptionObject(text = "Option 2")
 
         homeViewModel.addOption(anotherOption)
 
-        assertTrue(homeViewModel.view.options.contains(anotherOption))
-        assertTrue(homeViewModel.view.decideOption)
-        assertFalse(homeViewModel.view.emptyView)
-        assertTrue(homeViewModel.view.clearAllShown)
+        assertTrue(homeViewModel.view.value.options.contains(anotherOption))
+        assertTrue(homeViewModel.view.value.decideOption)
+        assertFalse(homeViewModel.view.value.emptyView)
+        assertTrue(homeViewModel.view.value.clearAllShown)
     }
 
     @Test
@@ -56,15 +55,15 @@ class HomeViewModelTest {
             initialOptions = options
         )
 
-        assertEquals(options, homeViewModel.view.options)
+        assertEquals(options, homeViewModel.view.value.options)
 
         val deleteOption = options[0]
 
-        homeViewModel.deleteOption(deleteOption)
+        homeViewModel.deleteOption(deleteOption.id)
 
-        assertFalse(homeViewModel.view.options.contains(deleteOption))
-        assertTrue(homeViewModel.view.decideOption)
-        assertFalse(homeViewModel.view.emptyView)
+        assertFalse(homeViewModel.view.value.options.contains(deleteOption))
+        assertTrue(homeViewModel.view.value.decideOption)
+        assertFalse(homeViewModel.view.value.emptyView)
     }
 
     @Test
@@ -77,98 +76,14 @@ class HomeViewModelTest {
             initialOptions = options
         )
 
-        assertEquals(options, homeViewModel.view.options)
+        assertEquals(options, homeViewModel.view.value.options)
 
         homeViewModel.clearOptions()
 
-        assertEquals(0, homeViewModel.view.options.size)
-        assertFalse(homeViewModel.view.decideOption)
-        assertTrue(homeViewModel.view.emptyView)
-        assertFalse(homeViewModel.view.clearAllShown)
-    }
-
-    @Test
-    fun addDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.addOption)
-
-        homeViewModel.showAddDialog()
-        assertTrue(homeViewModel.dialogs.addOption)
-
-        homeViewModel.hideAddDialog()
-        assertFalse(homeViewModel.dialogs.addOption)
-    }
-
-    @Test
-    fun voiceDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.voiceOption)
-
-        homeViewModel.showVoiceDialog()
-        assertTrue(homeViewModel.dialogs.voiceOption)
-
-        homeViewModel.hideVoiceDialog()
-        assertFalse(homeViewModel.dialogs.voiceOption)
-    }
-
-    @Test
-    fun showOptionDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.showOption)
-
-        homeViewModel.showDecisionDialog()
-        assertTrue(homeViewModel.dialogs.showOption)
-
-        homeViewModel.hideDecisionDialog()
-        assertFalse(homeViewModel.dialogs.showOption)
-    }
-
-    @Test
-    fun showWheelOptionDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.showWheelOption)
-
-        homeViewModel.showWheelDecisionDialog()
-        assertTrue(homeViewModel.dialogs.showWheelOption)
-
-        homeViewModel.hideWheelDecisionDialog()
-        assertFalse(homeViewModel.dialogs.showWheelOption)
-    }
-
-    @Test
-    fun showDefaultDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.defaultChoice)
-
-        homeViewModel.showDefaultDialog()
-        assertTrue(homeViewModel.dialogs.defaultChoice)
-
-        homeViewModel.hideDefaultDialog()
-        assertFalse(homeViewModel.dialogs.defaultChoice)
-    }
-
-    @Test
-    fun showSettingsDialog() {
-
-        val homeViewModel = HomeViewModel(analyticsLibrary = MockAnalyticsLibrary())
-
-        assertFalse(homeViewModel.dialogs.settings)
-
-        homeViewModel.showSettingsDialog()
-        assertTrue(homeViewModel.dialogs.settings)
-
-        homeViewModel.hideSettingsDialog()
-        assertFalse(homeViewModel.dialogs.settings)
+        assertEquals(0, homeViewModel.view.value.options.size)
+        assertFalse(homeViewModel.view.value.decideOption)
+        assertTrue(homeViewModel.view.value.emptyView)
+        assertFalse(homeViewModel.view.value.clearAllShown)
     }
 
     @Test
@@ -179,7 +94,7 @@ class HomeViewModelTest {
             isSpeechCompatible = true
         )
 
-        assertTrue(homeViewModel.view.voiceButton)
+        assertTrue(homeViewModel.view.value.voiceButton)
     }
 
     @Test
@@ -190,6 +105,6 @@ class HomeViewModelTest {
             isSpeechCompatible = false
         )
 
-        assertFalse(homeViewModel.view.voiceButton)
+        assertFalse(homeViewModel.view.value.voiceButton)
     }
 }

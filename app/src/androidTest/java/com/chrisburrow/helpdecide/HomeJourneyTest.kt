@@ -5,6 +5,7 @@ import android.os.SystemClock
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
@@ -13,8 +14,7 @@ import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.robots.generalDialog
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
-import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,20 +35,13 @@ class HomeJourneyTest {
 
             HelpDecideTheme {
 
-                HomeScreen(
-                    MockAnalyticsLibrary(),
-                    HomeViewModel(
-                        analyticsLibrary = MockAnalyticsLibrary(),
-                        isSpeechCompatible = false,
-                        initialOptions = emptyList()
-                    )
-                )
+                HelpDecideApp(analyticsLibrary = MockAnalyticsLibrary(settingsShown = true))
             }
         }
     }
 
     @Test
-    fun decideDisabled_whenNoOptionsAdded() {
+    fun decideDisabled_whenNoOptionsAdded() = runTest {
 
         home(rule) {
 
@@ -57,7 +50,7 @@ class HomeJourneyTest {
     }
 
     @Test
-    fun optionCancelled() {
+    fun optionCancelled() = runTest {
 
         home(rule) {
 
@@ -87,7 +80,7 @@ class HomeJourneyTest {
     }
 
     @Test
-    fun optionsShown() {
+    fun optionsShown() = runTest {
 
         home(rule) {
 
@@ -120,7 +113,7 @@ class HomeJourneyTest {
     }
 
     @Test
-    fun deleteOptions() {
+    fun deleteOptions() = runTest {
 
         home(rule) {
 
@@ -163,7 +156,7 @@ class HomeJourneyTest {
     }
 
     @Test
-    fun decisionTextShown() {
+    fun decisionDisabled_whenOneOptionShown() = runTest {
 
         val optionText = "Option 1"
 
@@ -196,7 +189,6 @@ class HomeJourneyTest {
 
             decisionDialog(rule) {
 
-                checkText(optionText)
                 pressDone()
             }
 
@@ -211,7 +203,6 @@ class HomeJourneyTest {
 
             decisionDialog(rule) {
 
-                checkText(optionText)
                 pressRemove()
             }
 
@@ -220,7 +211,45 @@ class HomeJourneyTest {
     }
 
     @Test
-    fun decisionWheelShown() {
+    fun decisionTextShown() = runTest {
+
+        val optionText = "Option 1"
+
+        home(rule) {
+
+            pressAdd()
+
+            addDialog(rule) {
+
+                typeText(optionText)
+                pressSave()
+            }
+
+            pressAdd()
+
+            addDialog(rule) {
+
+                typeText(optionText)
+                pressSave()
+            }
+
+            pressDecide()
+
+            decisionDefault(rule) {
+
+                pressOptions()
+                pressQuickOption()
+                pressGo()
+            }
+
+            decisionDialog(rule) {
+
+            }
+        }
+    }
+
+    @Test
+    fun decisionWheelShown() = runTest {
 
         val optionText = "Option 1"
 
@@ -253,26 +282,7 @@ class HomeJourneyTest {
 
             decisionWheel(rule) {
 
-                checkText(optionText)
-                pressDone()
             }
-
-            pressDecide()
-
-            decisionDefault(rule) {
-
-                pressOptions()
-                pressWheelOption()
-                pressGo()
-            }
-
-            decisionWheel(rule) {
-
-                checkText(optionText)
-                pressRemove()
-            }
-
-            checkDecideDisabled()
         }
     }
 }

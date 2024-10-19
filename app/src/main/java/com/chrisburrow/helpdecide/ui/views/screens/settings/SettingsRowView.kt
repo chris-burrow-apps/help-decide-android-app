@@ -105,7 +105,7 @@ fun SettingsBooleanView(position: Int, option: SettingsBooleanRow) {
                     checked = option.enabled,
                     onCheckedChange = {
                         option.enabled = it
-                        option.toggled.invoke(it)
+                        option.toggled(it)
                     },
                     thumbContent =
                     {

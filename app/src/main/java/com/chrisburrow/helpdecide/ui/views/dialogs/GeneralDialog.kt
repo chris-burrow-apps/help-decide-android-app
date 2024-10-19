@@ -13,6 +13,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -48,6 +51,10 @@ fun GeneralDialog(
             dismissOnClickOutside = true
         )
     ) {
+
+        val state = remember { viewModel.uiState }
+        val uiState by state.collectAsState()
+
         Surface(
             modifier = Modifier.testTag(GeneralDialogTags.BASE_VIEW_TAG),
             shape = RoundedCornerShape(8.dp),
@@ -61,7 +68,7 @@ fun GeneralDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     modifier = Modifier.testTag(GeneralDialogTags.DESCRIPTION_TAG),
-                    text = viewModel.dialog.description
+                    text = uiState.description
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row {
@@ -73,7 +80,7 @@ fun GeneralDialog(
                         },
                     ) {
 
-                        Text(text = viewModel.dialog.cancelText)
+                        Text(text = uiState.cancelText)
                     }
                     Spacer(modifier = Modifier.width(16.dp))
                     ElevatedButton(
@@ -84,7 +91,7 @@ fun GeneralDialog(
                         },
                     ) {
 
-                        Text(text = viewModel.dialog.confirmText)
+                        Text(text = uiState.confirmText)
                     }
                 }
             }

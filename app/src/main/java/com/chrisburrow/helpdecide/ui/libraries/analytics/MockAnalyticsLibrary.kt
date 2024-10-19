@@ -18,18 +18,18 @@ class MockAnalyticsLibrary(
     var getCrashalyticsStateCalled: Boolean = false
     var setCrashalyticsStateCalled: Boolean = false
 
-    override suspend fun getCrashalyticsState(): Flow<Boolean> {
+    override suspend fun getCrashalyticsState(): Boolean {
 
         getCrashalyticsStateCalled = true
 
-        return flow { emit(crashayticsState) }
+        return crashayticsState
     }
 
-    override suspend fun getAnalyticsState(): Flow<Boolean> {
+    override suspend fun getAnalyticsState(): Boolean {
 
         getAnalyticsStateCalled = true
 
-        return flow { emit(analyticsState) }
+        return analyticsState
     }
 
     override suspend fun setCrashalyticsState(enabled: Boolean) {
@@ -56,12 +56,12 @@ class MockAnalyticsLibrary(
         analyticsButtonsPressed.add(buttonText)
     }
 
-    override suspend fun checkSettingsShown(): Flow<Boolean> {
+    override suspend fun checkSettingsShown(): Boolean {
 
-        return flow { emit(settingsShown) }
+        return settingsShown
     }
 
-    override suspend fun settingsShown() {
+    override suspend fun permissionsRequested() {
 
         settingsShown = true
     }

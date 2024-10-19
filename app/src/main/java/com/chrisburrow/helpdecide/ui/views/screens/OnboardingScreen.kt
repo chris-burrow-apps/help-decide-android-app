@@ -36,6 +36,7 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterfa
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -100,7 +101,7 @@ fun OnboardingScreen(
                 viewNextButton = stringResource(R.string.enable),
                 viewNextPressed = {
 
-                    scope.launch {
+                    scope.launch(Dispatchers.IO) {
 
                         analyticsLibrary.setCrashalyticsState(true)
                     }
@@ -110,7 +111,7 @@ fun OnboardingScreen(
                 viewSkipButton = stringResource(R.string.disable),
                 viewSkipPressed = {
 
-                    scope.launch {
+                    scope.launch(Dispatchers.IO) {
 
                         analyticsLibrary.setCrashalyticsState(false)
                     }
@@ -125,7 +126,7 @@ fun OnboardingScreen(
                 viewNextButton = stringResource(R.string.enable),
                 viewNextPressed = {
 
-                    scope.launch {
+                    scope.launch(Dispatchers.IO) {
 
                         analyticsLibrary.setAnalyticsState(true)
                     }
@@ -135,7 +136,7 @@ fun OnboardingScreen(
                 viewSkipButton = stringResource(R.string.disable),
                 viewSkipPressed = {
 
-                    scope.launch {
+                    scope.launch(Dispatchers.IO) {
 
                         analyticsLibrary.setAnalyticsState(false)
                     }

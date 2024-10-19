@@ -10,10 +10,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -22,17 +24,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
-import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibrary
+import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.viewmodels.PermissionsViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsList
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
-import com.google.firebase.ktx.BuildConfig
+import kotlinx.coroutines.flow.collect
 
 class SettingsDialogTags {
 
@@ -46,25 +49,22 @@ class SettingsDialogTags {
 
 @Composable
 fun SettingsDialog(
-    model: PermissionsViewModel = PermissionsViewModel(
-        AnalyticsLibrary(
-            context = LocalContext.current,
-            debug = BuildConfig.DEBUG,
-            storageLibrary = StorageLibrary(LocalContext.current)
-        )
-    ),
+    viewModel: SettingsViewModel,
     onDismissRequested: () -> Unit
 ) {
 
-    val viewModel = remember { model }
-
     Dialog(
-        onDismissRequest = { onDismissRequested() },
+        onDismissRequest = {
+            onDismissRequested()
+        },
         properties = DialogProperties(
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
         )
     ) {
+
+        val state = remember { viewModel.uiState }
+        val uiState by state.collectAsState()
 
         Surface(
             modifier = Modifier.testTag(SettingsDialogTags.BASE_VIEW_TAG),
@@ -89,8 +89,8 @@ fun SettingsDialog(
                     SettingsBooleanRow(
                         stringResource(R.string.analytics),
                         stringResource(R.string.analytics_desc),
-                        enabled = viewModel.googleAnalyticsEnabled,
-                        loading = viewModel.googleAnalyticsLoading
+                        enabled = uiState.googleAnalyticsEnabled,
+                        loading = uiState.googleAnalyticsLoading
                     ) { toggled ->
 
                         viewModel.toggleGoogleAnalytics(toggled)
@@ -98,8 +98,8 @@ fun SettingsDialog(
                     SettingsBooleanRow(
                         stringResource(R.string.crashalytics),
                         stringResource(R.string.crashalytics_desc),
-                        enabled = viewModel.crashalyticsEnabled,
-                        loading = viewModel.crashalyticsLoading
+                        enabled = uiState.crashalyticsEnabled,
+                        loading = uiState.crashalyticsLoading
                     ) { toggled ->
 
                         viewModel.toggleCrashalytics(toggled)
@@ -110,9 +110,10 @@ fun SettingsDialog(
                     modifier = Modifier
                         .testTag(SettingsDialogTags.DONE_BUTTON_TAG),
                     onClick = {
+
                         viewModel.logButtonPressed(AnalyticsActions.Done)
                         onDismissRequested()
-                              },
+                    },
                 ) {
 
                     Text(stringResource(R.string.done))
@@ -120,13 +121,13 @@ fun SettingsDialog(
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
-    }
 
-    LaunchedEffect(Unit) {
+        LaunchedEffect(Unit) {
 
-        viewModel.logScreenView(AnalyticsScreens.Settings)
-        viewModel.settingsShown()
-        viewModel.refreshAnalytics()
+            viewModel.logScreenView(AnalyticsScreens.Settings)
+
+            viewModel.refreshAnalytics()
+        }
     }
 }
 
@@ -136,6 +137,6 @@ fun SettingsDialogPreview() {
 
     HelpDecideTheme {
 
-        SettingsDialog(onDismissRequested = {})
+        SettingsDialog(SettingsViewModel(MockAnalyticsLibrary())) {}
     }
 }

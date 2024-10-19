@@ -13,6 +13,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
@@ -45,11 +48,10 @@ class DecisionDialogTags {
 
 @Composable
 fun DecisionDialog(
-    model: DecisionViewModel,
+    viewModel: DecisionViewModel,
     donePressed: () -> Unit = {},
-    removePressed: (OptionObject) -> Unit = {}
+    removePressed: (String) -> Unit = {}
 ) {
-    val viewModel = remember { model }
 
     Dialog(
         onDismissRequest = { },
@@ -58,6 +60,9 @@ fun DecisionDialog(
             dismissOnClickOutside = true
         )
     ) {
+
+        val state = remember { viewModel.uiState }
+        val uiState by state.collectAsStateWithLifecycle()
 
         Surface(
             modifier = Modifier.testTag(DecisionDialogTags.BASE_VIEW_TAG),
@@ -72,7 +77,7 @@ fun DecisionDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     modifier = Modifier.testTag(DecisionDialogTags.DECISION_TEXT_TAG),
-                    text = viewModel.decidedOption.text
+                    text = uiState.decidedOption.text
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row {
@@ -82,7 +87,7 @@ fun DecisionDialog(
                             .weight(1.0f),
                         onClick = {
                             viewModel.logButtonPressed(AnalyticsActions.RemoveOption)
-                            removePressed(viewModel.decidedOption)
+                            removePressed(uiState.decidedOption.id)
                         },
                     ) {
 
@@ -106,12 +111,12 @@ fun DecisionDialog(
                 }
             }
         }
-    }
 
-    LaunchedEffect(Unit) {
+        LaunchedEffect(Unit) {
 
-        viewModel.logScreenView(AnalyticsScreens.Instant)
-        viewModel.chooseOption()
+            viewModel.logScreenView(AnalyticsScreens.Instant)
+            viewModel.chooseOption()
+        }
     }
 }
 

@@ -11,6 +11,7 @@ import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.views.screens.OnboardingScreen
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +25,7 @@ class OnboardingScreenTest {
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Test
-    fun textShown() {
+    fun textShown() = runTest {
 
         val analyticsLibrary = MockAnalyticsLibrary()
 
@@ -55,9 +56,9 @@ class OnboardingScreenTest {
     }
 
     @Test
-    fun analyticsNextUpdated() {
+    fun analyticsNextUpdated() = runTest {
 
-        val analyticsLibrary = MockAnalyticsLibrary()
+    val analyticsLibrary = MockAnalyticsLibrary()
         var nextPageCalled = false
 
         rule.setContent {
@@ -89,7 +90,7 @@ class OnboardingScreenTest {
     }
 
     @Test
-    fun analyticsSkipUpdated() {
+    fun analyticsSkipUpdated() = runTest {
 
         val analyticsLibrary = MockAnalyticsLibrary()
         var nextPageCalled = false
