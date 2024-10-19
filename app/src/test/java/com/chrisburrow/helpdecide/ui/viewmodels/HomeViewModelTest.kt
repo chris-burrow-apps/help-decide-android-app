@@ -59,7 +59,7 @@ class HomeViewModelTest {
 
         val deleteOption = options[0]
 
-        homeViewModel.deleteOption(deleteOption)
+        homeViewModel.deleteOption(deleteOption.id)
 
         assertFalse(homeViewModel.view.value.options.contains(deleteOption))
         assertTrue(homeViewModel.view.value.decideOption)

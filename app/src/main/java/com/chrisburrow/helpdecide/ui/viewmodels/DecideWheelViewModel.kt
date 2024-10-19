@@ -23,7 +23,7 @@ class DecideWheelViewModel(
 
     fun chooseOption(index: Int) {
 
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
 
             _uiState.value = _uiState.value.copy(
                 decidedOption = _uiState.value.options[index]

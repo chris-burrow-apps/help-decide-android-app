@@ -1,11 +1,16 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
+import com.chrisburrow.helpdecide.MainDispatcherRule
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.utils.OptionObject
 import junit.framework.TestCase.assertEquals
+import org.junit.Rule
 import org.junit.Test
 
 class DecideWheelViewModelTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun defaultValues() {
