@@ -1,16 +1,14 @@
 package com.chrisburrow.helpdecide.ui.views.screens.options
 
-import android.widget.Toast
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
@@ -19,10 +17,11 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.chrisburrow.helpdecide.ui.ThemePreviews
@@ -42,28 +41,31 @@ fun OptionRowView(
             .testTag(OptionListTags.BASE_VIEW)
     ) {
 
-        val context = LocalContext.current
-        val dismissState = rememberSwipeToDismissBoxState(
-            confirmValueChange = {
-                when(it) {
-                    SwipeToDismissBoxValue.Settled -> return@rememberSwipeToDismissBoxState false
-                    else -> {
-                        removeOption(option)
-                        Toast.makeText(context, "Option removed", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                return@rememberSwipeToDismissBoxState true
-            },
-            positionalThreshold = { it * .25f }
-        )
+        val swipeState = rememberSwipeToDismissBoxState()
+
         SwipeToDismissBox(
-            state = dismissState,
+            state = swipeState,
             modifier = Modifier.testTag(OptionListTags.ROW_VIEW + position),
-            backgroundContent = { DismissBackground(dismissState) },
+            backgroundContent = {
+                DismissBackground(swipeState)
+            },
             content = {
                 OptionTextView(position = position, option = option)
             }
         )
+
+        when (swipeState.currentValue) {
+            SwipeToDismissBoxValue.StartToEnd, SwipeToDismissBoxValue.EndToStart -> {
+                LaunchedEffect(swipeState.currentValue) {
+                    removeOption(option)
+                    swipeState.snapTo(SwipeToDismissBoxValue.Settled)
+                }
+            }
+
+            SwipeToDismissBoxValue.Settled -> {
+                // Nothing to do
+            }
+        }
     }
 }
 
@@ -90,31 +92,50 @@ fun OptionTextView(position: Int, option: OptionObject) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DismissBackground(dismissState: SwipeToDismissBoxState) {
-    val color = when (dismissState.dismissDirection) {
-        SwipeToDismissBoxValue.Settled -> Color.Transparent
-        else -> Color(0xFFFF1744)
-    }
 
-    Row(
+    val color by animateColorAsState(
+        targetValue = when (dismissState.targetValue) {
+            SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.surface
+            SwipeToDismissBoxValue.StartToEnd, SwipeToDismissBoxValue.EndToStart -> Color.Red
+        },
+        label = "swipe"
+    )
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color)
-            .padding(12.dp, 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Icon(
-            Icons.Default.Delete,
-            contentDescription = "delete"
-        )
-        Spacer(modifier = Modifier)
-        Icon(
-            Icons.Default.Delete,
-            contentDescription = "delete"
-        )
+
+        // 4. Show the correct icon
+        when (dismissState.targetValue) {
+            SwipeToDismissBoxValue.StartToEnd -> {
+                Icon(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(end = 16.dp),
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "delete"
+                )
+            }
+
+            SwipeToDismissBoxValue.EndToStart -> {
+                Icon(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 16.dp),
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "delete"
+                )
+            }
+
+            SwipeToDismissBoxValue.Settled -> {
+                // Nothing to do
+            }
+        }
+
     }
 }
 

@@ -72,16 +72,19 @@ class OnboardingScreenTest {
         onboarding(rule) {
 
             pressNext(0)
+            checkPageShown(1)
             assertFalse(analyticsLibrary.setCrashalyticsStateCalled)
             assertFalse(analyticsLibrary.crashayticsState)
             assertFalse(analyticsLibrary.setAnalyticsStateCalled)
             assertFalse(analyticsLibrary.analyticsState)
 
             pressNext(1)
+            checkPageShown(2)
             assertTrue(analyticsLibrary.setCrashalyticsStateCalled)
             assertTrue(analyticsLibrary.crashayticsState)
 
             pressNext(2)
+            checkPageShown(2)
             assertTrue(analyticsLibrary.setAnalyticsStateCalled)
             assertTrue(analyticsLibrary.analyticsState)
 
@@ -106,16 +109,19 @@ class OnboardingScreenTest {
         onboarding(rule) {
 
             pressNext(0)
+            checkPageShown(1)
             assertFalse(analyticsLibrary.setCrashalyticsStateCalled)
             assertFalse(analyticsLibrary.crashayticsState)
             assertFalse(analyticsLibrary.setAnalyticsStateCalled)
             assertFalse(analyticsLibrary.analyticsState)
 
             pressSkip(1)
+            checkPageShown(2)
             assertTrue(analyticsLibrary.setCrashalyticsStateCalled)
             assertFalse(analyticsLibrary.crashayticsState)
 
             pressSkip(2)
+            checkPageShown(2)
             assertTrue(analyticsLibrary.setAnalyticsStateCalled)
             assertFalse(analyticsLibrary.analyticsState)
 
