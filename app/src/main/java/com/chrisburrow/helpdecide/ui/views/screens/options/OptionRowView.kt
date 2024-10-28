@@ -98,8 +98,7 @@ fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     val color by animateColorAsState(
         targetValue = when (dismissState.targetValue) {
             SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.surface
-            SwipeToDismissBoxValue.StartToEnd -> Color.Red
-            SwipeToDismissBoxValue.EndToStart -> Color.Red
+            SwipeToDismissBoxValue.StartToEnd, SwipeToDismissBoxValue.EndToStart -> Color.Red
         },
         label = "swipe"
     )
