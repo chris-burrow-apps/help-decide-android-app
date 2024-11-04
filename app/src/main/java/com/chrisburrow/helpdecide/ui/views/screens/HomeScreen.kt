@@ -24,7 +24,6 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +40,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.chrisburrow.helpdecide.R
@@ -61,7 +59,6 @@ class HomeTags {
 
         const val BASE_VIEW_TAG = "HomeView"
         const val ADD_TEXT_TAG = "HomeAddTextButton"
-        const val ADD_VOICE_TAG = "HomeAddVoiceButton"
         const val CLEAR_ALL_TAG = "ClearAllButton"
         const val SETTINGS_TAG = "HomeSettingsButton"
         const val DECIDE_BUTTON_TAG = "HomeDecideFAB"
@@ -149,22 +146,6 @@ fun HomeScreen(
                             painter = painterResource(R.drawable.text_icon),
                             contentDescription = stringResource(R.string.add_text_option))
                     }
-
-                    if(view.value.voiceButton) {
-
-                        IconButton(
-                            modifier = Modifier.testTag(HomeTags.ADD_VOICE_TAG),
-                            onClick = {
-                                model.logButtonPressed(AnalyticsActions.Voice)
-                                navController.navigate(NavigationDialogItem.SpeechToText.route)
-                            },
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.voice_icon),
-                                contentDescription = stringResource(id = R.string.add_voice_option)
-                            )
-                        }
-                    }
                 },
                 floatingActionButton = {
                     Button(
@@ -229,10 +210,6 @@ fun EmptyHomeInstructions(modifier: Modifier) {
                 append("-  ")
                 appendInlineContent(id = "manualAddIcon")
                 append("  Add option by typing")
-                append("\n\n")
-                append("-  ")
-                appendInlineContent(id = "voiceAddIcon")
-                append("  Add option by voice")
 
             }
 
@@ -246,15 +223,6 @@ fun EmptyHomeInstructions(modifier: Modifier) {
                         contentDescription = ""
                     )
                 },
-                "voiceAddIcon" to InlineTextContent(
-                    Placeholder(20.sp, 20.sp, PlaceholderVerticalAlign.TextCenter)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.voice_icon),
-                        modifier = Modifier.fillMaxSize(),
-                        contentDescription = ""
-                    )
-                }
             )
 
             Text(
@@ -276,6 +244,6 @@ fun HomeScreenPreview() {
         val analyticsLibrary = MockAnalyticsLibrary()
         val navController = rememberNavController()
 
-        HomeScreen(navController, HomeViewModel(analyticsLibrary, isSpeechCompatible = true))
+        HomeScreen(navController, HomeViewModel(analyticsLibrary))
     }
 }

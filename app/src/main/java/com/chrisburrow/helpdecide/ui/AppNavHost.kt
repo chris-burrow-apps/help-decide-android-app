@@ -1,14 +1,11 @@
 package com.chrisburrow.helpdecide.ui
 
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -35,8 +32,6 @@ import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import com.chrisburrow.helpdecide.ui.views.screens.LoadingScreen
 import com.chrisburrow.helpdecide.ui.views.screens.OnboardingScreen
 import com.chrisburrow.helpdecide.utils.OptionObject
-import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToText
-import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextToTextRequest
 import kotlinx.coroutines.launch
 
 enum class Screen {
@@ -63,7 +58,6 @@ enum class Dialog {
 
 sealed class NavigationDialogItem(val route: String) {
     data object AddOption : NavigationDialogItem(Dialog.AddOption.name)
-    data object SpeechToText : NavigationDialogItem(Dialog.SpeechToText.name)
     data object DecideType : NavigationDialogItem(Dialog.DecideType.name)
     data object InstantDecision : NavigationDialogItem(Dialog.InstantDecision.name)
     data object SpinTheWheel : NavigationDialogItem(Dialog.SpinTheWheel.name)
@@ -81,10 +75,8 @@ fun AppNavHost (
 
     val scope = rememberCoroutineScope()
 
-    val isSpeechCompatible = SpeechToTextToTextRequest(LocalContext.current).isSpeechCompatible()
-
     val homeViewModel = remember {
-        HomeViewModel(analyticsLibrary, isSpeechCompatible)
+        HomeViewModel(analyticsLibrary)
     }
 
     NavHost(
@@ -224,18 +216,6 @@ fun AppNavHost (
                     navController.popBackStack()
                 }
             )
-        }
-
-        dialog(NavigationDialogItem.SpeechToText.route) {
-
-            SpeechToText(response = {
-
-                homeViewModel.addOption(OptionObject(text = it))
-                navController.popBackStack()
-            }, cancelled = {
-
-                navController.popBackStack()
-            })
         }
     }
 }

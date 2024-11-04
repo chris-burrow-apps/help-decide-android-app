@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 data class HomeViewState(
-    val voiceButton: Boolean = false,
     val options: List<OptionObject> = listOf(),
     val clearAllShown: Boolean = false,
     val decideOption: Boolean = false,
@@ -15,11 +14,10 @@ data class HomeViewState(
 
 class HomeViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface,
-    isSpeechCompatible: Boolean = false,
     initialOptions: List<OptionObject> = listOf(),
 ): AnalyticsViewModel(analyticsLibrary) {
 
-    private var _view = MutableStateFlow(HomeViewState(voiceButton = isSpeechCompatible, options = initialOptions))
+    private var _view = MutableStateFlow(HomeViewState(options = initialOptions))
     var view = _view.asStateFlow()
 
     fun addOption(option: OptionObject) {
