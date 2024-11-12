@@ -85,4 +85,28 @@ class HomeViewModelTest {
         assertTrue(homeViewModel.view.value.emptyView)
         assertFalse(homeViewModel.view.value.clearAllShown)
     }
+
+    @Test
+    fun speechButtonEnabled_whenDeviceCompatible() {
+
+        val homeViewModel = HomeViewModel(
+
+            analyticsLibrary = MockAnalyticsLibrary(),
+            isSpeechCompatible = true
+        )
+
+        assertTrue(homeViewModel.view.value.voiceButton)
+    }
+
+    @Test
+    fun speechButtonDisabled_whenDeviceIsNotCompatible() {
+
+        val homeViewModel = HomeViewModel(
+
+            analyticsLibrary = MockAnalyticsLibrary(),
+            isSpeechCompatible = false
+        )
+
+        assertFalse(homeViewModel.view.value.voiceButton)
+    }
 }

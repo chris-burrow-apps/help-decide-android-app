@@ -35,7 +35,10 @@ class HomeJourneyTest {
 
             HelpDecideTheme {
 
-                HelpDecideApp(analyticsLibrary = MockAnalyticsLibrary(settingsShown = true))
+                HelpDecideApp(
+                    analyticsLibrary = MockAnalyticsLibrary(settingsShown = true),
+                    voiceCompatible = false
+                )
             }
         }
     }

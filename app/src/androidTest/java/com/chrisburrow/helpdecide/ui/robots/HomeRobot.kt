@@ -43,6 +43,12 @@ class HomeRobot(private val rule: ComposeContentTestRule) {
 
     fun checkClearAllHidden() { rule.onNodeWithTag(HomeTags.CLEAR_ALL_TAG).assertDoesNotExist() }
 
+    fun checkEmptyShown() { rule.onNodeWithTag(HomeTags.EMPTY_VIEW_TAG).assertIsDisplayed() }
+
+    fun checkAddByVoiceShown() { rule.onNodeWithTag(HomeTags.ADD_VOICE_TAG).assertIsDisplayed() }
+
+    fun checkAddByVoiceHidden() { rule.onNodeWithTag(HomeTags.ADD_VOICE_TAG).assertDoesNotExist() }
+
     fun optionShown(position: Int, text: String) {
 
         rule.onNodeWithTag(OptionListTags.TEXT_TAG + position)

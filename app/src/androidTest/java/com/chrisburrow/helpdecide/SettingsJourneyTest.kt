@@ -40,7 +40,7 @@ class SettingsJourneyTest {
 
             HelpDecideTheme {
 
-                HelpDecideApp(analyticsLibrary = analyticsLibrary)
+                HelpDecideApp(analyticsLibrary = analyticsLibrary, voiceCompatible = false)
             }
         }
     }

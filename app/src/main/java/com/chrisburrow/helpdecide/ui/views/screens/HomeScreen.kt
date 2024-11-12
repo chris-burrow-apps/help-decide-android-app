@@ -59,9 +59,11 @@ class HomeTags {
 
         const val BASE_VIEW_TAG = "HomeView"
         const val ADD_TEXT_TAG = "HomeAddTextButton"
+        const val ADD_VOICE_TAG = "HomeAddVoiceButton"
         const val CLEAR_ALL_TAG = "ClearAllButton"
         const val SETTINGS_TAG = "HomeSettingsButton"
         const val DECIDE_BUTTON_TAG = "HomeDecideFAB"
+        const val EMPTY_VIEW_TAG = "EmptyView"
     }
 }
 
@@ -146,6 +148,25 @@ fun HomeScreen(
                             painter = painterResource(R.drawable.text_icon),
                             contentDescription = stringResource(R.string.add_text_option))
                     }
+
+                    if(view.value.voiceButton) {
+
+                        IconButton(
+
+                            modifier = Modifier.testTag(HomeTags.ADD_VOICE_TAG),
+
+                            onClick = {
+
+                                model.logButtonPressed(AnalyticsActions.Voice)
+                                navController.navigate(NavigationDialogItem.SpeechToText.route)
+                            },
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.voice_icon),
+                                contentDescription = stringResource(id = R.string.add_voice_option)
+                            )
+                        }
+                    }
                 },
                 floatingActionButton = {
                     Button(
@@ -179,7 +200,10 @@ fun HomeScreen(
 
         if(view.value.emptyView) {
 
-            EmptyHomeInstructions(modifier = Modifier.padding(top = innerPadding.calculateTopPadding()))
+            EmptyHomeInstructions(
+                modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+                isSpeechEnabled = view.value.voiceButton
+            )
         }
     }
 
@@ -190,9 +214,13 @@ fun HomeScreen(
 }
 
 @Composable
-fun EmptyHomeInstructions(modifier: Modifier) {
+fun EmptyHomeInstructions(modifier: Modifier, isSpeechEnabled: Boolean) {
 
-    Surface(modifier = modifier.fillMaxSize()) {
+    Surface(
+        modifier = modifier
+            .fillMaxSize()
+            .testTag(HomeTags.EMPTY_VIEW_TAG)
+    ) {
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -211,6 +239,13 @@ fun EmptyHomeInstructions(modifier: Modifier) {
                 appendInlineContent(id = "manualAddIcon")
                 append("  Add option by typing")
 
+                if(isSpeechEnabled) {
+
+                    append("\n\n")
+                    append("-  ")
+                    appendInlineContent(id = "voiceAddIcon")
+                    append("  Add option by voice")
+                }
             }
 
             val inlineContentMap = mapOf(
@@ -223,6 +258,15 @@ fun EmptyHomeInstructions(modifier: Modifier) {
                         contentDescription = ""
                     )
                 },
+                "voiceAddIcon" to InlineTextContent(
+                    Placeholder(20.sp, 20.sp, PlaceholderVerticalAlign.TextCenter)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.voice_icon),
+                        modifier = Modifier.fillMaxSize(),
+                        contentDescription = ""
+                    )
+                }
             )
 
             Text(
