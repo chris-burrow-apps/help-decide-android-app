@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -32,6 +33,8 @@ import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import com.chrisburrow.helpdecide.ui.views.screens.LoadingScreen
 import com.chrisburrow.helpdecide.ui.views.screens.OnboardingScreen
 import com.chrisburrow.helpdecide.utils.OptionObject
+import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToText
+import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextToTextRequest
 import kotlinx.coroutines.launch
 
 enum class Screen {
@@ -58,6 +61,7 @@ enum class Dialog {
 
 sealed class NavigationDialogItem(val route: String) {
     data object AddOption : NavigationDialogItem(Dialog.AddOption.name)
+    data object SpeechToText : NavigationDialogItem(Dialog.SpeechToText.name)
     data object DecideType : NavigationDialogItem(Dialog.DecideType.name)
     data object InstantDecision : NavigationDialogItem(Dialog.InstantDecision.name)
     data object SpinTheWheel : NavigationDialogItem(Dialog.SpinTheWheel.name)
@@ -70,13 +74,14 @@ fun AppNavHost (
     modifier: Modifier = Modifier,
     navController: NavHostController,
     analyticsLibrary: AnalyticsLibraryInterface,
+    voiceCompatible: Boolean,
     startDestination: String = NavigationScreenItem.Onboarding.route,
 ) {
 
     val scope = rememberCoroutineScope()
 
     val homeViewModel = remember {
-        HomeViewModel(analyticsLibrary)
+        HomeViewModel(analyticsLibrary, voiceCompatible)
     }
 
     NavHost(
@@ -216,6 +221,19 @@ fun AppNavHost (
                     navController.popBackStack()
                 }
             )
+        }
+
+        dialog(NavigationDialogItem.SpeechToText.route) {
+
+            SpeechToText(response = {
+
+                homeViewModel.addOption(OptionObject(text = it))
+                navController.popBackStack()
+
+            }, cancelled = {
+
+                navController.popBackStack()
+            })
         }
     }
 }

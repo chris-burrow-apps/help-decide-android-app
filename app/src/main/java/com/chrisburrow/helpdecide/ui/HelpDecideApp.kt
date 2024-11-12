@@ -13,6 +13,7 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterfa
 fun HelpDecideApp(
     navController: NavHostController = rememberNavController(),
     analyticsLibrary: AnalyticsLibraryInterface,
+    voiceCompatible: Boolean,
 ){
 
     Surface(
@@ -23,6 +24,7 @@ fun HelpDecideApp(
         AppNavHost(
             navController = navController,
             analyticsLibrary = analyticsLibrary,
+            voiceCompatible = voiceCompatible,
             startDestination = NavigationScreenItem.Loading.route
         )
     }
