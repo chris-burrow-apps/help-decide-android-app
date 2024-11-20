@@ -38,16 +38,16 @@ class AddDialogTest {
 
             isTextFocused()
             isClearDisabled()
-            isSaveDisabled()
+            isAddDisabled()
 
             typeText(testTextInput)
 
-            isSaveEnabled()
+            isAddEnabled()
             isClearEnabled()
 
             pressClear()
 
-            isSaveDisabled()
+            isAddDisabled()
             isClearDisabled()
         }
     }
@@ -74,7 +74,7 @@ class AddDialogTest {
 
             typeText(testTextInput)
 
-            pressSave()
+            pressAdd()
         }
 
         assertEquals(testTextInput, returnedString)
@@ -132,7 +132,7 @@ class AddDialogTest {
             typeText(testTextInput)
             checkText(testTextInput)
 
-            pressSave()
+            pressAdd()
         }
 
         assertEquals(expectedTextInput, returnedString)
@@ -160,7 +160,7 @@ class AddDialogTest {
 
             typeText("Option 1")
 
-            pressSave()
+            pressAdd()
             assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Add))
 
             pressClear()

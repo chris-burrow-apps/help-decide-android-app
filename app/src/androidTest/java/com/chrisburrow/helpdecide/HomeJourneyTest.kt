@@ -77,7 +77,7 @@ class HomeJourneyTest {
 
                 checkText("")
 
-                isSaveDisabled()
+                isAddDisabled()
                 isClearDisabled()
             }
         }
@@ -93,7 +93,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText("Option 1")
-                pressSave()
+                pressAdd()
 
                 dialogHidden()
             }
@@ -105,7 +105,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText("Option 2")
-                pressSave()
+                pressAdd()
 
                 dialogHidden()
             }
@@ -126,7 +126,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(SystemClock.uptimeMillis().toString())
-                pressSave()
+                pressAdd()
             }
 
             checkDecideEnabled()
@@ -169,7 +169,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionOne)
-                pressSave()
+                pressAdd()
             }
 
             pressAdd()
@@ -179,7 +179,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionTwo)
-                pressSave()
+                pressAdd()
             }
 
             checkNumberOfOptions(2)
@@ -203,7 +203,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(SystemClock.uptimeMillis().toString())
-                pressSave()
+                pressAdd()
             }
 
             checkClearAllShown()
@@ -213,7 +213,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(SystemClock.uptimeMillis().toString())
-                pressSave()
+                pressAdd()
             }
 
             checkClearAllShown()
@@ -246,7 +246,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionText)
-                pressSave()
+                pressAdd()
             }
 
             pressAdd()
@@ -254,7 +254,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionText)
-                pressSave()
+                pressAdd()
             }
 
             pressDecide()
@@ -284,7 +284,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionText)
-                pressSave()
+                pressAdd()
             }
 
             pressAdd()
@@ -292,7 +292,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionText)
-                pressSave()
+                pressAdd()
             }
 
             pressDecide()
