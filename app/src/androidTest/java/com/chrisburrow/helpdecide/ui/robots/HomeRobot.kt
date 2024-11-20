@@ -24,6 +24,11 @@ class HomeRobot(private val rule: ComposeContentTestRule) {
 
     fun pressAdd() { rule.onNodeWithTag(HomeTags.ADD_TEXT_TAG).performClick() }
 
+    fun pressDelete(position: Int) {
+
+        rule.onNodeWithTag(OptionListTags.DELETE_TAG + position).performClick()
+    }
+
     fun pressClearAll() { rule.onNodeWithTag(HomeTags.CLEAR_ALL_TAG).performClick() }
 
     fun pressSettings() { rule.onNodeWithTag(HomeTags.SETTINGS_TAG).performClick() }
@@ -49,7 +54,7 @@ class HomeRobot(private val rule: ComposeContentTestRule) {
 
     fun checkAddByVoiceHidden() { rule.onNodeWithTag(HomeTags.ADD_VOICE_TAG).assertDoesNotExist() }
 
-    fun optionShown(position: Int, text: String) {
+    fun checkOptionShown(position: Int, text: String) {
 
         rule.onNodeWithTag(OptionListTags.TEXT_TAG + position)
             .assertTextContains(text)

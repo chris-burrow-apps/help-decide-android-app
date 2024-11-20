@@ -21,9 +21,9 @@ class OptionListTags {
 
     companion object {
 
-        const val ROW_VIEW = "RowView"
         const val BASE_VIEW = "BaseView"
         const val TEXT_TAG = "TextOption"
+        const val DELETE_TAG = "DeleteOption"
     }
 }
 

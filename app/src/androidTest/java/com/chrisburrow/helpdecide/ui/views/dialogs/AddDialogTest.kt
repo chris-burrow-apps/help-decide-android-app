@@ -38,16 +38,16 @@ class AddDialogTest {
 
             isTextFocused()
             isClearDisabled()
-            isSaveDisabled()
+            isAddDisabled()
 
             typeText(testTextInput)
 
-            isSaveEnabled()
+            isAddEnabled()
             isClearEnabled()
 
             pressClear()
 
-            isSaveDisabled()
+            isAddDisabled()
             isClearDisabled()
         }
     }
@@ -74,7 +74,7 @@ class AddDialogTest {
 
             typeText(testTextInput)
 
-            pressSave()
+            pressAdd()
         }
 
         assertEquals(testTextInput, returnedString)
@@ -109,7 +109,7 @@ class AddDialogTest {
     }
 
     @Test
-    fun optionTextPaddingRemoved() = runTest {
+    fun optionTextPaddingRemovedUponSubmit() = runTest {
 
         var returnedString = ""
 
@@ -130,8 +130,9 @@ class AddDialogTest {
         addDialog(rule) {
 
             typeText(testTextInput)
+            checkText(testTextInput)
 
-            pressSave()
+            pressAdd()
         }
 
         assertEquals(expectedTextInput, returnedString)
@@ -159,8 +160,8 @@ class AddDialogTest {
 
             typeText("Option 1")
 
-            pressSave()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Save))
+            pressAdd()
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Add))
 
             pressClear()
             assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Clear))

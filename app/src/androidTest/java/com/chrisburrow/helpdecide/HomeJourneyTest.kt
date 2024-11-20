@@ -7,11 +7,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.robots.addAnotherDialog
 import com.chrisburrow.helpdecide.ui.robots.addDialog
+import com.chrisburrow.helpdecide.ui.robots.clearAllDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
-import com.chrisburrow.helpdecide.ui.robots.generalDialog
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import kotlinx.coroutines.test.runTest
@@ -76,14 +77,14 @@ class HomeJourneyTest {
 
                 checkText("")
 
-                isSaveDisabled()
+                isAddDisabled()
                 isClearDisabled()
             }
         }
     }
 
     @Test
-    fun optionsShown() = runTest {
+    fun optionsCanBeAdded() = runTest {
 
         home(rule) {
 
@@ -92,31 +93,106 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText("Option 1")
-                pressSave()
+                pressAdd()
 
                 dialogHidden()
             }
 
-            optionShown(0, "Option 1")
+            checkOptionShown(0, "Option 1")
 
             pressAdd()
 
             addDialog(rule) {
 
                 typeText("Option 2")
-                pressSave()
+                pressAdd()
 
                 dialogHidden()
             }
 
-            optionShown(1,"Option 2")
+            checkOptionShown(1,"Option 2")
 
-            pressDecide()
+            checkDecideEnabled()
         }
     }
 
     @Test
-    fun deleteOptions() = runTest {
+    fun addAnotherShown() {
+
+        home(rule) {
+
+            pressAdd()
+
+            addDialog(rule) {
+
+                typeText(SystemClock.uptimeMillis().toString())
+                pressAdd()
+            }
+
+            checkDecideEnabled()
+
+            pressDecide()
+
+            addAnotherDialog(rule) {
+
+                checkDescription(context.getString(R.string.add_another_desc))
+                checkConfirm(context.getString(R.string.continue_option))
+                checkCancel(context.getString(R.string.cancel))
+
+                pressCancel()
+            }
+
+            pressDecide()
+
+            addAnotherDialog(rule) {
+
+                pressConfirm()
+            }
+
+            decisionDialog(rule) {
+
+            }
+        }
+    }
+
+    @Test
+    fun deleteOneOption() = runTest {
+
+        home(rule) {
+
+            checkClearAllHidden()
+
+            pressAdd()
+
+            val optionOne = SystemClock.uptimeMillis().toString()
+
+            addDialog(rule) {
+
+                typeText(optionOne)
+                pressAdd()
+            }
+
+            pressAdd()
+
+            val optionTwo = SystemClock.uptimeMillis().toString()
+
+            addDialog(rule) {
+
+                typeText(optionTwo)
+                pressAdd()
+            }
+
+            checkNumberOfOptions(2)
+
+            pressDelete(0)
+
+            checkNumberOfOptions(1)
+            checkOptionShown(0, optionTwo)
+        }
+    }
+
+    @Test
+    fun clearAllOptions() = runTest {
 
         home(rule) {
 
@@ -127,7 +203,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(SystemClock.uptimeMillis().toString())
-                pressSave()
+                pressAdd()
             }
 
             checkClearAllShown()
@@ -137,13 +213,13 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(SystemClock.uptimeMillis().toString())
-                pressSave()
+                pressAdd()
             }
 
             checkClearAllShown()
             pressClearAll()
 
-            generalDialog(rule) {
+            clearAllDialog(rule) {
 
                 checkDescription(context.getString(R.string.confirm_delete_desc))
                 checkConfirm(context.getString(R.string.delete_all_button))
@@ -159,61 +235,6 @@ class HomeJourneyTest {
     }
 
     @Test
-    fun decisionDisabled_whenOneOptionShown() = runTest {
-
-        val optionText = "Option 1"
-
-        home(rule) {
-
-            pressAdd()
-
-            addDialog(rule) {
-
-                typeText(optionText)
-                pressSave()
-            }
-
-            pressAdd()
-
-            addDialog(rule) {
-
-                typeText(optionText)
-                pressSave()
-            }
-
-            pressDecide()
-
-            decisionDefault(rule) {
-
-                pressOptions()
-                pressQuickOption()
-                pressGo()
-            }
-
-            decisionDialog(rule) {
-
-                pressDone()
-            }
-
-            pressDecide()
-
-            decisionDefault(rule) {
-
-                pressOptions()
-                pressQuickOption()
-                pressGo()
-            }
-
-            decisionDialog(rule) {
-
-                pressRemove()
-            }
-
-            checkDecideDisabled()
-        }
-    }
-
-    @Test
     fun decisionTextShown() = runTest {
 
         val optionText = "Option 1"
@@ -225,7 +246,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionText)
-                pressSave()
+                pressAdd()
             }
 
             pressAdd()
@@ -233,7 +254,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionText)
-                pressSave()
+                pressAdd()
             }
 
             pressDecide()
@@ -263,7 +284,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionText)
-                pressSave()
+                pressAdd()
             }
 
             pressAdd()
@@ -271,7 +292,7 @@ class HomeJourneyTest {
             addDialog(rule) {
 
                 typeText(optionText)
-                pressSave()
+                pressAdd()
             }
 
             pressDecide()

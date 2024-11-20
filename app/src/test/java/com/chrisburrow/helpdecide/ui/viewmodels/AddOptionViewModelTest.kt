@@ -17,7 +17,7 @@ class AddOptionViewModelTest {
 
         assertEquals(defaultValue, viewModel.uiState.value.optionText)
         assertFalse(viewModel.uiState.value.clearEnabled)
-        assertFalse(viewModel.uiState.value.saveEnabled)
+        assertFalse(viewModel.uiState.value.addEnabled)
     }
 
     @Test
@@ -30,7 +30,7 @@ class AddOptionViewModelTest {
 
         assertEquals(modifiedText, viewModel.uiState.value.optionText)
         assertTrue(viewModel.uiState.value.clearEnabled)
-        assertTrue(viewModel.uiState.value.saveEnabled)
+        assertTrue(viewModel.uiState.value.addEnabled)
     }
 
     @Test
@@ -43,7 +43,20 @@ class AddOptionViewModelTest {
 
         assertEquals(emptyText, viewModel.uiState.value.optionText)
         assertFalse(viewModel.uiState.value.clearEnabled)
-        assertFalse(viewModel.uiState.value.saveEnabled)
+        assertFalse(viewModel.uiState.value.addEnabled)
+    }
+
+    @Test
+    fun addDisabledWithEmptyText() {
+
+        val viewModel = AddOptionViewModel(MockAnalyticsLibrary())
+
+        val emptyText = "        "
+        viewModel.onTextChanged(emptyText)
+
+        assertEquals(emptyText, viewModel.uiState.value.optionText)
+        assertFalse(viewModel.uiState.value.addEnabled)
+        assertTrue(viewModel.uiState.value.clearEnabled)
     }
 
     @Test
@@ -55,17 +68,6 @@ class AddOptionViewModelTest {
 
         assertEquals("", viewModel.uiState.value.optionText)
         assertFalse(viewModel.uiState.value.clearEnabled)
-        assertFalse(viewModel.uiState.value.saveEnabled)
-    }
-
-    @Test
-    fun removeExtraWhiteSpaces() {
-
-        val viewModel = AddOptionViewModel(MockAnalyticsLibrary())
-
-        val modifiedText = "Option 1"
-        viewModel.onTextChanged("          $modifiedText            ")
-
-        assertEquals(modifiedText, viewModel.uiState.value.optionText)
+        assertFalse(viewModel.uiState.value.addEnabled)
     }
 }

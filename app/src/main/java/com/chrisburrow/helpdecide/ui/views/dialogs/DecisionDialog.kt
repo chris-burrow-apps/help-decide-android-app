@@ -56,8 +56,8 @@ fun DecisionDialog(
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
         )
     ) {
 

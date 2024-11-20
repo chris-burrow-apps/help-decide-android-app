@@ -71,7 +71,7 @@ fun DecideSpinWheel(
             }
 
         Text(
-            "${shownWheelSegments[index]}",
+            "?",
             style = TextStyle(
                 fontSize = 25.sp,
                 fontFamily = FontFamily.Cursive,

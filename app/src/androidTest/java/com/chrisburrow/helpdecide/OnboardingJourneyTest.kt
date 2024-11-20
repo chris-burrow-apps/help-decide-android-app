@@ -44,11 +44,16 @@ class OnboardingJourneyTest {
         onboarding(rule) {
 
             pressNext(0)
+
             assertFalse(analyticsLibrary.crashayticsState)
+
             pressNext(1)
+
             assertTrue(analyticsLibrary.crashayticsState)
             assertFalse(analyticsLibrary.analyticsState)
+
             pressNext(2)
+
             assertTrue(analyticsLibrary.analyticsState)
         }
 
@@ -65,12 +70,17 @@ class OnboardingJourneyTest {
         onboarding(rule) {
 
             pressNext(0)
+
             assertFalse(analyticsLibrary.crashayticsState)
+
             pressSkip(1)
+
             assertFalse(analyticsLibrary.crashayticsState)
             assertTrue(analyticsLibrary.setCrashalyticsStateCalled)
             assertFalse(analyticsLibrary.analyticsState)
+
             pressSkip(2)
+
             assertFalse(analyticsLibrary.analyticsState)
             assertTrue(analyticsLibrary.setAnalyticsStateCalled)
         }

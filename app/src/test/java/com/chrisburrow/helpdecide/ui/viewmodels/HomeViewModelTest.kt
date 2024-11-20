@@ -31,7 +31,7 @@ class HomeViewModelTest {
         homeViewModel.addOption(newOption)
 
         assertTrue(homeViewModel.view.value.options.contains(newOption))
-        assertFalse(homeViewModel.view.value.decideOption)
+        assertTrue(homeViewModel.view.value.decideOption)
         assertFalse(homeViewModel.view.value.emptyView)
         assertTrue(homeViewModel.view.value.clearAllShown)
 
