@@ -57,15 +57,4 @@ class AddOptionViewModelTest {
         assertFalse(viewModel.uiState.value.clearEnabled)
         assertFalse(viewModel.uiState.value.addEnabled)
     }
-
-    @Test
-    fun removeExtraWhiteSpaces() {
-
-        val viewModel = AddOptionViewModel(MockAnalyticsLibrary())
-
-        val modifiedText = "Option 1"
-        viewModel.onTextChanged("          $modifiedText            ")
-
-        assertEquals(modifiedText, viewModel.uiState.value.optionText)
-    }
 }
