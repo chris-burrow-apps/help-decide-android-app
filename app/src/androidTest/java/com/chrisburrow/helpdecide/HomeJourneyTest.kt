@@ -2,7 +2,6 @@ package com.chrisburrow.helpdecide
 
 import android.content.Context
 import android.os.SystemClock
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -14,7 +13,6 @@ import com.chrisburrow.helpdecide.ui.robots.clearAllDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
-import com.chrisburrow.helpdecide.ui.robots.generalDialog
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import kotlinx.coroutines.test.runTest
@@ -100,7 +98,7 @@ class HomeJourneyTest {
                 dialogHidden()
             }
 
-            optionShown(0, "Option 1")
+            checkOptionShown(0, "Option 1")
 
             pressAdd()
 
@@ -112,7 +110,7 @@ class HomeJourneyTest {
                 dialogHidden()
             }
 
-            optionShown(1,"Option 2")
+            checkOptionShown(1,"Option 2")
 
             checkDecideEnabled()
         }
@@ -154,6 +152,42 @@ class HomeJourneyTest {
             decisionDialog(rule) {
 
             }
+        }
+    }
+
+    @Test
+    fun deleteOneOption() = runTest {
+
+        home(rule) {
+
+            checkClearAllHidden()
+
+            pressAdd()
+
+            val optionOne = SystemClock.uptimeMillis().toString()
+
+            addDialog(rule) {
+
+                typeText(optionOne)
+                pressSave()
+            }
+
+            pressAdd()
+
+            val optionTwo = SystemClock.uptimeMillis().toString()
+
+            addDialog(rule) {
+
+                typeText(optionTwo)
+                pressSave()
+            }
+
+            checkNumberOfOptions(2)
+
+            pressDelete(0)
+
+            checkNumberOfOptions(1)
+            checkOptionShown(0, optionTwo)
         }
     }
 

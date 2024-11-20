@@ -120,7 +120,7 @@ fun HomeScreen(
                         ) {
                             Icon(
                                 tint = Color(MaterialTheme.colorScheme.secondary.toArgb()),
-                                painter = painterResource(R.drawable.delete_icon),
+                                painter = painterResource(R.drawable.delete_all),
                                 contentDescription = stringResource(R.string.clear_all))
                         }
                     }

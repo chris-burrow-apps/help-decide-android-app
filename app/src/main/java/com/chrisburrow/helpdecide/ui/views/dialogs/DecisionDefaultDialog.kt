@@ -66,10 +66,10 @@ fun DecisionDefaultDialog(
 
     Dialog(
         properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
         ),
-        onDismissRequest = {  },
+        onDismissRequest = { },
     ) {
 
         Surface(
