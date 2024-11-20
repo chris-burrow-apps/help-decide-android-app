@@ -18,7 +18,7 @@ class MockStorage(
 
         override suspend fun getString(key: String, defaultValue: String): Flow<String> {
 
-            keyCalledWithDefaultString.put(key, defaultValue)
+            keyCalledWithDefaultString[key] = defaultValue
 
             return flow {
 

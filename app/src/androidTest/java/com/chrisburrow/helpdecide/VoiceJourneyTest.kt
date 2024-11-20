@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import kotlinx.coroutines.test.runTest
@@ -24,7 +25,8 @@ class VoiceJourneyTest {
             HelpDecideTheme {
 
                 HelpDecideApp(
-                    analyticsLibrary = MockAnalyticsLibrary(settingsShown = true),
+                    analyticsLibrary = MockAnalyticsLibrary(),
+                    preferencesLibrary = MockPreferencesLibrary(),
                     voiceCompatible = voiceCompatible
                 )
             }

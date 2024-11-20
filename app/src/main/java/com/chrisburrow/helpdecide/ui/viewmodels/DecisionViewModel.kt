@@ -1,8 +1,5 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.RandomGenerator
@@ -18,7 +15,7 @@ data class DecisionDialogState(
 class DecisionViewModel(
     analyticsLibrary: AnalyticsLibraryInterface,
     private val randomGenerator: RandomNumberInterface = RandomGenerator(),
-    options: List<OptionObject>
+    val options: List<OptionObject>
 ): AnalyticsViewModel(analyticsLibrary) {
 
     private var _uiState = MutableStateFlow(DecisionDialogState(options = options))

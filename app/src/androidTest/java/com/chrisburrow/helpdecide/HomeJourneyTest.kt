@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.addAnotherDialog
 import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.clearAllDialog
@@ -37,7 +38,8 @@ class HomeJourneyTest {
             HelpDecideTheme {
 
                 HelpDecideApp(
-                    analyticsLibrary = MockAnalyticsLibrary(settingsShown = true),
+                    analyticsLibrary = MockAnalyticsLibrary(),
+                    preferencesLibrary = MockPreferencesLibrary(),
                     voiceCompatible = false
                 )
             }

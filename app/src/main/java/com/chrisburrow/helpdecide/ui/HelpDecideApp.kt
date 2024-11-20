@@ -8,11 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibraryInterface
 
 @Composable
 fun HelpDecideApp(
     navController: NavHostController = rememberNavController(),
     analyticsLibrary: AnalyticsLibraryInterface,
+    preferencesLibrary: PreferencesLibraryInterface,
     voiceCompatible: Boolean,
 ){
 
@@ -24,6 +27,7 @@ fun HelpDecideApp(
         AppNavHost(
             navController = navController,
             analyticsLibrary = analyticsLibrary,
+            preferencesLibrary = preferencesLibrary,
             voiceCompatible = voiceCompatible,
             startDestination = NavigationScreenItem.Loading.route
         )

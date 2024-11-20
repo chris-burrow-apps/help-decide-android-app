@@ -49,4 +49,6 @@ class AnalyticsLibraryTest {
         assertTrue(fakeStorage.didGetBooleanCalled(StorageLibraryKeys.CrashalyicsEnabled))
         assertTrue(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.CrashalyicsEnabled, false))
     }
+
+
 }

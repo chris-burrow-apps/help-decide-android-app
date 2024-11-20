@@ -5,10 +5,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
-import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest

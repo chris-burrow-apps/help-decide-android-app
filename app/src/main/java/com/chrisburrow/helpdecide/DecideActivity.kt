@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextToTextRequest
 
@@ -24,6 +25,9 @@ class DecideActivity : ComponentActivity() {
                 HelpDecideApp(
                     analyticsLibrary = AnalyticsLibrary(
                         context = this.applicationContext,
+                        storageLibrary = DecideApplication.storageLibrary
+                    ),
+                    preferencesLibrary = PreferencesLibrary(
                         storageLibrary = DecideApplication.storageLibrary
                     ),
                     voiceCompatible = SpeechToTextToTextRequest(LocalContext.current).isSpeechCompatible()
