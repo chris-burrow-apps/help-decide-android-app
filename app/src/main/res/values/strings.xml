@@ -16,6 +16,7 @@
     <string name="instant_decision">Instant Decision</string>
     <string name="spin_the_wheel">Spin the wheel</string>
     <string name="go">Go</string>
+    <string name="continue_option">Continue</string>
     <string name="clear_all">Clear All</string>
     <string name="got_a_few_ideas_but_undecided_which_to_pick">"Got a few ideas but undecided which to pick?\nLet the app pick for you.\n\n"</string>
 
@@ -29,6 +30,8 @@
 
     <string name="delete_all_button">Delete All</string>
     <string name="confirm_delete_desc">Are you sure you want to delete all options?\n\nTip: To remove one option, swipe the option you would like to remove</string>
+
+    <string name="add_another_desc">You have only added one option. Maybe you should add another option so it\'s a surprise.</string>
 
     <string name="onboarding_welcome_title">Welcome to Help Decide</string>
     <string name="onboarding_welcome_desc">"Make your life easier by adding in your decisions and let the app decide for you.\n\nTo help the developer, the app needs to ask your permission to do 2 things."</string>

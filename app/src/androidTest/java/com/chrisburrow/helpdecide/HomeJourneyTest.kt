@@ -2,12 +2,15 @@ package com.chrisburrow.helpdecide
 
 import android.content.Context
 import android.os.SystemClock
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.robots.addAnotherDialog
 import com.chrisburrow.helpdecide.ui.robots.addDialog
+import com.chrisburrow.helpdecide.ui.robots.clearAllDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
@@ -83,7 +86,7 @@ class HomeJourneyTest {
     }
 
     @Test
-    fun optionsShown() = runTest {
+    fun optionsCanBeAdded() = runTest {
 
         home(rule) {
 
@@ -111,12 +114,51 @@ class HomeJourneyTest {
 
             optionShown(1,"Option 2")
 
-            pressDecide()
+            checkDecideEnabled()
         }
     }
 
     @Test
-    fun deleteOptions() = runTest {
+    fun addAnotherShown() {
+
+        home(rule) {
+
+            pressAdd()
+
+            addDialog(rule) {
+
+                typeText(SystemClock.uptimeMillis().toString())
+                pressSave()
+            }
+
+            checkDecideEnabled()
+
+            pressDecide()
+
+            addAnotherDialog(rule) {
+
+                checkDescription(context.getString(R.string.add_another_desc))
+                checkConfirm(context.getString(R.string.continue_option))
+                checkCancel(context.getString(R.string.cancel))
+
+                pressCancel()
+            }
+
+            pressDecide()
+
+            addAnotherDialog(rule) {
+
+                pressConfirm()
+            }
+
+            decisionDialog(rule) {
+
+            }
+        }
+    }
+
+    @Test
+    fun clearAllOptions() = runTest {
 
         home(rule) {
 
@@ -143,7 +185,7 @@ class HomeJourneyTest {
             checkClearAllShown()
             pressClearAll()
 
-            generalDialog(rule) {
+            clearAllDialog(rule) {
 
                 checkDescription(context.getString(R.string.confirm_delete_desc))
                 checkConfirm(context.getString(R.string.delete_all_button))
@@ -155,61 +197,6 @@ class HomeJourneyTest {
             checkNumberOfOptions(0)
             checkDecideDisabled()
             checkClearAllHidden()
-        }
-    }
-
-    @Test
-    fun decisionDisabled_whenOneOptionShown() = runTest {
-
-        val optionText = "Option 1"
-
-        home(rule) {
-
-            pressAdd()
-
-            addDialog(rule) {
-
-                typeText(optionText)
-                pressSave()
-            }
-
-            pressAdd()
-
-            addDialog(rule) {
-
-                typeText(optionText)
-                pressSave()
-            }
-
-            pressDecide()
-
-            decisionDefault(rule) {
-
-                pressOptions()
-                pressQuickOption()
-                pressGo()
-            }
-
-            decisionDialog(rule) {
-
-                pressDone()
-            }
-
-            pressDecide()
-
-            decisionDefault(rule) {
-
-                pressOptions()
-                pressQuickOption()
-                pressGo()
-            }
-
-            decisionDialog(rule) {
-
-                pressRemove()
-            }
-
-            checkDecideDisabled()
         }
     }
 

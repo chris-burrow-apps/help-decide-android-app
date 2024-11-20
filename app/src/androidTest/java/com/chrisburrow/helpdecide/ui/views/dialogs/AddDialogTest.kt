@@ -109,7 +109,7 @@ class AddDialogTest {
     }
 
     @Test
-    fun optionTextPaddingRemoved() = runTest {
+    fun optionTextPaddingRemovedUponSubmit() = runTest {
 
         var returnedString = ""
 
@@ -130,6 +130,7 @@ class AddDialogTest {
         addDialog(rule) {
 
             typeText(testTextInput)
+            checkText(testTextInput)
 
             pressSave()
         }
@@ -160,7 +161,7 @@ class AddDialogTest {
             typeText("Option 1")
 
             pressSave()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Save))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Add))
 
             pressClear()
             assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Clear))

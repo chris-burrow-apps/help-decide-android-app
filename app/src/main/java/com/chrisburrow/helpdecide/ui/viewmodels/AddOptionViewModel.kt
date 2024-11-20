@@ -1,15 +1,12 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 data class AddOptionState(
     val optionText: String = "",
-    val saveEnabled: Boolean = false,
+    val addEnabled: Boolean = false,
     val clearEnabled: Boolean = false,
 )
 
@@ -25,7 +22,7 @@ class AddOptionViewModel(
 
         _uiState.value = uiState.value.copy(
             optionText = "",
-            saveEnabled = false,
+            addEnabled = false,
             clearEnabled = false
         )
     }
@@ -33,8 +30,8 @@ class AddOptionViewModel(
     fun onTextChanged(text: String) {
 
         _uiState.value = uiState.value.copy(
-            optionText = text.trim(),
-            saveEnabled = text.isNotEmpty(),
+            optionText = text,
+            addEnabled = text.isNotEmpty(),
             clearEnabled = text.isNotEmpty()
         )
     }

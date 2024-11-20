@@ -141,7 +141,7 @@ fun DecisionDefaultDialog(
                     onClick = {
                         analyticsLibrary.logButtonPressed(AnalyticsActions.Go)
                         selected(selectedPosition)
-                              },
+                    },
                 ) {
 
                     Text(

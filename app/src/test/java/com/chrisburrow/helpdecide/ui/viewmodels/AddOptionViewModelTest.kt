@@ -17,7 +17,7 @@ class AddOptionViewModelTest {
 
         assertEquals(defaultValue, viewModel.uiState.value.optionText)
         assertFalse(viewModel.uiState.value.clearEnabled)
-        assertFalse(viewModel.uiState.value.saveEnabled)
+        assertFalse(viewModel.uiState.value.addEnabled)
     }
 
     @Test
@@ -30,7 +30,7 @@ class AddOptionViewModelTest {
 
         assertEquals(modifiedText, viewModel.uiState.value.optionText)
         assertTrue(viewModel.uiState.value.clearEnabled)
-        assertTrue(viewModel.uiState.value.saveEnabled)
+        assertTrue(viewModel.uiState.value.addEnabled)
     }
 
     @Test
@@ -43,7 +43,7 @@ class AddOptionViewModelTest {
 
         assertEquals(emptyText, viewModel.uiState.value.optionText)
         assertFalse(viewModel.uiState.value.clearEnabled)
-        assertFalse(viewModel.uiState.value.saveEnabled)
+        assertFalse(viewModel.uiState.value.addEnabled)
     }
 
     @Test
@@ -55,7 +55,7 @@ class AddOptionViewModelTest {
 
         assertEquals("", viewModel.uiState.value.optionText)
         assertFalse(viewModel.uiState.value.clearEnabled)
-        assertFalse(viewModel.uiState.value.saveEnabled)
+        assertFalse(viewModel.uiState.value.addEnabled)
     }
 
     @Test

@@ -57,6 +57,7 @@ enum class Dialog {
     SpinTheWheel,
     Settings,
     DeleteAll,
+    AddAnother
 }
 
 sealed class NavigationDialogItem(val route: String) {
@@ -67,6 +68,7 @@ sealed class NavigationDialogItem(val route: String) {
     data object SpinTheWheel : NavigationDialogItem(Dialog.SpinTheWheel.name)
     data object Settings : NavigationDialogItem(Dialog.Settings.name)
     data object DeleteAll : NavigationDialogItem(Dialog.DeleteAll.name)
+    data object AddAnother : NavigationDialogItem(Dialog.AddAnother.name)
 }
 
 @Composable
@@ -153,6 +155,30 @@ fun AppNavHost (
                         },
                         cancelText = stringResource(id = R.string.cancel),
                         cancelPressed = {
+                            navController.popBackStack()
+                        },
+                    ),
+                    analyticsLibrary = analyticsLibrary,
+                )
+            )
+        }
+
+        dialog(NavigationDialogItem.AddAnother.route) {
+
+            GeneralDialog(
+                viewModel = GeneralDialogViewModel(
+                    configuration = GeneralDialogConfig(
+                        screenName = AnalyticsScreens.RemoveAll,
+                        description = stringResource(id = R.string.add_another_desc),
+                        confirmText = stringResource(id = R.string.continue_option),
+                        confirmPressed = {
+
+                            navController.popBackStack()
+                            navController.navigate(NavigationDialogItem.InstantDecision.route)
+                        },
+                        cancelText = stringResource(id = R.string.cancel),
+                        cancelPressed = {
+
                             navController.popBackStack()
                         },
                     ),

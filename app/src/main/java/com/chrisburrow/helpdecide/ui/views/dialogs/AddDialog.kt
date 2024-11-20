@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,7 +37,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
@@ -52,7 +50,7 @@ class AddDialogTags {
         const val OPTION_TEXT_TAG = "OptionTextDialog"
         const val CANCEL_BUTTON_TAG = "CancelButtonDialog"
         const val CLEAR_BUTTON_TAG = "ClearButtonDialog"
-        const val SAVE_BUTTON_TAG = "SaveButtonDialog"
+        const val ADD_BUTTON_TAG = "AddButtonDialog"
     }
 }
 
@@ -133,16 +131,16 @@ fun AddOptionDialog(
                     Spacer(modifier = Modifier.width(16.dp))
                     ElevatedButton(
                         modifier = Modifier
-                            .testTag(AddDialogTags.SAVE_BUTTON_TAG)
+                            .testTag(AddDialogTags.ADD_BUTTON_TAG)
                             .weight(1.0f),
-                        enabled = uiState.saveEnabled,
+                        enabled = uiState.addEnabled,
                         onClick = {
-                            viewModel.logButtonPressed(AnalyticsActions.Save)
-                            optionSaved(uiState.optionText)
+                            viewModel.logButtonPressed(AnalyticsActions.Add)
+                            optionSaved(uiState.optionText.trim())
                         },
                     ) {
 
-                        Text(text = stringResource(R.string.save))
+                        Text(text = stringResource(R.string.add))
                     }
                 }
             }

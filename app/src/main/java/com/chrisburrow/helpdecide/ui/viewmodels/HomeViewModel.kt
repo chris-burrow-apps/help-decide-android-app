@@ -25,6 +25,11 @@ class HomeViewModel(
 
     var view = _view.asStateFlow()
 
+    init {
+
+        checkButtonsState()
+    }
+
     fun addOption(option: OptionObject) {
 
         _view.value = view.value.copy(options = view.value.options.plus(option))
@@ -55,7 +60,7 @@ class HomeViewModel(
 
     private fun checkDecideEnabled() {
 
-        _view.value = view.value.copy(decideOption = view.value.options.isNotEmpty() && view.value.options.size > 1)
+        _view.value = view.value.copy(decideOption = view.value.options.isNotEmpty())
     }
 
     private fun checkEmptyShown() {

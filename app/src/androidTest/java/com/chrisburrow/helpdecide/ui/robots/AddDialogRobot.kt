@@ -1,6 +1,5 @@
 package com.chrisburrow.helpdecide.ui.robots
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -20,9 +19,9 @@ class AddDialogRobot(private val rule: ComposeContentTestRule) {
         }
     }
 
-    fun isSaveEnabled() { rule.onNodeWithTag(AddDialogTags.SAVE_BUTTON_TAG).assertIsEnabled() }
+    fun isSaveEnabled() { rule.onNodeWithTag(AddDialogTags.ADD_BUTTON_TAG).assertIsEnabled() }
 
-    fun isSaveDisabled() { rule.onNodeWithTag(AddDialogTags.SAVE_BUTTON_TAG).assertIsNotEnabled() }
+    fun isSaveDisabled() { rule.onNodeWithTag(AddDialogTags.ADD_BUTTON_TAG).assertIsNotEnabled() }
 
     fun isClearEnabled() { rule.onNodeWithTag(AddDialogTags.CLEAR_BUTTON_TAG).assertIsEnabled() }
 
@@ -32,7 +31,7 @@ class AddDialogRobot(private val rule: ComposeContentTestRule) {
 
     fun checkText(text: String = "") { rule.onNodeWithTag(AddDialogTags.OPTION_TEXT_TAG).assertTextEquals(text) }
 
-    fun pressSave() { rule.onNodeWithTag(AddDialogTags.SAVE_BUTTON_TAG).performClick() }
+    fun pressSave() { rule.onNodeWithTag(AddDialogTags.ADD_BUTTON_TAG).performClick() }
 
     fun pressCancel() { rule.onNodeWithTag(AddDialogTags.CANCEL_BUTTON_TAG).performClick() }
 

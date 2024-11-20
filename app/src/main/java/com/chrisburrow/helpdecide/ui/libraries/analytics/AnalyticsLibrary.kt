@@ -9,7 +9,6 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.logEvent
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 object AnalyticsScreens {
@@ -20,10 +19,11 @@ object AnalyticsScreens {
     val Wheel = "wheel_screen"
     val Instant = "instant_screen"
     val RemoveAll = "remove_all_screen"
+    val AddAnother = "add_another_screen"
 }
 
 object AnalyticsActions {
-    val Save = "save_action"
+    val Add = "add_action"
     val Cancel = "cancel_action"
     val Clear = "clear_action"
     val RemoveOption = "remove_option_action"
