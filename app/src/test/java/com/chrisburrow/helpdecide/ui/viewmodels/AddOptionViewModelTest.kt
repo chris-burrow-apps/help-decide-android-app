@@ -47,6 +47,19 @@ class AddOptionViewModelTest {
     }
 
     @Test
+    fun addDisabledWithEmptyText() {
+
+        val viewModel = AddOptionViewModel(MockAnalyticsLibrary())
+
+        val emptyText = "        "
+        viewModel.onTextChanged(emptyText)
+
+        assertEquals(emptyText, viewModel.uiState.value.optionText)
+        assertFalse(viewModel.uiState.value.addEnabled)
+        assertTrue(viewModel.uiState.value.clearEnabled)
+    }
+
+    @Test
     fun onTextCleared() {
 
         val viewModel = AddOptionViewModel(MockAnalyticsLibrary(), initialText = "Option 1")

@@ -31,7 +31,7 @@ class AddOptionViewModel(
 
         _uiState.value = uiState.value.copy(
             optionText = text,
-            addEnabled = text.isNotEmpty(),
+            addEnabled = text.trim().isNotEmpty(),
             clearEnabled = text.isNotEmpty()
         )
     }
