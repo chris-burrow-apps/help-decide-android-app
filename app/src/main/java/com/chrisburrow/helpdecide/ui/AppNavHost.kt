@@ -18,6 +18,7 @@ import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibraryInt
 import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.AppStartupViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.DecisionDefaultViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogConfig
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
@@ -189,19 +190,35 @@ fun AppNavHost (
 
         dialog(NavigationDialogItem.DecideType.route) {
 
+            val spinTheWheelKey = "spinTheWheel"
+            val instantKey = "instant"
+
+            val options: LinkedHashMap<String, String> = linkedMapOf(
+                spinTheWheelKey to stringResource(R.string.spin_the_wheel),
+                instantKey to stringResource(R.string.instant_decision),
+            )
+
             DecisionDefaultDialog(
-                analyticsLibrary = analyticsLibrary,
-                previouslySelected = 0,
-                selected = { position ->
+                viewModel = DecisionDefaultViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    preferencesLibrary = preferencesLibrary,
+                    options = options,
+                ),
+                selectedKey = { key ->
 
                     navController.popBackStack()
 
-                    if(position == 0) {
+                    when (key) {
 
-                        navController.navigate(NavigationDialogItem.SpinTheWheel.route)
-                    } else if(position == 1) {
+                        spinTheWheelKey -> {
 
-                        navController.navigate(NavigationDialogItem.InstantDecision.route)
+                            navController.navigate(NavigationDialogItem.SpinTheWheel.route)
+                        }
+
+                        instantKey -> {
+
+                            navController.navigate(NavigationDialogItem.InstantDecision.route)
+                        }
                     }
                 }
             )

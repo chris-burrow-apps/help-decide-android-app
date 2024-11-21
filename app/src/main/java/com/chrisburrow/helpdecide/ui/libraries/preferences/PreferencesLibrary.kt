@@ -17,4 +17,14 @@ class PreferencesLibrary(
 
         storageLibrary.storeBoolean(StorageLibraryKeys.PermissionsShown, true)
     }
+
+    override suspend fun checkDefaultDecisionOption(): String {
+
+        return storageLibrary.getString(StorageLibraryKeys.DecisionDefault).first()
+    }
+
+    override suspend fun saveDefaultDecisionOption(key: String) {
+
+        storageLibrary.storeString(StorageLibraryKeys.DecisionDefault, key)
+    }
 }
