@@ -40,7 +40,8 @@ class GeneralDialogTest {
                             cancelText = cancelText,
                             cancelPressed = { },
                         ),
-                        analyticsLibrary = MockAnalyticsLibrary())
+                        analyticsLibrary = MockAnalyticsLibrary()
+                    )
                 )
             }
         }
@@ -73,7 +74,8 @@ class GeneralDialogTest {
                             cancelText = "cancelText",
                             cancelPressed = { cancelPressed = true },
                         ),
-                        analyticsLibrary = MockAnalyticsLibrary())
+                        analyticsLibrary = MockAnalyticsLibrary()
+                    )
                 )
             }
         }

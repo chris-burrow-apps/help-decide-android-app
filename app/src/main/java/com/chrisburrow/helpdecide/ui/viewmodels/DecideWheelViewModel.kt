@@ -14,8 +14,8 @@ data class DecideWheelState(
 )
 
 class DecideWheelViewModel(
-    analyticsLibrary: AnalyticsLibraryInterface,
-    options: List<OptionObject>
+    val analyticsLibrary: AnalyticsLibraryInterface,
+    val options: List<OptionObject>
 ): AnalyticsViewModel(analyticsLibrary) {
 
     private val _uiState = MutableStateFlow(DecideWheelState(options = options))

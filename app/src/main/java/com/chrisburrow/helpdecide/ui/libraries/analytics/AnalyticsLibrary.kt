@@ -39,16 +39,6 @@ class AnalyticsLibrary(
     private val storageLibrary: StorageLibraryInterface
 ) : AnalyticsLibraryInterface {
 
-    override suspend fun checkSettingsShown(): Boolean {
-
-        return storageLibrary.getBoolean(StorageLibraryKeys.SettingsShown).first()
-    }
-
-    override suspend fun permissionsRequested() {
-
-        storageLibrary.storeBoolean(StorageLibraryKeys.SettingsShown, true)
-    }
-
     override suspend fun getCrashalyticsState(): Boolean {
 
         return storageLibrary.getBoolean(StorageLibraryKeys.CrashalyicsEnabled).first()

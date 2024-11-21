@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.robots.onboarding
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
@@ -21,7 +22,8 @@ class OnboardingJourneyTest {
     @get:Rule
     val rule = createComposeRule()
 
-    val analyticsLibrary = MockAnalyticsLibrary(settingsShown = false)
+    val analyticsLibrary = MockAnalyticsLibrary()
+    val preferencesLibrary = MockPreferencesLibrary(onboardingShown = false)
 
     @Before
     fun setup() {
@@ -32,6 +34,7 @@ class OnboardingJourneyTest {
 
                 HelpDecideApp(
                     analyticsLibrary = analyticsLibrary,
+                    preferencesLibrary = preferencesLibrary,
                     voiceCompatible = false
                 )
             }

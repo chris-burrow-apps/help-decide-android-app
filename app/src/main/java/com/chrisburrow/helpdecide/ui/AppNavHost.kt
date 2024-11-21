@@ -5,7 +5,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -15,9 +14,11 @@ import androidx.navigation.compose.dialog
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibraryInterface
 import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.AppStartupViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.DecisionDefaultViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogConfig
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
@@ -34,7 +35,6 @@ import com.chrisburrow.helpdecide.ui.views.screens.LoadingScreen
 import com.chrisburrow.helpdecide.ui.views.screens.OnboardingScreen
 import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToText
-import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextToTextRequest
 import kotlinx.coroutines.launch
 
 enum class Screen {
@@ -76,6 +76,7 @@ fun AppNavHost (
     modifier: Modifier = Modifier,
     navController: NavHostController,
     analyticsLibrary: AnalyticsLibraryInterface,
+    preferencesLibrary: PreferencesLibraryInterface,
     voiceCompatible: Boolean,
     startDestination: String = NavigationScreenItem.Onboarding.route,
 ) {
@@ -94,7 +95,7 @@ fun AppNavHost (
     {
         composable(NavigationScreenItem.Loading.route) {
 
-            LoadingScreen(AppStartupViewModel(navController, analyticsLibrary))
+            LoadingScreen(AppStartupViewModel(navController, preferencesLibrary))
         }
 
         composable(NavigationScreenItem.Onboarding.route) {
@@ -105,7 +106,7 @@ fun AppNavHost (
 
                     scope.launch {
 
-                        analyticsLibrary.permissionsRequested()
+                        preferencesLibrary.permissionsRequested()
                         navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
                     }
                 }
@@ -189,19 +190,35 @@ fun AppNavHost (
 
         dialog(NavigationDialogItem.DecideType.route) {
 
+            val spinTheWheelKey = "spinTheWheel"
+            val instantKey = "instant"
+
+            val options: LinkedHashMap<String, String> = linkedMapOf(
+                spinTheWheelKey to stringResource(R.string.spin_the_wheel),
+                instantKey to stringResource(R.string.instant_decision),
+            )
+
             DecisionDefaultDialog(
-                analyticsLibrary = analyticsLibrary,
-                previouslySelected = 0,
-                selected = { position ->
+                viewModel = DecisionDefaultViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    preferencesLibrary = preferencesLibrary,
+                    options = options,
+                ),
+                selectedKey = { key ->
 
                     navController.popBackStack()
 
-                    if(position == 0) {
+                    when (key) {
 
-                        navController.navigate(NavigationDialogItem.SpinTheWheel.route)
-                    } else if(position == 1) {
+                        spinTheWheelKey -> {
 
-                        navController.navigate(NavigationDialogItem.InstantDecision.route)
+                            navController.navigate(NavigationDialogItem.SpinTheWheel.route)
+                        }
+
+                        instantKey -> {
+
+                            navController.navigate(NavigationDialogItem.InstantDecision.route)
+                        }
                     }
                 }
             )

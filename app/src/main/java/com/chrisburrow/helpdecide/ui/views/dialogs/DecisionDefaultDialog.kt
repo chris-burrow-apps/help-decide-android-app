@@ -20,7 +20,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,12 +31,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
+import com.chrisburrow.helpdecide.ui.viewmodels.DecisionDefaultViewModel
 
 class DecisionDefaultDialogTags {
 
@@ -49,20 +50,18 @@ class DecisionDefaultDialogTags {
         const val GO_BUTTON_TAG = "DecisionGoButton"
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DecisionDefaultDialog(
-    analyticsLibrary: AnalyticsLibraryInterface,
-    options: List<String> = listOf(
-        stringResource(R.string.spin_the_wheel),
-        stringResource(R.string.instant_decision),
-    ),
-    previouslySelected: Int,
-    selected:(Int) -> Unit
+    viewModel: DecisionDefaultViewModel,
+    selectedKey:(String) -> Unit
 ) {
 
+    val state = remember { viewModel.uiState }
+    val uiState by state.collectAsStateWithLifecycle()
+
     var expandedOptions by remember { mutableStateOf(false) }
-    var selectedPosition by remember { mutableIntStateOf(previouslySelected) }
-    var selectedOptionText by remember { mutableStateOf(options[previouslySelected]) }
 
     Dialog(
         properties = DialogProperties(
@@ -84,6 +83,7 @@ fun DecisionDefaultDialog(
 
                     ExposedDropdownMenuBox(
                         modifier = Modifier
+                            .testTag(DecisionDefaultDialogTags.OPTION_CHOSEN_TAG)
                             .fillMaxWidth()
                             .wrapContentSize()
                             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
@@ -95,10 +95,9 @@ fun DecisionDefaultDialog(
                     ) {
                         TextField(
                             modifier = Modifier
-                                .testTag(DecisionDefaultDialogTags.OPTION_CHOSEN_TAG)
                                 .menuAnchor(),
                             readOnly = true,
-                            value = selectedOptionText,
+                            value = uiState.currentlySelectedValue,
                             onValueChange = { },
                             label = { Text(stringResource(R.string.how_do_you_want_to_decide)) },
                             trailingIcon = {
@@ -114,19 +113,22 @@ fun DecisionDefaultDialog(
                                 expandedOptions = false
                             }
                         ) {
-                            options.forEachIndexed { position, item ->
+
+                            val options = uiState.options
+
+                            options.keys.forEachIndexed { position, key ->
 
                                 DropdownMenuItem(
                                     modifier = Modifier.testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
                                     text = {
                                         Text(
-                                            text = item
+                                            text = options.get(key)!!
                                         )
                                     },
                                     onClick = {
-                                        selectedOptionText = options[position]
+
+                                        viewModel.setDecisionOption(key)
                                         expandedOptions = false
-                                        selectedPosition = position
                                     }
                                 )
                             }
@@ -139,8 +141,11 @@ fun DecisionDefaultDialog(
                         .align(Alignment.CenterHorizontally)
                         .padding(8.dp),
                     onClick = {
-                        analyticsLibrary.logButtonPressed(AnalyticsActions.Go)
-                        selected(selectedPosition)
+
+                        viewModel.logButtonPressed(AnalyticsActions.Go)
+                        viewModel.saveUserOption()
+
+                        selectedKey(uiState.currentlySelectedKey)
                     },
                 ) {
 
@@ -155,7 +160,8 @@ fun DecisionDefaultDialog(
 
     LaunchedEffect(Unit) {
 
-        analyticsLibrary.logScreenView(AnalyticsScreens.DecisionType)
+        viewModel.logScreenView(AnalyticsScreens.DecisionType)
+        viewModel.refreshDefaultDecision()
     }
 }
 
@@ -164,7 +170,10 @@ fun DecisionDefaultDialog(
 fun DecisionDefaultBottomSheetPreview() {
 
     DecisionDefaultDialog(
-        analyticsLibrary = MockAnalyticsLibrary(),
-        previouslySelected = 0,
-        selected = {})
+        viewModel = DecisionDefaultViewModel(
+            MockAnalyticsLibrary(),
+            MockPreferencesLibrary(),
+            linkedMapOf("optionOneKey" to "Option 1")
+        ),
+        selectedKey = {})
 }

@@ -1,10 +1,6 @@
 package com.chrisburrow.helpdecide.ui.libraries.analytics
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-
 class MockAnalyticsLibrary(
-    var settingsShown: Boolean = true,
     var analyticsState: Boolean = false,
     var crashayticsState: Boolean = false,
 ) : AnalyticsLibraryInterface {
@@ -54,16 +50,6 @@ class MockAnalyticsLibrary(
     override fun logButtonPressed(buttonText: String) {
 
         analyticsButtonsPressed.add(buttonText)
-    }
-
-    override suspend fun checkSettingsShown(): Boolean {
-
-        return settingsShown
-    }
-
-    override suspend fun permissionsRequested() {
-
-        settingsShown = true
     }
 
     fun logScreenCalledWith(screenName: String) : Boolean {

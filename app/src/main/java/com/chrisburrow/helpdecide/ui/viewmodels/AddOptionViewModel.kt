@@ -11,8 +11,8 @@ data class AddOptionState(
 )
 
 class AddOptionViewModel(
-    analyticsLibrary: AnalyticsLibraryInterface,
-    initialText: String = ""
+    val analyticsLibrary: AnalyticsLibraryInterface,
+    val initialText: String = ""
 ): AnalyticsViewModel(analyticsLibrary) {
 
     private var _uiState = MutableStateFlow(AddOptionState(optionText = initialText))

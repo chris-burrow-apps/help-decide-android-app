@@ -8,9 +8,6 @@ interface AnalyticsLibraryInterface {
     suspend fun setCrashalyticsState(enabled: Boolean)
     suspend fun setAnalyticsState(enabled: Boolean)
 
-    suspend fun checkSettingsShown(): Boolean
-    suspend fun permissionsRequested()
-
     fun logScreenView(screenName: String)
     fun logButtonPressed(buttonText: String)
 }
