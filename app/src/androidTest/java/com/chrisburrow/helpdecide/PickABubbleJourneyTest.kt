@@ -3,6 +3,7 @@ package com.chrisburrow.helpdecide
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
@@ -23,6 +24,8 @@ class PickABubbleJourneyTest {
     @get:Rule
     val rule = createComposeRule()
 
+    private val analyticsLibrary = MockAnalyticsLibrary()
+
     @Before
     fun setup() {
 
@@ -31,7 +34,7 @@ class PickABubbleJourneyTest {
             HelpDecideTheme {
 
                 HelpDecideApp(
-                    analyticsLibrary = MockAnalyticsLibrary(),
+                    analyticsLibrary = analyticsLibrary,
                     preferencesLibrary = MockPreferencesLibrary(),
                     voiceCompatible = false
                 )
@@ -78,6 +81,8 @@ class PickABubbleJourneyTest {
         }
 
         decisionChosenDialog(rule) {
+
+            analyticsLibrary.logScreenCalledWith(AnalyticsScreens.DecisionChosen)
 
             pressConfirm()
         }

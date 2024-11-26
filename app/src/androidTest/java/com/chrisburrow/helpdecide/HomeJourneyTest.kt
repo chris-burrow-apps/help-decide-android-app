@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.addAnotherDialog
@@ -30,6 +31,8 @@ class HomeJourneyTest {
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
+    private val analyticsLibrary = MockAnalyticsLibrary()
+
     @Before
     fun setup() {
 
@@ -38,7 +41,7 @@ class HomeJourneyTest {
             HelpDecideTheme {
 
                 HelpDecideApp(
-                    analyticsLibrary = MockAnalyticsLibrary(),
+                    analyticsLibrary = analyticsLibrary,
                     preferencesLibrary = MockPreferencesLibrary(),
                     voiceCompatible = false
                 )
@@ -137,6 +140,8 @@ class HomeJourneyTest {
 
             addAnotherDialog(rule) {
 
+                analyticsLibrary.logScreenCalledWith(AnalyticsScreens.AddAnother)
+
                 checkDescription(context.getString(R.string.add_another_desc))
                 checkConfirm(context.getString(R.string.continue_option))
                 checkCancel(context.getString(R.string.cancel))
@@ -222,6 +227,8 @@ class HomeJourneyTest {
             pressClearAll()
 
             clearAllDialog(rule) {
+
+                analyticsLibrary.logScreenCalledWith(AnalyticsScreens.RemoveAll)
 
                 checkDescription(context.getString(R.string.confirm_delete_desc))
                 checkConfirm(context.getString(R.string.delete_all_button))

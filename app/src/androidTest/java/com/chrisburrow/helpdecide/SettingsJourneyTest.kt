@@ -28,12 +28,12 @@ class SettingsJourneyTest {
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    val analyticsLibrary = MockAnalyticsLibrary(
+    private val analyticsLibrary = MockAnalyticsLibrary(
         analyticsState = false,
         crashayticsState = true
     )
 
-    val preferencesLibrary = MockPreferencesLibrary()
+    private val preferencesLibrary = MockPreferencesLibrary()
 
     @Before
     fun setup() {

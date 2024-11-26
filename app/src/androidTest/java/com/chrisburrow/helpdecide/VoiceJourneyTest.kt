@@ -18,7 +18,7 @@ class VoiceJourneyTest {
     @get:Rule
     val rule = createComposeRule()
 
-    fun setup(voiceCompatible: Boolean) {
+    private fun setup(voiceCompatible: Boolean) {
 
         rule.setContent {
 

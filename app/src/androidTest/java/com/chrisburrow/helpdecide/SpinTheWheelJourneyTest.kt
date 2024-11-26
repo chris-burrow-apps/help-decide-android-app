@@ -6,11 +6,9 @@ import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
-import com.chrisburrow.helpdecide.ui.robots.decisionChosenDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.robots.home
-import com.chrisburrow.helpdecide.ui.robots.pickABubble
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
