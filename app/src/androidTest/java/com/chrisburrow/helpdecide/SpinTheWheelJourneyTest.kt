@@ -6,6 +6,7 @@ import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
+import com.chrisburrow.helpdecide.ui.robots.decisionChosenDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.robots.home
@@ -74,7 +75,11 @@ class SpinTheWheelJourneyTest {
         decisionWheel(rule) {
 
             Thread.sleep(1000)
-            pressDone()
+        }
+
+        decisionChosenDialog(rule) {
+
+            pressConfirm()
         }
 
         home(rule) {

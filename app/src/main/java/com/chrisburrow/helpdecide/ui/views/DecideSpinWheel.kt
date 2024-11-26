@@ -6,11 +6,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chrisburrow.helpdecide.ui.ThemePreviews
@@ -22,12 +25,14 @@ import com.commandiron.spin_wheel_compose.state.rememberSpinWheelState
 
 @Composable
 fun DecideSpinWheel(
-    size: Int,
+    modifier: Modifier = Modifier,
+    wheelSize: Dp,
+    numberOfSegments: Int,
     stopped: (Int) -> Unit
 ) {
 
-    val numberOfWheelSegments = if(size < 8) { size } else { 8 }
-    val allWheelSegments = List(size) { it + 1 }
+    val numberOfWheelSegments = if(numberOfSegments < 8) { numberOfSegments } else { 8 }
+    val allWheelSegments = List(numberOfSegments) { it + 1 }
     val shownWheelSegments = allWheelSegments.shuffled().subList(0, numberOfWheelSegments)
 
     val state = rememberSpinWheelState(
@@ -40,8 +45,10 @@ fun DecideSpinWheel(
     )
 
     SpinWheel(
+        modifier = modifier,
         state = state,
         dimensions = SpinWheelDefaults.spinWheelDimensions(
+            spinWheelSize = wheelSize,
             frameWidth = 10.dp,
             selectorWidth = 15.dp
         ),
@@ -101,7 +108,9 @@ fun DecideSpinWheelPreview() {
     HelpDecideTheme {
 
         DecideSpinWheel(
-            size = 20,
+            modifier = Modifier,
+            wheelSize = 200.dp,
+            numberOfSegments = 20,
             stopped = {
 
                 Toast.makeText(context, "Winning index: $it", Toast.LENGTH_LONG).show()

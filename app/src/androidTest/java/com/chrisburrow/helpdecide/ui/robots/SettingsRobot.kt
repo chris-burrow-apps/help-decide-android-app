@@ -1,7 +1,5 @@
 package com.chrisburrow.helpdecide.ui.robots
 
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
@@ -9,8 +7,6 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialogTags
-import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialogTags
 import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialogTags
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsListTags
 
