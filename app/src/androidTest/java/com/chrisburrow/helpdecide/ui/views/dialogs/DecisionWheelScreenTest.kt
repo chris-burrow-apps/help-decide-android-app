@@ -8,6 +8,7 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
+import com.chrisburrow.helpdecide.ui.views.screens.DecideWheelScreen
 import com.chrisburrow.helpdecide.utils.OptionObject
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
@@ -17,7 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class DecisionWheelDialogTest {
+class DecisionWheelScreenTest {
 
     @get:Rule
     val rule = createComposeRule()
@@ -32,89 +33,56 @@ class DecisionWheelDialogTest {
 
             HelpDecideTheme {
 
-                DecideWheelDialog(
+                DecideWheelScreen(
                     DecideWheelViewModel(
                         analyticsLibrary = MockAnalyticsLibrary(),
                         options = options
                     ),
-                    dismissPressed = { },
-                    removePressed = { }
+                    backPressed = { },
+                    optionChosen = { }
                 )
             }
         }
 
         decisionWheel(rule) {
 
-            checkText(expectedObject.text)
         }
     }
 
     @Test
-    fun donePressed() = runTest {
+    fun optionChosen() = runTest {
 
         val expectedObject = OptionObject(text = "example 1")
         val options = listOf(expectedObject)
 
-        var doneCalled = false
+        var optionChosenCalled = false
+        var optionIdChosen: String? = null
 
         rule.setContent {
 
             HelpDecideTheme {
 
-                DecideWheelDialog(
+                DecideWheelScreen(
                     DecideWheelViewModel(
                         analyticsLibrary = MockAnalyticsLibrary(),
                         options = options
                     ),
-                    dismissPressed = { doneCalled = true },
-                    removePressed = { }
+                    optionChosen = {
+                        optionChosenCalled = true
+                        optionIdChosen = it
+                    },
+                    backPressed = { }
                 )
             }
         }
 
         decisionWheel(rule) {
 
-            pressDone()
+            Thread.sleep(1000)
         }
 
-        assertTrue(doneCalled)
-    }
-
-    @Test
-    fun clearPressed() = runTest {
-
-        val expectedObject = OptionObject(text = "example 1")
-        val options = listOf(expectedObject)
-
-        var clearCalled = false
-
-        var optionRemoved: String? = null
-
-        rule.setContent {
-
-            HelpDecideTheme {
-
-                DecideWheelDialog(
-                    DecideWheelViewModel(
-                        analyticsLibrary = MockAnalyticsLibrary(),
-                        options = options
-                    ),
-                    dismissPressed = {  },
-                    removePressed = {
-                        optionRemoved = it
-                        clearCalled = true
-                    }
-                )
-            }
-        }
-
-        decisionWheel(rule) {
-
-            pressRemove()
-        }
-
-        assertTrue(clearCalled)
-        assertEquals(expectedObject.id, optionRemoved)
+        assertTrue(optionChosenCalled)
+        assertEquals(expectedObject.id, optionIdChosen)
     }
 
     @Test
@@ -128,13 +96,13 @@ class DecisionWheelDialogTest {
 
             HelpDecideTheme {
 
-                DecideWheelDialog(
+                DecideWheelScreen(
                     DecideWheelViewModel(
                         analyticsLibrary = analyticsLibrary,
                         options = options
                     ),
-                    dismissPressed = { },
-                    removePressed = { }
+                    backPressed = { },
+                    optionChosen = { }
                 )
             }
         }
@@ -142,12 +110,6 @@ class DecisionWheelDialogTest {
         decisionWheel(rule) {
 
             assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.Wheel))
-
-            pressDone()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Done))
-
-            pressRemove()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.RemoveOption))
         }
     }
 }

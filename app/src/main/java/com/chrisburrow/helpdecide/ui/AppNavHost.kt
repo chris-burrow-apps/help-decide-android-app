@@ -28,7 +28,7 @@ import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.PickABubbleViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
-import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialog
+import com.chrisburrow.helpdecide.ui.views.screens.DecideWheelScreen
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialog
@@ -239,21 +239,20 @@ fun AppNavHost (
             )
         }
 
-        dialog(NavigationDialogItem.SpinTheWheel.route) {
+        composable(NavigationDialogItem.SpinTheWheel.route) {
 
             val options = homeViewModel.view.collectAsState()
 
-            DecideWheelDialog(
+            DecideWheelScreen(
                 DecideWheelViewModel(
                     analyticsLibrary = analyticsLibrary,
                     options = options.value.options
                 ),
-                removePressed = { option ->
+                optionChosen = {
 
-                    homeViewModel.deleteOption(option)
-                    navController.popBackStack()
+                    navController.navigate("${NavigationDialogItem.OptionChosen}/$it")
                 },
-                dismissPressed = {
+                backPressed = {
 
                     navController.popBackStack()
                 }
