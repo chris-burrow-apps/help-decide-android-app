@@ -25,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chrisburrow.helpdecide.R
+import com.chrisburrow.helpdecide.ui.PreviewOptions
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
@@ -44,6 +45,7 @@ class DecideWheelDialogTags {
         const val DONE_BUTTON_TAG = "DoneButtonDialog"
     }
 }
+
 @Composable
 fun DecideWheelDialog(
     viewModel: DecideWheelViewModel,
@@ -136,10 +138,7 @@ fun DecideSpinWheelPreview() {
     HelpDecideTheme {
 
         DecideWheelDialog(
-            DecideWheelViewModel(MockAnalyticsLibrary(), listOf(
-                OptionObject(text = "Option 1"),
-                OptionObject(text = "Option 2")
-            )),
+            DecideWheelViewModel(MockAnalyticsLibrary(), PreviewOptions()),
             dismissPressed = {},
             removePressed = {},
         )

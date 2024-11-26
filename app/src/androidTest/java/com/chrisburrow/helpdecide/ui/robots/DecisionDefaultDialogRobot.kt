@@ -15,7 +15,9 @@ class DecisionDefaultDialogRobot(private val rule: ComposeContentTestRule) {
         }
     }
 
-    fun pressQuickOption() { pressOption(1) }
+    fun pressQuickOption() { pressOption(2) }
+
+    fun pressBubbleOption() { pressOption(1) }
 
     fun pressWheelOption() { pressOption(0) }
 

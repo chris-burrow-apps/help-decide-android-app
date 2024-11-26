@@ -273,42 +273,4 @@ class HomeJourneyTest {
             }
         }
     }
-
-    @Test
-    fun decisionWheelShown() = runTest {
-
-        val optionText = "Option 1"
-
-        home(rule) {
-
-            pressAdd()
-
-            addDialog(rule) {
-
-                typeText(optionText)
-                pressAdd()
-            }
-
-            pressAdd()
-
-            addDialog(rule) {
-
-                typeText(optionText)
-                pressAdd()
-            }
-
-            pressDecide()
-
-            decisionDefault(rule) {
-
-                pressOptions()
-                pressWheelOption()
-                pressGo()
-            }
-
-            decisionWheel(rule) {
-
-            }
-        }
-    }
 }

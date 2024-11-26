@@ -30,3 +30,4 @@ class GeneralDialogRobot(private val rule: ComposeContentTestRule) {
 fun generalDialog(rule: ComposeContentTestRule, block: GeneralDialogRobot.() -> Unit) = GeneralDialogRobot(rule).apply(block)
 fun clearAllDialog(rule: ComposeContentTestRule, block: GeneralDialogRobot.() -> Unit) = GeneralDialogRobot(rule).apply(block)
 fun addAnotherDialog(rule: ComposeContentTestRule, block: GeneralDialogRobot.() -> Unit) = GeneralDialogRobot(rule).apply(block)
+fun decisionChosenDialog(rule: ComposeContentTestRule, block: GeneralDialogRobot.() -> Unit) = GeneralDialogRobot(rule).apply(block)

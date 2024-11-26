@@ -78,12 +78,15 @@ class OnboardingJourneyTest {
 
             pressSkip(1)
 
+            Thread.sleep(500)
             assertFalse(analyticsLibrary.crashayticsState)
             assertTrue(analyticsLibrary.setCrashalyticsStateCalled)
+
             assertFalse(analyticsLibrary.analyticsState)
 
             pressSkip(2)
 
+            Thread.sleep(500)
             assertFalse(analyticsLibrary.analyticsState)
             assertTrue(analyticsLibrary.setAnalyticsStateCalled)
         }

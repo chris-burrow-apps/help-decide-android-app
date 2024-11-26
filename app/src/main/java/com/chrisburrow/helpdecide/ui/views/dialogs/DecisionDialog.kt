@@ -25,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chrisburrow.helpdecide.R
+import com.chrisburrow.helpdecide.ui.PreviewOptions
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
@@ -129,7 +130,7 @@ fun DecisionDialogPreview() {
             DecisionViewModel(
                 MockAnalyticsLibrary(),
                 RandomGenerator(),
-                listOf(OptionObject(text = "Option"))
+                PreviewOptions()
             ),
             removePressed = {},
             donePressed = {}
