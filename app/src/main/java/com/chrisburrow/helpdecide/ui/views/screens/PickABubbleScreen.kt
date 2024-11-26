@@ -41,6 +41,7 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.PickABubbleViewModel
+import kotlin.random.Random
 
 class PickABubbleTags  {
 
@@ -134,7 +135,7 @@ fun PickABubbleScreen(
                                 ),
                                 shape = CircleShape
                             ),
-                        colors = ButtonDefaults.buttonColors(),
+                        colors = ButtonDefaults.buttonColors(containerColor = pickARandomColour()),
                     ) {
                         Text("?")
                     }
@@ -151,6 +152,16 @@ fun PickABubbleScreen(
             screenWidth = screenWidth,
             screenHeight = screenHeight
         )
+    }
+}
+
+@Composable
+fun pickARandomColour(): Color {
+
+    return when(Random.nextInt(1, 4)) {
+        1 -> MaterialTheme.colorScheme.primary
+        2 -> MaterialTheme.colorScheme.secondary
+        else -> MaterialTheme.colorScheme.error
     }
 }
 
