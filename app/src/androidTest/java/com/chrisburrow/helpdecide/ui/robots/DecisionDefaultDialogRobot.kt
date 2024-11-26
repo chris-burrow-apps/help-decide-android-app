@@ -1,6 +1,5 @@
 package com.chrisburrow.helpdecide.ui.robots
 
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -15,9 +14,11 @@ class DecisionDefaultDialogRobot(private val rule: ComposeContentTestRule) {
         }
     }
 
-    fun pressQuickOption() { pressOption(1) }
-
     fun pressWheelOption() { pressOption(0) }
+
+    fun pressBubbleOption() { pressOption(1) }
+
+    fun pressQuickOption() { pressOption(2) }
 
     fun pressOptions() { rule.onNodeWithTag(DecisionDefaultDialogTags.OPTION_CHOSEN_TAG).performClick() }
 

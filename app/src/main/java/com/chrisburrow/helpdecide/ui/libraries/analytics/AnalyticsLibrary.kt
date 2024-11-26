@@ -20,6 +20,8 @@ object AnalyticsScreens {
     val Instant = "instant_screen"
     val RemoveAll = "remove_all_screen"
     val AddAnother = "add_another_screen"
+    val DecisionChosen = "decision_chosen_screen"
+    val BubblePicker = "bubble_picker_screen"
 }
 
 object AnalyticsActions {
@@ -27,6 +29,7 @@ object AnalyticsActions {
     val Cancel = "cancel_action"
     val Clear = "clear_action"
     val RemoveOption = "remove_option_action"
+    val OptionPressed = "bubble_pressed_action"
     val Done = "done_action"
     val Voice = "voice_action"
     val Decide = "decide_action"

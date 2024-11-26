@@ -49,6 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.NavigationDialogItem
+import com.chrisburrow.helpdecide.ui.PreviewOptions
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
@@ -56,7 +57,6 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
 import com.chrisburrow.helpdecide.ui.views.screens.options.OptionList
-import com.chrisburrow.helpdecide.utils.OptionObject
 
 
 class HomeTags {
@@ -339,10 +339,7 @@ fun HomeScreenPreview() {
             HomeViewModel(
                 analyticsLibrary = analyticsLibrary,
                 isSpeechCompatible = true,
-                initialOptions = listOf(
-                    OptionObject(text = "Option 1"),
-                    OptionObject(text = "Option 2")
-                )
+                initialOptions = PreviewOptions()
             )
         )
     }

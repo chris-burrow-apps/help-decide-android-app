@@ -22,8 +22,8 @@ class OnboardingJourneyTest {
     @get:Rule
     val rule = createComposeRule()
 
-    val analyticsLibrary = MockAnalyticsLibrary()
-    val preferencesLibrary = MockPreferencesLibrary(onboardingShown = false)
+    private val analyticsLibrary = MockAnalyticsLibrary()
+    private val preferencesLibrary = MockPreferencesLibrary(onboardingShown = false)
 
     @Before
     fun setup() {
@@ -78,12 +78,15 @@ class OnboardingJourneyTest {
 
             pressSkip(1)
 
+            Thread.sleep(500)
             assertFalse(analyticsLibrary.crashayticsState)
             assertTrue(analyticsLibrary.setCrashalyticsStateCalled)
+
             assertFalse(analyticsLibrary.analyticsState)
 
             pressSkip(2)
 
+            Thread.sleep(500)
             assertFalse(analyticsLibrary.analyticsState)
             assertTrue(analyticsLibrary.setAnalyticsStateCalled)
         }

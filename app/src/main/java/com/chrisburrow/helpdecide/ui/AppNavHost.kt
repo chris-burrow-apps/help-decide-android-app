@@ -8,9 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
+import androidx.navigation.navArgument
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
@@ -23,12 +25,14 @@ import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogConfig
 import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.PickABubbleViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecideWheelDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialog
+import com.chrisburrow.helpdecide.ui.views.screens.PickABubbleScreen
 import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialog
 import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import com.chrisburrow.helpdecide.ui.views.screens.LoadingScreen
@@ -41,12 +45,14 @@ enum class Screen {
     Loading,
     Onboarding,
     Home,
+    PickABubbleScreen,
 }
 
 sealed class NavigationScreenItem(val route: String) {
     data object Loading : NavigationScreenItem(Screen.Loading.name)
     data object Onboarding : NavigationScreenItem(Screen.Onboarding.name)
     data object Home : NavigationScreenItem(Screen.Home.name)
+    data object PickABubbleScreen : NavigationScreenItem(Screen.PickABubbleScreen.name)
 }
 
 enum class Dialog {
@@ -57,7 +63,8 @@ enum class Dialog {
     SpinTheWheel,
     Settings,
     DeleteAll,
-    AddAnother
+    AddAnother,
+    OptionChosen,
 }
 
 sealed class NavigationDialogItem(val route: String) {
@@ -69,6 +76,7 @@ sealed class NavigationDialogItem(val route: String) {
     data object Settings : NavigationDialogItem(Dialog.Settings.name)
     data object DeleteAll : NavigationDialogItem(Dialog.DeleteAll.name)
     data object AddAnother : NavigationDialogItem(Dialog.AddAnother.name)
+    data object OptionChosen : NavigationDialogItem("${Dialog.OptionChosen.name}/{optionId}")
 }
 
 @Composable
@@ -169,7 +177,7 @@ fun AppNavHost (
             GeneralDialog(
                 viewModel = GeneralDialogViewModel(
                     configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.RemoveAll,
+                        screenName = AnalyticsScreens.AddAnother,
                         description = stringResource(id = R.string.add_another_desc),
                         confirmText = stringResource(id = R.string.continue_option),
                         confirmPressed = {
@@ -192,9 +200,11 @@ fun AppNavHost (
 
             val spinTheWheelKey = "spinTheWheel"
             val instantKey = "instant"
+            val pickABubbleKey = "pickABubble"
 
             val options: LinkedHashMap<String, String> = linkedMapOf(
                 spinTheWheelKey to stringResource(R.string.spin_the_wheel),
+                pickABubbleKey to stringResource(R.string.pick_a_bubble),
                 instantKey to stringResource(R.string.instant_decision),
             )
 
@@ -218,6 +228,11 @@ fun AppNavHost (
                         instantKey -> {
 
                             navController.navigate(NavigationDialogItem.InstantDecision.route)
+                        }
+
+                        pickABubbleKey -> {
+
+                            navController.navigate(NavigationScreenItem.PickABubbleScreen.route)
                         }
                     }
                 }
@@ -277,6 +292,57 @@ fun AppNavHost (
 
                 navController.popBackStack()
             })
+        }
+
+        composable(NavigationScreenItem.PickABubbleScreen.route) {
+
+            val state = homeViewModel.view.collectAsState()
+
+            PickABubbleScreen(
+                model = PickABubbleViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    options = state.value.options
+                ),
+                optionPressed = {
+
+                    navController.navigate("${NavigationDialogItem.OptionChosen}/$it")
+                },
+                backPressed = {
+
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        dialog(
+            route = NavigationDialogItem.OptionChosen.route,
+            arguments = listOf(navArgument("optionId") { type = NavType.StringType })
+        ) { navArguments ->
+
+            val optionId = navArguments.arguments?.getString("optionId")!!
+            val state = homeViewModel.view.collectAsState()
+            val optionText = state.value.options.first { it.id == optionId }.text
+
+            GeneralDialog(
+                viewModel = GeneralDialogViewModel(
+                    configuration = GeneralDialogConfig(
+                        screenName = AnalyticsScreens.DecisionChosen,
+                        description = optionText,
+                        confirmText = stringResource(id = R.string.done),
+                        confirmPressed = {
+
+                            navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
+                        },
+                        cancelText = stringResource(id = R.string.remove_option),
+                        cancelPressed = {
+
+                            homeViewModel.deleteOption(optionId)
+                            navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
+                        },
+                    ),
+                    analyticsLibrary = analyticsLibrary,
+                )
+            )
         }
     }
 }
