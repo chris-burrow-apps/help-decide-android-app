@@ -134,13 +134,13 @@ class DecisionDialogTest {
 
         decisionDialog(rule) {
 
-            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.Instant))
+            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.INSTANT))
 
             pressDone()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Done))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.DONE))
 
             pressRemove()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.RemoveOption))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.REMOVE_OPTION))
         }
     }
 }

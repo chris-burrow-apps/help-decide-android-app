@@ -14,7 +14,6 @@ import com.chrisburrow.helpdecide.ui.robots.addDialog
 import com.chrisburrow.helpdecide.ui.robots.clearAllDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionDialog
-import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import kotlinx.coroutines.test.runTest
@@ -140,7 +139,7 @@ class HomeJourneyTest {
 
             addAnotherDialog(rule) {
 
-                analyticsLibrary.logScreenCalledWith(AnalyticsScreens.AddAnother)
+                analyticsLibrary.logScreenCalledWith(AnalyticsScreens.ADD_ANOTHER)
 
                 checkDescription(context.getString(R.string.add_another_desc))
                 checkConfirm(context.getString(R.string.continue_option))
@@ -228,7 +227,7 @@ class HomeJourneyTest {
 
             clearAllDialog(rule) {
 
-                analyticsLibrary.logScreenCalledWith(AnalyticsScreens.RemoveAll)
+                analyticsLibrary.logScreenCalledWith(AnalyticsScreens.REMOVE_ALL)
 
                 checkDescription(context.getString(R.string.confirm_delete_desc))
                 checkConfirm(context.getString(R.string.delete_all_button))

@@ -118,7 +118,7 @@ fun DecideWheelScreen(
 
         LaunchedEffect(Unit) {
 
-            viewModel.logScreenView(AnalyticsScreens.Wheel)
+            viewModel.logScreenView(AnalyticsScreens.WHEEL)
         }
     }
 }

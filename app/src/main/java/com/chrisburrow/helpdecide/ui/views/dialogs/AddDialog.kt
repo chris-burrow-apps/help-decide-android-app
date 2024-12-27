@@ -95,7 +95,7 @@ fun AddOptionDialog(
                             modifier = Modifier.testTag(AddDialogTags.CLEAR_BUTTON_TAG),
                             enabled = uiState.clearEnabled,
                             onClick = {
-                                viewModel.logButtonPressed(AnalyticsActions.Clear)
+                                viewModel.logButtonPressed(AnalyticsActions.CLEAR)
                                 viewModel.onTextCleared()
                             },
                         ) {
@@ -121,7 +121,7 @@ fun AddOptionDialog(
                             .testTag(AddDialogTags.CANCEL_BUTTON_TAG)
                             .weight(1.0f),
                         onClick = {
-                            viewModel.logButtonPressed(AnalyticsActions.Cancel)
+                            viewModel.logButtonPressed(AnalyticsActions.CANCEL)
                             optionCancelled()
                         },
                     ) {
@@ -135,7 +135,7 @@ fun AddOptionDialog(
                             .weight(1.0f),
                         enabled = uiState.addEnabled,
                         onClick = {
-                            viewModel.logButtonPressed(AnalyticsActions.Add)
+                            viewModel.logButtonPressed(AnalyticsActions.ADD)
                             optionSaved(uiState.optionText.trim())
                         },
                     ) {
@@ -148,7 +148,7 @@ fun AddOptionDialog(
 
         LaunchedEffect(Unit) {
 
-            viewModel.logScreenView(AnalyticsScreens.AddText)
+            viewModel.logScreenView(AnalyticsScreens.ADD_TEXT)
             focusRequester.requestFocus()
         }
     }

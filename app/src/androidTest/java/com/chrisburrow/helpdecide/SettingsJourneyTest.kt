@@ -123,10 +123,10 @@ class SettingsJourneyTest {
 
         settings(rule) {
 
-            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.Settings))
+            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.SETTINGS))
 
             pressDone()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Done))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.DONE))
         }
     }
 }

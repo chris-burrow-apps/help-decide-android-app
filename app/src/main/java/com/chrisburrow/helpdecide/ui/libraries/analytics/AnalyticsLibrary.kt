@@ -12,28 +12,28 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.first
 
 object AnalyticsScreens {
-    val DecisionType = "decisiontype_screen"
-    val Home = "home_screen"
-    val Settings = "settings_screen"
-    val AddText = "add_text_screen"
-    val Wheel = "wheel_screen"
-    val Instant = "instant_screen"
-    val RemoveAll = "remove_all_screen"
-    val AddAnother = "add_another_screen"
-    val DecisionChosen = "decision_chosen_screen"
-    val BubblePicker = "bubble_picker_screen"
+    const val DECISION_TYPE = "decisiontype_screen"
+    const val HOME = "home_screen"
+    const val SETTINGS = "settings_screen"
+    const val ADD_TEXT = "add_text_screen"
+    const val WHEEL = "wheel_screen"
+    const val INSTANT = "instant_screen"
+    const val REMOVE_ALL = "remove_all_screen"
+    const val ADD_ANOTHER = "add_another_screen"
+    const val DECISION_CHOSEN = "decision_chosen_screen"
+    const val BUBBLE_PICKER = "bubble_picker_screen"
 }
 
 object AnalyticsActions {
-    val Add = "add_action"
-    val Cancel = "cancel_action"
-    val Clear = "clear_action"
-    val RemoveOption = "remove_option_action"
-    val OptionPressed = "bubble_pressed_action"
-    val Done = "done_action"
-    val Voice = "voice_action"
-    val Decide = "decide_action"
-    val Go = "go_action"
+    const val ADD = "add_action"
+    const val CANCEL = "cancel_action"
+    const val CLEAR = "clear_action"
+    const val REMOVE_OPTION = "remove_option_action"
+    const val OPTION_PRESSED = "bubble_pressed_action"
+    const val DONE = "done_action"
+    const val VOICE = "voice_action"
+    const val DECIDE = "decide_action"
+    const val GO = "go_action"
 }
 
 class AnalyticsLibrary(

@@ -88,11 +88,11 @@ class DecisionDefaultDialogTest {
 
         decisionDefault(rule) {
 
-            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.DecisionType))
+            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.DECISION_TYPE))
 
             pressGo()
 
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Go))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.GO))
         }
     }
 

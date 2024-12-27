@@ -155,7 +155,7 @@ fun AppNavHost (
             GeneralDialog(
                 viewModel = GeneralDialogViewModel(
                     configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.RemoveAll,
+                        screenName = AnalyticsScreens.REMOVE_ALL,
                         description = stringResource(id = R.string.confirm_delete_desc),
                         confirmText = stringResource(id = R.string.delete_all_button),
                         confirmPressed = {
@@ -177,7 +177,7 @@ fun AppNavHost (
             GeneralDialog(
                 viewModel = GeneralDialogViewModel(
                     configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.AddAnother,
+                        screenName = AnalyticsScreens.ADD_ANOTHER,
                         description = stringResource(id = R.string.add_another_desc),
                         confirmText = stringResource(id = R.string.continue_option),
                         confirmPressed = {
@@ -325,7 +325,7 @@ fun AppNavHost (
             GeneralDialog(
                 viewModel = GeneralDialogViewModel(
                     configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.DecisionChosen,
+                        screenName = AnalyticsScreens.DECISION_CHOSEN,
                         description = optionText,
                         confirmText = stringResource(id = R.string.done),
                         confirmPressed = {

@@ -33,7 +33,7 @@ class PickABubbleViewModel(
 
     fun chooseOption(position: Int) {
 
-        logButtonPressed(AnalyticsActions.OptionPressed)
+        logButtonPressed(AnalyticsActions.OPTION_PRESSED)
 
         _uiState.value = _uiState.value.copy(optionPressed = options[position])
     }

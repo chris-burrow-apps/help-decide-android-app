@@ -146,7 +146,7 @@ fun PickABubbleScreen(
 
     LaunchedEffect(Unit) {
 
-        model.logScreenView(AnalyticsScreens.BubblePicker)
+        model.logScreenView(AnalyticsScreens.BUBBLE_PICKER)
 
         model.generateBubbles(
             screenWidth = screenWidth,

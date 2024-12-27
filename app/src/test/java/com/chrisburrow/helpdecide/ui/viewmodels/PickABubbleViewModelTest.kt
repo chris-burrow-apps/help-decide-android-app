@@ -1,6 +1,5 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
-import android.os.SystemClock
 import com.chrisburrow.helpdecide.MainDispatcherRule
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
@@ -57,6 +56,6 @@ class PickABubbleViewModelTest {
 
         viewModel.chooseOption(0)
 
-        assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.OptionPressed))
+        assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.OPTION_PRESSED))
     }
 }

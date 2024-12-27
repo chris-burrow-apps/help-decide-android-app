@@ -113,7 +113,7 @@ fun HomeScreen(
                                 .wrapContentSize(),
                             onClick = {
 
-                                model.logButtonPressed(AnalyticsActions.Clear)
+                                model.logButtonPressed(AnalyticsActions.CLEAR)
                                 navController.navigate(NavigationDialogItem.DeleteAll.route)
                             }
                         ) {
@@ -153,7 +153,7 @@ fun HomeScreen(
                                 .weight(0.25f),
                             onClick = {
 
-                                model.logButtonPressed(AnalyticsActions.Voice)
+                                model.logButtonPressed(AnalyticsActions.VOICE)
                                 navController.navigate(NavigationDialogItem.SpeechToText.route)
                             },
                         ) {
@@ -190,7 +190,7 @@ fun HomeScreen(
 
                             if(view.value.options.size > 1) {
 
-                                model.logButtonPressed(AnalyticsActions.Decide)
+                                model.logButtonPressed(AnalyticsActions.DECIDE)
                                 navController.navigate(NavigationDialogItem.DecideType.route)
                             } else {
 
@@ -227,7 +227,7 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
 
-        model.logScreenView(AnalyticsScreens.Home)
+        model.logScreenView(AnalyticsScreens.HOME)
     }
 }
 

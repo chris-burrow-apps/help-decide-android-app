@@ -2,7 +2,6 @@ package com.chrisburrow.helpdecide.ui.views.dialogs
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
@@ -109,7 +108,7 @@ class DecisionWheelScreenTest {
 
         decisionWheel(rule) {
 
-            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.Wheel))
+            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.WHEEL))
         }
     }
 }

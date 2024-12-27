@@ -142,7 +142,7 @@ fun DecisionDefaultDialog(
                         .padding(8.dp),
                     onClick = {
 
-                        viewModel.logButtonPressed(AnalyticsActions.Go)
+                        viewModel.logButtonPressed(AnalyticsActions.GO)
                         viewModel.saveUserOption()
 
                         selectedKey(uiState.currentlySelectedKey)
@@ -160,7 +160,7 @@ fun DecisionDefaultDialog(
 
     LaunchedEffect(Unit) {
 
-        viewModel.logScreenView(AnalyticsScreens.DecisionType)
+        viewModel.logScreenView(AnalyticsScreens.DECISION_TYPE)
         viewModel.refreshDefaultDecision()
     }
 }

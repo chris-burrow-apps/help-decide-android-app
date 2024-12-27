@@ -107,7 +107,7 @@ fun SettingsDialog(
                         .testTag(SettingsDialogTags.DONE_BUTTON_TAG),
                     onClick = {
 
-                        viewModel.logButtonPressed(AnalyticsActions.Done)
+                        viewModel.logButtonPressed(AnalyticsActions.DONE)
                         onDismissRequested()
                     },
                 ) {
@@ -120,7 +120,7 @@ fun SettingsDialog(
 
         LaunchedEffect(Unit) {
 
-            viewModel.logScreenView(AnalyticsScreens.Settings)
+            viewModel.logScreenView(AnalyticsScreens.SETTINGS)
 
             viewModel.refreshAnalytics()
         }

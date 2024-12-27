@@ -82,7 +82,7 @@ class PickABubbleJourneyTest {
 
         decisionChosenDialog(rule) {
 
-            analyticsLibrary.logScreenCalledWith(AnalyticsScreens.DecisionChosen)
+            analyticsLibrary.logScreenCalledWith(AnalyticsScreens.DECISION_CHOSEN)
 
             pressConfirm()
         }
