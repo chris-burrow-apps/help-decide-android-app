@@ -144,7 +144,7 @@ fun AppNavHost (
 
         composable(NavigationScreenItem.Settings.route) {
 
-            SettingsScreen(viewModel = SettingsViewModel(analyticsLibrary)) {
+            SettingsScreen(viewModel = SettingsViewModel(analyticsLibrary = analyticsLibrary, preferencesLibrary = preferencesLibrary)) {
 
                 navController.popBackStack()
             }

@@ -7,7 +7,7 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.chrisburrow.helpdecide.ui.views.screens.SettingsDialogTags
+import com.chrisburrow.helpdecide.ui.views.screens.SettingsScreenTags
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsListTags
 
 class SettingsRobot(private val rule: ComposeContentTestRule) {
@@ -36,7 +36,7 @@ class SettingsRobot(private val rule: ComposeContentTestRule) {
 
     fun pressToggle(position: Int) { rule.onNodeWithTag(SettingsListTags.SWITCH_TAG + position).performClick() }
 
-    fun pressDone() { rule.onNodeWithTag(SettingsDialogTags.DONE_BUTTON_TAG).performClick() }
+    fun pressBack() { rule.onNodeWithTag(SettingsScreenTags.BACK_BUTTON_TAG).performClick() }
 }
 
 fun settings(rule: ComposeContentTestRule, block: SettingsRobot.() -> Unit) = SettingsRobot(rule).apply(block)

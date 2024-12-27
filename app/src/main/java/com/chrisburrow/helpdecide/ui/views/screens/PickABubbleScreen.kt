@@ -50,6 +50,7 @@ class PickABubbleTags  {
         const val BASE_VIEW_TAG = "BubbleView"
         const val BUBBLE_BUTTON_BASE_TAG = "BubbleButtonView"
         const val BUBBLE_BUTTON_CLICK_TAG = "BubbleButton"
+        const val BACK_BUTTON_TAG = "BackButton"
     }
 }
 
@@ -90,9 +91,12 @@ fun PickABubbleScreen(
                 },
                 navigationIcon =
                     {
-                        IconButton(onClick = {
-                            backPressed()
-                        }) {
+                        IconButton(
+                            modifier = Modifier.testTag(SettingsScreenTags.BACK_BUTTON_TAG),
+                            onClick = {
+                                backPressed()
+                            }
+                        ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back"

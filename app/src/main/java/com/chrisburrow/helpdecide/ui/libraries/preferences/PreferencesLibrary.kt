@@ -5,7 +5,8 @@ import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryKeys
 import kotlinx.coroutines.flow.first
 
 class PreferencesLibrary(
-    private val storageLibrary: StorageLibraryInterface
+    private val storageLibrary: StorageLibraryInterface,
+    private val versionName: String,
 ) : PreferencesLibraryInterface {
 
     override suspend fun checkPermissionsShown(): Boolean {
@@ -26,5 +27,10 @@ class PreferencesLibrary(
     override suspend fun saveDefaultDecisionOption(key: String) {
 
         storageLibrary.storeString(StorageLibraryKeys.DecisionDefault, key)
+    }
+
+    override fun checkVersionName(): String {
+
+        return versionName
     }
 }

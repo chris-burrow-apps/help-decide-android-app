@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
 import com.chrisburrow.helpdecide.utils.SettingsRow
+import com.chrisburrow.helpdecide.utils.SettingsStringRow
 
 
 @Composable
@@ -32,6 +33,10 @@ fun SettingsList(
                 is SettingsBooleanRow -> {
 
                     SettingsBooleanView(position, option)
+                }
+                is SettingsStringRow -> {
+
+                    SettingsStringView(position, option)
                 }
             }
 

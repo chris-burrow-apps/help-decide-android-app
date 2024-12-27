@@ -12,3 +12,8 @@ class SettingsBooleanRow(
     var loading: Boolean = false,
     val toggled: (Boolean) -> Unit,
 ) : SettingsRow(title, description)
+
+class SettingsStringRow(
+    title: String,
+    description: String,
+) : SettingsRow(title, description)

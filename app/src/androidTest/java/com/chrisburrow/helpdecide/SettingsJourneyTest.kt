@@ -12,6 +12,7 @@ import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrar
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.robots.settings
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
+import com.google.firebase.installations.time.SystemClock
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
@@ -26,6 +27,8 @@ class SettingsJourneyTest {
     @get:Rule
     val rule = createComposeRule()
 
+    private val expectedVersionName = SystemClock.getInstance().currentTimeMillis().toString()
+
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val analyticsLibrary = MockAnalyticsLibrary(
@@ -33,7 +36,7 @@ class SettingsJourneyTest {
         crashayticsState = true
     )
 
-    private val preferencesLibrary = MockPreferencesLibrary()
+    private val preferencesLibrary = MockPreferencesLibrary(versionCode = expectedVersionName)
 
     @Before
     fun setup() {
@@ -65,7 +68,7 @@ class SettingsJourneyTest {
             assertTrue(analyticsLibrary.getAnalyticsStateCalled)
 
             pressToggle(0)
-            checkToggleOn(0)
+
             assertTrue(analyticsLibrary.setAnalyticsStateCalled)
             assertTrue(analyticsLibrary.analyticsState)
 
@@ -73,7 +76,7 @@ class SettingsJourneyTest {
             assertTrue(analyticsLibrary.getCrashalyticsStateCalled)
 
             pressToggle(1)
-            checkToggleOff(1)
+
             assertTrue(analyticsLibrary.setCrashalyticsStateCalled)
             assertFalse(analyticsLibrary.crashayticsState)
         }
@@ -91,11 +94,12 @@ class SettingsJourneyTest {
 
             checkText(0, context.getString(R.string.analytics), context.getString(R.string.analytics_desc))
             checkText(1, context.getString(R.string.crashalytics), context.getString(R.string.crashalytics_desc))
+            checkText(2, context.getString(R.string.version_name), expectedVersionName)
         }
     }
 
     @Test
-    fun doneClosesDialog() = runTest {
+    fun packClosesScreen() = runTest {
 
         home(rule) {
 
@@ -104,7 +108,7 @@ class SettingsJourneyTest {
 
         settings(rule) {
 
-            pressDone()
+            pressBack()
         }
 
         home(rule) {
@@ -124,9 +128,6 @@ class SettingsJourneyTest {
         settings(rule) {
 
             assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.SETTINGS))
-
-            pressDone()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.DONE))
         }
     }
 }

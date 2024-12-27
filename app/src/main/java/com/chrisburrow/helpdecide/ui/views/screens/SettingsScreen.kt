@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -35,18 +36,20 @@ import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsList
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
+import com.chrisburrow.helpdecide.utils.SettingsStringRow
 
-class SettingsDialogTags {
+class SettingsScreenTags {
 
     companion object {
 
-        const val BASE_VIEW_TAG = "SettingsDialog"
-        const val TITLE_VIEW_TAG = "SettingsTitleDialog"
-        const val DONE_BUTTON_TAG = "DoneButtonDialog"
+        const val BASE_VIEW_TAG = "SettingsScreen"
+        const val TITLE_VIEW_TAG = "SettingsTitle"
+        const val BACK_BUTTON_TAG = "BackButton"
     }
 }
 
@@ -58,7 +61,6 @@ fun SettingsScreen(
 ) {
 
     Scaffold(
-        modifier = Modifier.testTag(PickABubbleTags.BASE_VIEW_TAG),
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarColors(
@@ -70,7 +72,7 @@ fun SettingsScreen(
                 ),
                 title = {
                     Text(
-                        stringResource(R.string.pick_a_bubble),
+                        stringResource(R.string.settings),
                         fontSize = 35.sp,
                         fontFamily = FontFamily.Cursive,
                         maxLines = 1,
@@ -79,7 +81,9 @@ fun SettingsScreen(
                 },
                 navigationIcon =
                 {
-                    IconButton(onClick = {
+                    IconButton(
+                        modifier = Modifier.testTag(SettingsScreenTags.BACK_BUTTON_TAG),
+                        onClick = {
                         onBackPressed()
                     }) {
                         Icon(
@@ -98,7 +102,7 @@ fun SettingsScreen(
 
         Surface(
             modifier = Modifier
-                .testTag(SettingsDialogTags.BASE_VIEW_TAG)
+                .testTag(SettingsScreenTags.BASE_VIEW_TAG)
                 .padding(top = innerPadding.calculateTopPadding()),
             shape = RoundedCornerShape(8.dp),
         ) {
@@ -106,21 +110,11 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    modifier = Modifier.testTag(SettingsDialogTags.TITLE_VIEW_TAG),
-                    text = stringResource(id = R.string.settings),
-                    fontSize = 35.sp,
-                    fontFamily = FontFamily.Cursive,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
                 SettingsList(options = listOf(
 
                     SettingsBooleanRow(
-                        stringResource(R.string.analytics),
-                        stringResource(R.string.analytics_desc),
+                        title = stringResource(R.string.analytics),
+                        description = stringResource(R.string.analytics_desc),
                         enabled = uiState.googleAnalyticsEnabled,
                         loading = uiState.googleAnalyticsLoading
                     ) { toggled ->
@@ -128,14 +122,18 @@ fun SettingsScreen(
                         viewModel.toggleGoogleAnalytics(toggled)
                     },
                     SettingsBooleanRow(
-                        stringResource(R.string.crashalytics),
-                        stringResource(R.string.crashalytics_desc),
+                        title = stringResource(R.string.crashalytics),
+                        description = stringResource(R.string.crashalytics_desc),
                         enabled = uiState.crashalyticsEnabled,
                         loading = uiState.crashalyticsLoading
                     ) { toggled ->
 
                         viewModel.toggleCrashalytics(toggled)
-                    }
+                    },
+                    SettingsStringRow(
+                        title = stringResource(R.string.version_name),
+                        description = uiState.versionName,
+                    )
                 ))
             }
         }
@@ -155,6 +153,9 @@ fun SettingsDialogPreview() {
 
     HelpDecideTheme {
 
-        SettingsScreen(SettingsViewModel(MockAnalyticsLibrary())) {}
+        SettingsScreen(SettingsViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
+            preferencesLibrary = MockPreferencesLibrary()
+        )) {}
     }
 }

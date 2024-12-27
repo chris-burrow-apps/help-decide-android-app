@@ -2,6 +2,8 @@ package com.chrisburrow.helpdecide.ui.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibraryInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -11,10 +13,12 @@ data class ScreenUiState(
     val crashalyticsLoading: Boolean = true,
     val googleAnalyticsEnabled: Boolean = false,
     val crashalyticsEnabled: Boolean = false,
+    val versionName: String = "",
 )
 
 class SettingsViewModel(
-    val analyticsLibrary: AnalyticsLibraryInterface
+    val analyticsLibrary: AnalyticsLibraryInterface,
+    val preferencesLibrary: PreferencesLibraryInterface,
 ): AnalyticsViewModel(analyticsLibrary) {
 
     private var _uiState = MutableStateFlow(ScreenUiState())
@@ -30,6 +34,8 @@ class SettingsViewModel(
 
                 crashalyticsLoading = false,
                 googleAnalyticsLoading = false,
+
+                versionName = preferencesLibrary.checkVersionName()
             )
         }
     }
