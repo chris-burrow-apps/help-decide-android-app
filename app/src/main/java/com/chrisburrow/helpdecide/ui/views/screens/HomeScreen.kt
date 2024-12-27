@@ -49,6 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.NavigationDialogItem
+import com.chrisburrow.helpdecide.ui.NavigationScreenItem
 import com.chrisburrow.helpdecide.ui.PreviewOptions
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
@@ -171,7 +172,7 @@ fun HomeScreen(
                             .weight(0.25f),
                         onClick = {
 
-                            navController.navigate(NavigationDialogItem.Settings.route)
+                            navController.navigate(NavigationScreenItem.Settings.route)
                         },
                     ) {
                         Icon(
