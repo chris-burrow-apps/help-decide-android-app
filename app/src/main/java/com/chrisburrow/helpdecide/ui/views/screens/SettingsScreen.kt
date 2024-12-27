@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.views.dialogs
+package com.chrisburrow.helpdecide.ui.views.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,12 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
-import com.chrisburrow.helpdecide.ui.views.screens.PickABubbleTags
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsList
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
 

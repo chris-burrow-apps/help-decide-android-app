@@ -21,13 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialogTags
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
 import com.chrisburrow.helpdecide.utils.SettingsRow
 

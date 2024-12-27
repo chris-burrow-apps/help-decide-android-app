@@ -7,7 +7,7 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialogTags
+import com.chrisburrow.helpdecide.ui.views.screens.SettingsDialogTags
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsListTags
 
 class SettingsRobot(private val rule: ComposeContentTestRule) {

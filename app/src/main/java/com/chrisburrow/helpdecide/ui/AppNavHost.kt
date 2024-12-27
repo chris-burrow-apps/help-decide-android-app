@@ -33,7 +33,7 @@ import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialog
 import com.chrisburrow.helpdecide.ui.views.screens.PickABubbleScreen
-import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsScreen
+import com.chrisburrow.helpdecide.ui.views.screens.SettingsScreen
 import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import com.chrisburrow.helpdecide.ui.views.screens.LoadingScreen
 import com.chrisburrow.helpdecide.ui.views.screens.OnboardingScreen
