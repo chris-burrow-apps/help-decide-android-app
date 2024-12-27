@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibrary
@@ -14,10 +13,8 @@ import com.chrisburrow.helpdecide.utils.speechtotext.SpeechToTextToTextRequest
 class DecideActivity : ComponentActivity() {
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
 
         setContent {
 
