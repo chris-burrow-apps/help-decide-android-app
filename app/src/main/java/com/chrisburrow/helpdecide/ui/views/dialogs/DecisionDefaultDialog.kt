@@ -77,7 +77,6 @@ fun DecisionDefaultDialog(
         Surface(
             modifier = Modifier.testTag(DecisionDefaultDialogTags.BASE_VIEW_TAG),
             shape = RoundedCornerShape(8.dp),
-            border = BorderStroke(1.dp, Color.LightGray),
             shadowElevation = 10.dp,
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
