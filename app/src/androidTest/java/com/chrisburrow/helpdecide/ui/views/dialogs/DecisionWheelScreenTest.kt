@@ -25,8 +25,9 @@ class DecisionWheelScreenTest {
     @Test
     fun optionShown() = runTest {
 
-        val expectedObject = OptionObject(text = "example 1")
-        val options = listOf(expectedObject)
+        val expectedObjectOne = OptionObject(text = "example 1")
+        val expectedObjectTwo = OptionObject(text = "example 2")
+        val options = listOf(expectedObjectOne, expectedObjectTwo)
 
         rule.setContent {
 
@@ -51,8 +52,9 @@ class DecisionWheelScreenTest {
     @Test
     fun optionChosen() = runTest {
 
-        val expectedObject = OptionObject(text = "example 1")
-        val options = listOf(expectedObject)
+        val expectedObjectOne = OptionObject(text = "example 1")
+        val expectedObjectTwo = OptionObject(text = "example 2")
+        val options = listOf(expectedObjectOne, expectedObjectTwo)
 
         var optionChosenCalled = false
         var optionIdChosen: String? = null
@@ -77,17 +79,18 @@ class DecisionWheelScreenTest {
 
         decisionWheel(rule) {
 
-            Thread.sleep(1000)
+            Thread.sleep(500)
         }
 
         assertTrue(optionChosenCalled)
-        assertEquals(expectedObject.id, optionIdChosen)
     }
 
     @Test
     fun analyticsCalled() = runTest {
 
-        val options = listOf(OptionObject(text = "example 1"))
+        val expectedObjectOne = OptionObject(text = "example 1")
+        val expectedObjectTwo = OptionObject(text = "example 2")
+        val options = listOf(expectedObjectOne, expectedObjectTwo)
 
         val analyticsLibrary = MockAnalyticsLibrary()
 

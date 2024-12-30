@@ -9,18 +9,18 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-data class PickABubbleState(
-    val options: List<OptionObject> = listOf(),
-    val optionPressed: OptionObject? = null,
-    val circles: List<Circle> = listOf()
-)
-
 data class Circle(
     val position: Int,
     val x: Float,
     val y: Float,
     val radius: Float,
     val optionId: String,
+)
+
+data class PickABubbleState(
+    val options: List<OptionObject> = listOf(),
+    val optionPressed: OptionObject? = null,
+    val circles: List<Circle> = listOf()
 )
 
 class PickABubbleViewModel(

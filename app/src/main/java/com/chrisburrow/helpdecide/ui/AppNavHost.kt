@@ -248,9 +248,9 @@ fun AppNavHost (
                     analyticsLibrary = analyticsLibrary,
                     options = options.value.options
                 ),
-                optionChosen = {
+                optionChosen = { optionId ->
 
-                    navController.navigate("${NavigationDialogItem.OptionChosen}/$it")
+                    navController.navigate("${NavigationDialogItem.OptionChosen}/${optionId}")
                 },
                 backPressed = {
 

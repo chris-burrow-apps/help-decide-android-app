@@ -20,7 +20,7 @@ fun PreviewOptions() : List<OptionObject> {
 
     val options = mutableListOf<OptionObject>()
 
-    for (i in 10 until 20) {
+    for (i in 1 until 20) {
         options.add(OptionObject(text = "Option $i"))
     }
 
