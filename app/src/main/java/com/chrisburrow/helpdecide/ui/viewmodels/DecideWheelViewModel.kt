@@ -18,7 +18,10 @@ data class DecideWheelState(
     val wheelSpinning: SpinAnimationState = SpinAnimationState.IDLE,
     val numberOfSegments: Int = 0,
     var targetRotation: Float = 0f,
-)
+    val removeEnabled: Boolean = false,
+    val doneEnabled: Boolean = false,
+) {
+}
 
 class DecideWheelViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface,
@@ -41,7 +44,9 @@ class DecideWheelViewModel(
 
             _uiState.value = _uiState.value.copy(
                 wheelSpinning = SpinAnimationState.COMPLETE,
-                decidedOption = _uiState.value.options[_uiState.value.numberOfSegments - reversePosition - 1]
+                decidedOption = _uiState.value.options[_uiState.value.numberOfSegments - reversePosition - 1],
+                doneEnabled = true,
+                removeEnabled = true
             )
         }
     }
@@ -57,7 +62,9 @@ class DecideWheelViewModel(
 
                 _uiState.value = _uiState.value.copy(
                     wheelSpinning = SpinAnimationState.SPINNING,
-                    targetRotation = _uiState.value.targetRotation + nextRotation
+                    targetRotation = _uiState.value.targetRotation + nextRotation,
+                    doneEnabled = false,
+                    removeEnabled = false
                 )
             }
         }

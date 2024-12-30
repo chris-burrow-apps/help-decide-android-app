@@ -27,6 +27,8 @@ class DecideWheelViewModelTest {
         assertNull(viewModel.uiState.value.decidedOption)
         assertEquals(options, viewModel.uiState.value.options)
         assertEquals(SpinAnimationState.IDLE, viewModel.uiState.value.wheelSpinning)
+        assertFalse(viewModel.uiState.value.doneEnabled)
+        assertFalse(viewModel.uiState.value.removeEnabled)
     }
 
     @Test
@@ -42,6 +44,8 @@ class DecideWheelViewModelTest {
         viewModel.spinTheWheel()
 
         assertEquals(SpinAnimationState.SPINNING, viewModel.uiState.value.wheelSpinning)
+        assertFalse(viewModel.uiState.value.doneEnabled)
+        assertFalse(viewModel.uiState.value.removeEnabled)
     }
 
     @Test
@@ -59,5 +63,7 @@ class DecideWheelViewModelTest {
 
         assertEquals(option, viewModel.uiState.value.decidedOption)
         assertEquals(SpinAnimationState.COMPLETE, viewModel.uiState.value.wheelSpinning)
+        assertTrue(viewModel.uiState.value.doneEnabled)
+        assertTrue(viewModel.uiState.value.removeEnabled)
     }
 }
