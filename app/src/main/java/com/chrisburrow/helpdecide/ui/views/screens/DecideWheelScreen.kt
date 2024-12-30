@@ -36,7 +36,7 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
-import com.chrisburrow.helpdecide.ui.views.SpinTheWheel
+import com.chrisburrow.helpdecide.ui.views.screens.spinthewheel.SpinTheWheel
 
 class DecideWheelTags {
 
@@ -112,6 +112,14 @@ fun DecideWheelScreen(
                         optionChosen(viewModel.uiState.value.decidedOption!!.id)
                     }
                 )
+            }
+
+            Box(modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.BottomCenter)
+            ) {
+
+
             }
         }
 

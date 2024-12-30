@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.views
+package com.chrisburrow.helpdecide.ui.views.screens.spinthewheel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
