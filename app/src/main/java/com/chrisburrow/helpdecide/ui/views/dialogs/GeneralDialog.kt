@@ -1,5 +1,6 @@
 package com.chrisburrow.helpdecide.ui.views.dialogs
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -58,6 +60,8 @@ fun GeneralDialog(
         Surface(
             modifier = Modifier.testTag(GeneralDialogTags.BASE_VIEW_TAG),
             shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(1.dp, Color.LightGray),
+            shadowElevation = 10.dp,
         ) {
             Column(
                 modifier = Modifier
