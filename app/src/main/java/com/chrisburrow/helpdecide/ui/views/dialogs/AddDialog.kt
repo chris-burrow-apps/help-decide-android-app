@@ -1,5 +1,6 @@
 package com.chrisburrow.helpdecide.ui.views.dialogs
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -24,8 +26,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -77,6 +81,7 @@ fun AddOptionDialog(
         Surface(
             modifier = Modifier.testTag(AddDialogTags.BASE_VIEW_TAG),
             shape = RoundedCornerShape(8.dp),
+            shadowElevation = 10.dp,
         ) {
             Column(
                 modifier = Modifier
@@ -95,7 +100,7 @@ fun AddOptionDialog(
                             modifier = Modifier.testTag(AddDialogTags.CLEAR_BUTTON_TAG),
                             enabled = uiState.clearEnabled,
                             onClick = {
-                                viewModel.logButtonPressed(AnalyticsActions.Clear)
+                                viewModel.logButtonPressed(AnalyticsActions.CLEAR)
                                 viewModel.onTextCleared()
                             },
                         ) {
@@ -121,7 +126,7 @@ fun AddOptionDialog(
                             .testTag(AddDialogTags.CANCEL_BUTTON_TAG)
                             .weight(1.0f),
                         onClick = {
-                            viewModel.logButtonPressed(AnalyticsActions.Cancel)
+                            viewModel.logButtonPressed(AnalyticsActions.CANCEL)
                             optionCancelled()
                         },
                     ) {
@@ -135,7 +140,7 @@ fun AddOptionDialog(
                             .weight(1.0f),
                         enabled = uiState.addEnabled,
                         onClick = {
-                            viewModel.logButtonPressed(AnalyticsActions.Add)
+                            viewModel.logButtonPressed(AnalyticsActions.ADD)
                             optionSaved(uiState.optionText.trim())
                         },
                     ) {
@@ -148,7 +153,7 @@ fun AddOptionDialog(
 
         LaunchedEffect(Unit) {
 
-            viewModel.logScreenView(AnalyticsScreens.AddText)
+            viewModel.logScreenView(AnalyticsScreens.ADD_TEXT)
             focusRequester.requestFocus()
         }
     }

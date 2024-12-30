@@ -9,18 +9,18 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-data class PickABubbleState(
-    val options: List<OptionObject> = listOf(),
-    val optionPressed: OptionObject? = null,
-    val circles: List<Circle> = listOf()
-)
-
 data class Circle(
     val position: Int,
     val x: Float,
     val y: Float,
     val radius: Float,
     val optionId: String,
+)
+
+data class PickABubbleState(
+    val options: List<OptionObject> = listOf(),
+    val optionPressed: OptionObject? = null,
+    val circles: List<Circle> = listOf()
 )
 
 class PickABubbleViewModel(
@@ -33,7 +33,7 @@ class PickABubbleViewModel(
 
     fun chooseOption(position: Int) {
 
-        logButtonPressed(AnalyticsActions.OptionPressed)
+        logButtonPressed(AnalyticsActions.OPTION_PRESSED)
 
         _uiState.value = _uiState.value.copy(optionPressed = options[position])
     }

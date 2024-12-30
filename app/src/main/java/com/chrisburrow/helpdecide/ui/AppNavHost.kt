@@ -33,7 +33,7 @@ import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialog
 import com.chrisburrow.helpdecide.ui.views.screens.PickABubbleScreen
-import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialog
+import com.chrisburrow.helpdecide.ui.views.screens.SettingsScreen
 import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
 import com.chrisburrow.helpdecide.ui.views.screens.LoadingScreen
 import com.chrisburrow.helpdecide.ui.views.screens.OnboardingScreen
@@ -43,6 +43,7 @@ import kotlinx.coroutines.launch
 
 enum class Screen {
     Loading,
+    Settings,
     Onboarding,
     Home,
     PickABubbleScreen,
@@ -50,6 +51,7 @@ enum class Screen {
 
 sealed class NavigationScreenItem(val route: String) {
     data object Loading : NavigationScreenItem(Screen.Loading.name)
+    data object Settings : NavigationDialogItem(Screen.Settings.name)
     data object Onboarding : NavigationScreenItem(Screen.Onboarding.name)
     data object Home : NavigationScreenItem(Screen.Home.name)
     data object PickABubbleScreen : NavigationScreenItem(Screen.PickABubbleScreen.name)
@@ -61,7 +63,6 @@ enum class Dialog {
     DecideType,
     InstantDecision,
     SpinTheWheel,
-    Settings,
     DeleteAll,
     AddAnother,
     OptionChosen,
@@ -73,7 +74,6 @@ sealed class NavigationDialogItem(val route: String) {
     data object DecideType : NavigationDialogItem(Dialog.DecideType.name)
     data object InstantDecision : NavigationDialogItem(Dialog.InstantDecision.name)
     data object SpinTheWheel : NavigationDialogItem(Dialog.SpinTheWheel.name)
-    data object Settings : NavigationDialogItem(Dialog.Settings.name)
     data object DeleteAll : NavigationDialogItem(Dialog.DeleteAll.name)
     data object AddAnother : NavigationDialogItem(Dialog.AddAnother.name)
     data object OptionChosen : NavigationDialogItem("${Dialog.OptionChosen.name}/{optionId}")
@@ -142,9 +142,9 @@ fun AppNavHost (
             )
         }
 
-        dialog(NavigationDialogItem.Settings.route) {
+        composable(NavigationScreenItem.Settings.route) {
 
-            SettingsDialog(viewModel = SettingsViewModel(analyticsLibrary)) {
+            SettingsScreen(viewModel = SettingsViewModel(analyticsLibrary = analyticsLibrary, preferencesLibrary = preferencesLibrary)) {
 
                 navController.popBackStack()
             }
@@ -155,7 +155,7 @@ fun AppNavHost (
             GeneralDialog(
                 viewModel = GeneralDialogViewModel(
                     configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.RemoveAll,
+                        screenName = AnalyticsScreens.REMOVE_ALL,
                         description = stringResource(id = R.string.confirm_delete_desc),
                         confirmText = stringResource(id = R.string.delete_all_button),
                         confirmPressed = {
@@ -177,7 +177,7 @@ fun AppNavHost (
             GeneralDialog(
                 viewModel = GeneralDialogViewModel(
                     configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.AddAnother,
+                        screenName = AnalyticsScreens.ADD_ANOTHER,
                         description = stringResource(id = R.string.add_another_desc),
                         confirmText = stringResource(id = R.string.continue_option),
                         confirmPressed = {
@@ -248,9 +248,9 @@ fun AppNavHost (
                     analyticsLibrary = analyticsLibrary,
                     options = options.value.options
                 ),
-                optionChosen = {
+                optionChosen = { optionId ->
 
-                    navController.navigate("${NavigationDialogItem.OptionChosen}/$it")
+                    navController.navigate("${NavigationDialogItem.OptionChosen}/${optionId}")
                 },
                 backPressed = {
 
@@ -325,7 +325,7 @@ fun AppNavHost (
             GeneralDialog(
                 viewModel = GeneralDialogViewModel(
                     configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.DecisionChosen,
+                        screenName = AnalyticsScreens.DECISION_CHOSEN,
                         description = optionText,
                         confirmText = stringResource(id = R.string.done),
                         confirmPressed = {

@@ -156,18 +156,18 @@ class AddDialogTest {
 
         addDialog(rule) {
 
-            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.AddText))
+            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.ADD_TEXT))
 
             typeText("Option 1")
 
             pressAdd()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Add))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.ADD))
 
             pressClear()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Clear))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.CLEAR))
 
             pressCancel()
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.Cancel))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.CANCEL))
         }
     }
 }

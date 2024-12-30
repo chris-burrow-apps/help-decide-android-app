@@ -16,6 +16,8 @@ import kotlin.math.exp
 @ExperimentalCoroutinesApi
 class PreferencesLibraryTest {
 
+    private val expectedVersionName = System.currentTimeMillis().toString()
+
     private lateinit var fakeStorage: MockStorage
     private lateinit var preferencesLibrary: PreferencesLibrary
 
@@ -24,7 +26,8 @@ class PreferencesLibraryTest {
 
         fakeStorage = MockStorage()
         preferencesLibrary = PreferencesLibrary(
-            storageLibrary = fakeStorage
+            storageLibrary = fakeStorage,
+            versionName = expectedVersionName
         )
     }
 
@@ -74,5 +77,11 @@ class PreferencesLibraryTest {
 
         assertTrue(fakeStorage.didGetStringCalledWithDefault(StorageLibraryKeys.DecisionDefault, ""))
         assertEquals(expectedKey, fakeStorage.stringValues[StorageLibraryKeys.DecisionDefault]!!)
+    }
+
+    @Test
+    fun checkVersionPassed() = runTest {
+        
+        assertEquals(expectedVersionName, preferencesLibrary.checkVersionName())
     }
 }

@@ -49,6 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.NavigationDialogItem
+import com.chrisburrow.helpdecide.ui.NavigationScreenItem
 import com.chrisburrow.helpdecide.ui.PreviewOptions
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
@@ -113,7 +114,7 @@ fun HomeScreen(
                                 .wrapContentSize(),
                             onClick = {
 
-                                model.logButtonPressed(AnalyticsActions.Clear)
+                                model.logButtonPressed(AnalyticsActions.CLEAR)
                                 navController.navigate(NavigationDialogItem.DeleteAll.route)
                             }
                         ) {
@@ -153,7 +154,7 @@ fun HomeScreen(
                                 .weight(0.25f),
                             onClick = {
 
-                                model.logButtonPressed(AnalyticsActions.Voice)
+                                model.logButtonPressed(AnalyticsActions.VOICE)
                                 navController.navigate(NavigationDialogItem.SpeechToText.route)
                             },
                         ) {
@@ -171,7 +172,7 @@ fun HomeScreen(
                             .weight(0.25f),
                         onClick = {
 
-                            navController.navigate(NavigationDialogItem.Settings.route)
+                            navController.navigate(NavigationScreenItem.Settings.route)
                         },
                     ) {
                         Icon(
@@ -190,7 +191,7 @@ fun HomeScreen(
 
                             if(view.value.options.size > 1) {
 
-                                model.logButtonPressed(AnalyticsActions.Decide)
+                                model.logButtonPressed(AnalyticsActions.DECIDE)
                                 navController.navigate(NavigationDialogItem.DecideType.route)
                             } else {
 
@@ -227,7 +228,7 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
 
-        model.logScreenView(AnalyticsScreens.Home)
+        model.logScreenView(AnalyticsScreens.HOME)
     }
 }
 

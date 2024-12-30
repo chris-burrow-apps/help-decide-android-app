@@ -1,5 +1,6 @@
 package com.chrisburrow.helpdecide.ui.views.dialogs
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,7 +35,6 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionViewModel
-import com.chrisburrow.helpdecide.utils.OptionObject
 import com.chrisburrow.helpdecide.utils.RandomGenerator
 
 class DecisionDialogTags {
@@ -67,6 +69,7 @@ fun DecisionDialog(
         Surface(
             modifier = Modifier.testTag(DecisionDialogTags.BASE_VIEW_TAG),
             shape = RoundedCornerShape(8.dp),
+            shadowElevation = 10.dp,
         ) {
             Column(
                 modifier = Modifier
@@ -86,7 +89,7 @@ fun DecisionDialog(
                             .testTag(DecisionDialogTags.REMOVE_BUTTON_TAG)
                             .weight(1.0f),
                         onClick = {
-                            viewModel.logButtonPressed(AnalyticsActions.RemoveOption)
+                            viewModel.logButtonPressed(AnalyticsActions.REMOVE_OPTION)
                             removePressed(uiState.decidedOption.id)
                         },
                     ) {
@@ -100,7 +103,7 @@ fun DecisionDialog(
                             .align(Alignment.CenterVertically)
                             .weight(1.0f),
                         onClick = {
-                            viewModel.logButtonPressed(AnalyticsActions.Done)
+                            viewModel.logButtonPressed(AnalyticsActions.DONE)
                             donePressed()
                         },
                     ) {
@@ -114,7 +117,7 @@ fun DecisionDialog(
 
         LaunchedEffect(Unit) {
 
-            viewModel.logScreenView(AnalyticsScreens.Instant)
+            viewModel.logScreenView(AnalyticsScreens.INSTANT)
             viewModel.chooseOption()
         }
     }

@@ -7,4 +7,6 @@ interface PreferencesLibraryInterface {
 
     suspend fun checkDefaultDecisionOption(): String
     suspend fun saveDefaultDecisionOption(key: String)
+
+    fun checkVersionName(): String
 }

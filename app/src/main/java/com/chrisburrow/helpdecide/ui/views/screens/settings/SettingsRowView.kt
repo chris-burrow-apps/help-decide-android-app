@@ -1,6 +1,7 @@
 package com.chrisburrow.helpdecide.ui.views.screens.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,15 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
-import com.chrisburrow.helpdecide.ui.views.dialogs.SettingsDialogTags
 import com.chrisburrow.helpdecide.utils.SettingsBooleanRow
 import com.chrisburrow.helpdecide.utils.SettingsRow
+import com.chrisburrow.helpdecide.utils.SettingsStringRow
 
 class SettingsListTags {
 
@@ -121,6 +120,28 @@ fun SettingsBooleanView(position: Int, option: SettingsBooleanRow) {
     }
 }
 
+@Composable
+fun SettingsStringView(position: Int, option: SettingsStringRow) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
+            .testTag(SettingsListTags.ROW_VIEW + position)
+            .padding(15.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Column(
+            modifier = Modifier
+                .weight(1.0f)
+        ) {
+
+            TitleDescriptionView(position, option)
+        }
+    }
+}
+
 @ThemePreviews
 @Composable
 fun SettingsTextListPreview() {
@@ -141,10 +162,14 @@ fun SettingsTextListPreview() {
                 ) { },
                 SettingsBooleanRow(
                     title = "Option 3",
-                    description = "Description 1",
+                    description = "Description 3",
                     enabled = false,
                     loading = true
                 ) { },
+                SettingsStringRow(
+                    title = "Option 4",
+                    description = "Description 4",
+                ),
             )
         )
     }

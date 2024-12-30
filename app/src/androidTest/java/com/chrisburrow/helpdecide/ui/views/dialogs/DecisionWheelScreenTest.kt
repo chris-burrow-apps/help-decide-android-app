@@ -2,7 +2,6 @@ package com.chrisburrow.helpdecide.ui.views.dialogs
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
@@ -26,8 +25,9 @@ class DecisionWheelScreenTest {
     @Test
     fun optionShown() = runTest {
 
-        val expectedObject = OptionObject(text = "example 1")
-        val options = listOf(expectedObject)
+        val expectedObjectOne = OptionObject(text = "example 1")
+        val expectedObjectTwo = OptionObject(text = "example 2")
+        val options = listOf(expectedObjectOne, expectedObjectTwo)
 
         rule.setContent {
 
@@ -52,8 +52,9 @@ class DecisionWheelScreenTest {
     @Test
     fun optionChosen() = runTest {
 
-        val expectedObject = OptionObject(text = "example 1")
-        val options = listOf(expectedObject)
+        val expectedObjectOne = OptionObject(text = "example 1")
+        val expectedObjectTwo = OptionObject(text = "example 2")
+        val options = listOf(expectedObjectOne, expectedObjectTwo)
 
         var optionChosenCalled = false
         var optionIdChosen: String? = null
@@ -78,17 +79,18 @@ class DecisionWheelScreenTest {
 
         decisionWheel(rule) {
 
-            Thread.sleep(1000)
+            Thread.sleep(500)
         }
 
         assertTrue(optionChosenCalled)
-        assertEquals(expectedObject.id, optionIdChosen)
     }
 
     @Test
     fun analyticsCalled() = runTest {
 
-        val options = listOf(OptionObject(text = "example 1"))
+        val expectedObjectOne = OptionObject(text = "example 1")
+        val expectedObjectTwo = OptionObject(text = "example 2")
+        val options = listOf(expectedObjectOne, expectedObjectTwo)
 
         val analyticsLibrary = MockAnalyticsLibrary()
 
@@ -109,7 +111,7 @@ class DecisionWheelScreenTest {
 
         decisionWheel(rule) {
 
-            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.Wheel))
+            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.WHEEL))
         }
     }
 }

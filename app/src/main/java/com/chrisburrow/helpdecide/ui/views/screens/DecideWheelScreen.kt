@@ -1,8 +1,10 @@
 package com.chrisburrow.helpdecide.ui.views.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -20,12 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chrisburrow.helpdecide.R
@@ -35,16 +36,13 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
-import com.chrisburrow.helpdecide.ui.views.DecideSpinWheel
+import com.chrisburrow.helpdecide.ui.views.SpinTheWheel
 
 class DecideWheelTags {
 
     companion object {
 
         const val BASE_VIEW_TAG = "DecisionWheelDialog"
-        const val DECISION_TEXT_TAG = "DecisionTextDialog"
-        const val REMOVE_BUTTON_TAG = "ClearButtonDialog"
-        const val DONE_BUTTON_TAG = "DoneButtonDialog"
     }
 }
 
@@ -93,32 +91,35 @@ fun DecideWheelScreen(
             )
         }) { innerPadding ->
 
-        val configuration = LocalConfiguration.current
-        val screenWidth = configuration.screenWidthDp * 0.8
+        val wheelState = uiState
 
-        Box(
-            modifier = Modifier
-                .padding(top = innerPadding.calculateTopPadding())
-                .fillMaxSize()
-                .testTag(DecideWheelTags.BASE_VIEW_TAG)
+        Box(modifier = Modifier
+            .padding(top = innerPadding.calculateTopPadding())
+            .fillMaxSize()
+            .testTag(DecideWheelTags.BASE_VIEW_TAG)
         ) {
 
-            DecideSpinWheel(
-                modifier = Modifier.align(Alignment.Center),
-                wheelSize = screenWidth.dp,
-                numberOfSegments = uiState.options.size,
-                stopped = {
+            Box(modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.Center)
+            ) {
 
-                    viewModel.chooseOption(it)
-                    
-                    optionChosen(viewModel.uiState.value.decidedOption.id)
-                }
-            )
+                SpinTheWheel(
+                    viewState = wheelState,
+                    finishedAnimating = {
+
+                        viewModel.chooseOption()
+                        optionChosen(viewModel.uiState.value.decidedOption!!.id)
+                    }
+                )
+            }
         }
 
         LaunchedEffect(Unit) {
 
-            viewModel.logScreenView(AnalyticsScreens.Wheel)
+            viewModel.logScreenView(AnalyticsScreens.WHEEL)
+
+            viewModel.spinTheWheel()
         }
     }
 }
@@ -127,12 +128,17 @@ fun DecideWheelScreen(
 @Composable
 fun DecideSpinWheelPreview() {
 
+    val context = LocalContext.current
+
     HelpDecideTheme {
 
         DecideWheelScreen(
             DecideWheelViewModel(MockAnalyticsLibrary(), PreviewOptions()),
             backPressed = {},
-            optionChosen = {},
+            optionChosen = { optionId ->
+
+                Toast.makeText(context, optionId, Toast.LENGTH_LONG).show()
+            },
         )
     }
 }

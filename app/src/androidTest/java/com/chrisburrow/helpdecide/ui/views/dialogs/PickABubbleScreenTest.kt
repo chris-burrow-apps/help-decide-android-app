@@ -117,10 +117,10 @@ class PickABubbleScreenTest {
 
         pickABubble(rule) {
 
-            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.BubblePicker))
+            assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.BUBBLE_PICKER))
 
             pressButton(0)
-            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.OptionPressed))
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.OPTION_PRESSED))
         }
     }
 }

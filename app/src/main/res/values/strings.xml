@@ -28,6 +28,7 @@
     <string name="crashalytics_desc">Do you give permission to the developer to allow crash reports to be automatically sent so they can diagnose what happened.</string>
     <string name="analytics">Analytics</string>
     <string name="analytics_desc">Do you give permission to allow the developer to see what is used in the app. This makes it easier in future to know what extra features can be made depending upon features currently used.</string>
+    <string name="version_name">Version Name</string>
 
     <string name="delete_all_button">Delete All</string>
     <string name="confirm_delete_desc">Are you sure you want to delete all options?</string>
