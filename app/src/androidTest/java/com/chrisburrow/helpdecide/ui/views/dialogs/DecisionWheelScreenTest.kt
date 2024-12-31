@@ -2,6 +2,7 @@ package com.chrisburrow.helpdecide.ui.views.dialogs
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
@@ -23,10 +24,12 @@ class DecisionWheelScreenTest {
     val rule = createComposeRule()
 
     @Test
-    fun optionShown() = runTest {
+    fun optionChosen() = runTest {
 
-        val expectedObjectOne = OptionObject(text = "example 1")
-        val expectedObjectTwo = OptionObject(text = "example 2")
+        val optionText = "example 1"
+
+        val expectedObjectOne = OptionObject(text = optionText)
+        val expectedObjectTwo = OptionObject(text = optionText)
         val options = listOf(expectedObjectOne, expectedObjectTwo)
 
         rule.setContent {
@@ -39,24 +42,25 @@ class DecisionWheelScreenTest {
                         options = options
                     ),
                     backPressed = { },
-                    optionChosen = { }
+                    donePressed = { },
+                    removePressed = { }
                 )
             }
         }
 
         decisionWheel(rule) {
 
+            checkText(optionText)
         }
     }
 
     @Test
-    fun optionChosen() = runTest {
+    fun removeChosen() = runTest {
 
         val expectedObjectOne = OptionObject(text = "example 1")
-        val expectedObjectTwo = OptionObject(text = "example 2")
-        val options = listOf(expectedObjectOne, expectedObjectTwo)
+        val options = listOf(expectedObjectOne)
 
-        var optionChosenCalled = false
+        var removeCalled = false
         var optionIdChosen: String? = null
 
         rule.setContent {
@@ -68,21 +72,55 @@ class DecisionWheelScreenTest {
                         analyticsLibrary = MockAnalyticsLibrary(),
                         options = options
                     ),
-                    optionChosen = {
-                        optionChosenCalled = true
+                    backPressed = { },
+                    donePressed = { },
+                    removePressed = {
+                        removeCalled = true
                         optionIdChosen = it
-                    },
-                    backPressed = { }
+                    }
                 )
             }
         }
 
         decisionWheel(rule) {
 
-            Thread.sleep(500)
+            pressRemove()
+
+            assertTrue(removeCalled)
+            assertEquals(expectedObjectOne.id, optionIdChosen)
+        }
+    }
+
+    @Test
+    fun doneChosen() = runTest {
+
+        val expectedObjectOne = OptionObject(text = "example 1")
+        val options = listOf(expectedObjectOne)
+
+        var doneCalled = false
+
+        rule.setContent {
+
+            HelpDecideTheme {
+
+                DecideWheelScreen(
+                    DecideWheelViewModel(
+                        analyticsLibrary = MockAnalyticsLibrary(),
+                        options = options
+                    ),
+                    backPressed = { },
+                    donePressed = { doneCalled = true },
+                    removePressed = { }
+                )
+            }
         }
 
-        assertTrue(optionChosenCalled)
+        decisionWheel(rule) {
+
+            pressDone()
+
+            assertTrue(doneCalled)
+        }
     }
 
     @Test
@@ -104,7 +142,8 @@ class DecisionWheelScreenTest {
                         options = options
                     ),
                     backPressed = { },
-                    optionChosen = { }
+                    donePressed = { },
+                    removePressed = { }
                 )
             }
         }
@@ -112,6 +151,12 @@ class DecisionWheelScreenTest {
         decisionWheel(rule) {
 
             assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.WHEEL))
+
+            pressDone()
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.DONE))
+
+            pressRemove()
+            assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.REMOVE_OPTION))
         }
     }
 }

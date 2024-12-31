@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.views
+package com.chrisburrow.helpdecide.ui.views.screens.spinthewheel
 
 import android.graphics.Paint
 import android.widget.Toast

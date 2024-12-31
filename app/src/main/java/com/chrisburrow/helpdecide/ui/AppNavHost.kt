@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -248,11 +249,16 @@ fun AppNavHost (
                     analyticsLibrary = analyticsLibrary,
                     options = options.value.options
                 ),
-                optionChosen = { optionId ->
+                removePressed = { optionId ->
 
-                    navController.navigate("${NavigationDialogItem.OptionChosen}/${optionId}")
+                    homeViewModel.deleteOption(optionId)
+                    navController.popBackStack()
                 },
                 backPressed = {
+
+                    navController.popBackStack()
+                },
+                donePressed = {
 
                     navController.popBackStack()
                 }

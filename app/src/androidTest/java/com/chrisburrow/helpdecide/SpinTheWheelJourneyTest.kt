@@ -6,7 +6,6 @@ import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
-import com.chrisburrow.helpdecide.ui.robots.decisionChosenDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.robots.home
@@ -62,6 +61,8 @@ class SpinTheWheelJourneyTest {
                 pressAdd()
             }
 
+            checkNumberOfOptions(2)
+
             pressDecide()
 
             decisionDefault(rule) {
@@ -74,16 +75,58 @@ class SpinTheWheelJourneyTest {
 
         decisionWheel(rule) {
 
-            Thread.sleep(1000)
-        }
-
-        decisionChosenDialog(rule) {
-
-            pressConfirm()
+            pressDone()
         }
 
         home(rule) {
 
+            checkNumberOfOptions(2)
+        }
+    }
+
+    @Test
+    fun pressRemove() = runTest {
+
+        val optionText = "Option 1"
+
+        home(rule) {
+
+            pressAdd()
+
+            addDialog(rule) {
+
+                typeText(optionText)
+                pressAdd()
+            }
+
+            pressAdd()
+
+            addDialog(rule) {
+
+                typeText(optionText)
+                pressAdd()
+            }
+
+            checkNumberOfOptions(2)
+
+            pressDecide()
+
+            decisionDefault(rule) {
+
+                pressOptions()
+                pressWheelOption()
+                pressGo()
+            }
+        }
+
+        decisionWheel(rule) {
+
+            pressRemove()
+        }
+
+        home(rule) {
+
+            checkNumberOfOptions(1)
         }
     }
 }

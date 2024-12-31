@@ -165,6 +165,20 @@ fun OnboardingView(
         modifier = Modifier.padding(all = 16.dp)
     ) {
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.7f),
+            painter = painterResource(page.viewImage),
+            contentDescription = "",
+            contentScale = ContentScale.FillWidth,
+            alignment = Alignment.TopStart
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -184,18 +198,6 @@ fun OnboardingView(
                 .fillMaxWidth()
                 .testTag(OnboardingTags.DESCRIPTION_VIEW_TAG + position),
             textAlign = TextAlign.Center,
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.7f),
-            painter = painterResource(page.viewImage),
-            contentDescription = "",
-            contentScale = ContentScale.FillWidth,
-            alignment = Alignment.TopStart
         )
 
         Spacer(modifier = Modifier.height(16.dp))
