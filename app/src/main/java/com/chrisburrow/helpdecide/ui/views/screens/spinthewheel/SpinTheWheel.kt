@@ -1,5 +1,6 @@
 package com.chrisburrow.helpdecide.ui.views.screens.spinthewheel
 
+import android.R.attr
 import android.graphics.Paint
 import android.widget.Toast
 import androidx.compose.animation.core.Animatable
@@ -31,12 +32,14 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.chrisburrow.helpdecide.ui.PreviewOptions
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelState
 import com.chrisburrow.helpdecide.ui.viewmodels.SpinAnimationState
 import kotlin.math.cos
 import kotlin.math.sin
+
 
 @Composable
 fun SpinTheWheel(
@@ -291,10 +294,10 @@ fun DrawScope.drawTextOnPath(
     val centerX = size.width / 2
     val centerY = size.height / 2
 
-    val substring = if(text.length < 20) text else "${text.substring(0, 20)}..."
+    val substring = if(text.length < 12) text else "${text.substring(0, 12)}..."
 
-    val x = centerX + radius / 1.6f * cos(Math.toRadians(angle.toDouble())).toFloat()
-    val y = centerY + radius / 1.6f * sin(Math.toRadians(angle.toDouble())).toFloat()
+    val x = centerX + radius / 1.7f * cos(Math.toRadians(angle.toDouble())).toFloat()
+    val y = centerY + radius / 1.7f * sin(Math.toRadians(angle.toDouble())).toFloat()
 
     drawContext.canvas.rotate(angle, x, y)
 
@@ -304,12 +307,31 @@ fun DrawScope.drawTextOnPath(
         y,
         Paint().apply {
             color = textColor.toArgb()
-            textSize = 25f
+            textSize = getDynamicTextSize(radius / 2, substring)
             textAlign = Paint.Align.CENTER
         }
     )
 
     drawContext.canvas.rotate(-angle, x, y)
+}
+
+fun getDynamicTextSize(width: Float, text: String) : Float {
+
+    val paint = Paint()
+    var textSize = 80f
+    paint.textSize = textSize
+    var textWidth: Float
+
+    while (true) {
+        textWidth = paint.measureText(text)
+        if (textWidth <= width) {
+            break
+        }
+        textSize -= 1f
+        paint.textSize = textSize
+    }
+
+    return textSize
 }
 
 @ThemePreviews
@@ -321,7 +343,10 @@ fun SpinTheWheelPreview() {
     HelpDecideTheme {
 
         SpinTheWheel(
-            viewState = DecideWheelState(),
+            viewState = DecideWheelState(
+                options = PreviewOptions(),
+                numberOfSegments = PreviewOptions().size
+            ),
             finishedAnimating = {
 
                 Toast.makeText(context, "Finished spinning", Toast.LENGTH_LONG).show()
