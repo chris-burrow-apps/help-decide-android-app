@@ -35,7 +35,10 @@ class SettingsJourneyTest {
         crashayticsState = true
     )
 
-    private val preferencesLibrary = MockPreferencesLibrary(versionCode = expectedVersionName)
+    private val preferencesLibrary = MockPreferencesLibrary(
+        alwaysAskOption = false,
+        versionCode = expectedVersionName
+    )
 
     @Before
     fun setup() {
@@ -54,7 +57,7 @@ class SettingsJourneyTest {
     }
 
     @Test
-    fun checkSettingsScreen() = runTest {
+    fun checkSettingsToggles() = runTest {
 
         home(rule) {
 
@@ -78,6 +81,10 @@ class SettingsJourneyTest {
 
             assertTrue(analyticsLibrary.setCrashalyticsStateCalled)
             assertFalse(analyticsLibrary.crashayticsState)
+
+            pressToggle(2)
+
+            assertTrue(preferencesLibrary.alwaysAskOptionCalledWith!!)
         }
     }
 
