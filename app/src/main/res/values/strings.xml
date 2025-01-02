@@ -14,7 +14,7 @@
     <string name="done">Done</string>
     <string name="how_do_you_want_to_decide">How do you want to decide?</string>
     <string name="instant_decision">Instant Decision</string>
-    <string name="spin_the_wheel">Spin the wheel</string>
+    <string name="spin_the_wheel">Spin The Wheel</string>
     <string name="pick_a_bubble">Pick A Bubble</string>
     <string name="go">Go</string>
     <string name="continue_option">Continue</string>
@@ -28,6 +28,10 @@
     <string name="crashalytics_desc">Do you give permission to the developer to allow crash reports to be automatically sent so they can diagnose what happened.</string>
     <string name="analytics">Analytics</string>
     <string name="analytics_desc">Do you give permission to allow the developer to see what is used in the app. This makes it easier in future to know what extra features can be made depending upon features currently used.</string>
+    <string name="always_ask_decision">Always Use Default</string>
+    <string name="always_ask_decision_desc">Enable if you no longer want the app to ask how to decide.</string>
+    <string name="decision_type">Default Decision Type</string>
+
     <string name="version_name">Version Name</string>
 
     <string name="delete_all_button">Delete All</string>

@@ -29,6 +29,16 @@ class PreferencesLibrary(
         storageLibrary.storeString(StorageLibraryKeys.DecisionDefault, key)
     }
 
+    override suspend fun alwaysAskDecisionDialog(): Boolean {
+
+        return storageLibrary.getBoolean(StorageLibraryKeys.AlwaysAskEnabled, defaultValue = true).first()
+    }
+
+    override suspend fun alwaysAskDecisionOption(enabled: Boolean) {
+
+        storageLibrary.storeBoolean(StorageLibraryKeys.AlwaysAskEnabled, enabled)
+    }
+
     override fun checkVersionName(): String {
 
         return versionName

@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,7 +53,8 @@ private fun TitleDescriptionView(position: Int, option: SettingsRow) {
             .fillMaxWidth(),
         color = MaterialTheme.colorScheme.primary,
         text = option.title,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+
     )
     Spacer(modifier = Modifier.height(8.dp))
     Text(
@@ -77,7 +79,9 @@ fun SettingsBooleanView(position: Int, option: SettingsBooleanRow) {
     ) {
 
         Column(
-            modifier = Modifier.weight(0.8f)
+            modifier = Modifier
+                .weight(0.8f)
+                .alpha(if(option.enabled) 1.0f else 0.6f)
         ) {
 
             TitleDescriptionView(position, option)
@@ -101,15 +105,16 @@ fun SettingsBooleanView(position: Int, option: SettingsBooleanRow) {
 
                 Switch(
                     modifier = Modifier.testTag(SettingsListTags.SWITCH_TAG + position),
-                    checked = option.enabled,
+                    checked = option.switchPosition,
+                    enabled = option.enabled,
                     onCheckedChange = {
-                        option.enabled = it
+                        option.switchPosition = it
                         option.toggled(it)
                     },
                     thumbContent =
                     {
                         Icon(
-                            imageVector = if (option.enabled) Icons.Filled.Check else Icons.Filled.Clear,
+                            imageVector = if (option.switchPosition) Icons.Filled.Check else Icons.Filled.Clear,
                             contentDescription = null,
                             modifier = Modifier.size(SwitchDefaults.IconSize),
                         )
@@ -129,12 +134,12 @@ fun SettingsStringView(position: Int, option: SettingsStringRow) {
             .background(MaterialTheme.colorScheme.surface)
             .testTag(SettingsListTags.ROW_VIEW + position)
             .padding(15.dp),
+//            .clickable { option.clicked() },
         verticalAlignment = Alignment.CenterVertically
     ) {
 
         Column(
-            modifier = Modifier
-                .weight(1.0f)
+            modifier = Modifier.weight(1.0f)
         ) {
 
             TitleDescriptionView(position, option)
@@ -153,17 +158,17 @@ fun SettingsTextListPreview() {
                 SettingsBooleanRow(
                     title = "Option 1",
                     description = "Description 1",
-                    enabled = false,
+                    switchPosition = false,
                 ) { },
                 SettingsBooleanRow(
                     title = "Option 2",
                     description = "Description 2",
-                    enabled = true
+                    switchPosition = true
                 ) { },
                 SettingsBooleanRow(
                     title = "Option 3",
                     description = "Description 3",
-                    enabled = false,
+                    switchPosition = false,
                     loading = true
                 ) { },
                 SettingsStringRow(

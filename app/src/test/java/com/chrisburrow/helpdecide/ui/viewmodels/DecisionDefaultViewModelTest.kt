@@ -81,7 +81,7 @@ class DecisionDefaultViewModelTest {
         val newSelectedValue = "Test Option 2"
         val options = linkedMapOf("testKey1" to "Test Option 1", newSelectedKey to newSelectedValue)
 
-        val preferencesLibrary = MockPreferencesLibrary(defaultDecisionOption = newSelectedKey)
+        val preferencesLibrary = MockPreferencesLibrary()
 
         val viewModel = DecisionDefaultViewModel(
             analyticsLibrary = MockAnalyticsLibrary(),
@@ -95,6 +95,6 @@ class DecisionDefaultViewModelTest {
         viewModel.refreshDefaultDecision()
 
         assertTrue(preferencesLibrary.checkDefaultDecisionOptionCalled)
-        assertEquals(newSelectedKey, viewModel.uiState.value.currentlySelectedKey)
+        assertEquals(options.keys.first(), viewModel.uiState.value.currentlySelectedKey)
     }
 }

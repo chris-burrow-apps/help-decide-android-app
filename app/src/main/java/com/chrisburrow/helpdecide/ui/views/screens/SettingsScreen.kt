@@ -1,9 +1,7 @@
 package com.chrisburrow.helpdecide.ui.views.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -115,7 +112,7 @@ fun SettingsScreen(
                     SettingsBooleanRow(
                         title = stringResource(R.string.analytics),
                         description = stringResource(R.string.analytics_desc),
-                        enabled = uiState.googleAnalyticsEnabled,
+                        switchPosition = uiState.googleAnalyticsEnabled,
                         loading = uiState.googleAnalyticsLoading
                     ) { toggled ->
 
@@ -124,11 +121,27 @@ fun SettingsScreen(
                     SettingsBooleanRow(
                         title = stringResource(R.string.crashalytics),
                         description = stringResource(R.string.crashalytics_desc),
-                        enabled = uiState.crashalyticsEnabled,
+                        switchPosition = uiState.crashalyticsEnabled,
                         loading = uiState.crashalyticsLoading
                     ) { toggled ->
 
                         viewModel.toggleCrashalytics(toggled)
+                    },
+                    SettingsBooleanRow(
+                        title = stringResource(R.string.always_ask_decision),
+                        description = stringResource(R.string.always_ask_decision_desc),
+                        switchPosition = uiState.alwaysAskEnabled,
+                        loading = uiState.alwaysAskLoading
+                    ) { toggled ->
+
+                        viewModel.toggleAlwaysAsk(toggled)
+                    },
+                    SettingsStringRow(
+                        title = stringResource(R.string.decision_type),
+                        description = stringResource(R.string.spin_the_wheel),
+                    ) {
+
+
                     },
                     SettingsStringRow(
                         title = stringResource(R.string.version_name),

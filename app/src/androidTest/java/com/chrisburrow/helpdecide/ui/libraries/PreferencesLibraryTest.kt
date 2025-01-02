@@ -80,6 +80,33 @@ class PreferencesLibraryTest {
     }
 
     @Test
+    fun alwaysAskSaved() = runTest  {
+
+        val expectedKey = true
+
+        assertNull(fakeStorage.stringValues[StorageLibraryKeys.AlwaysAskEnabled])
+
+        preferencesLibrary.alwaysAskDecisionOption(expectedKey)
+
+        assertEquals(expectedKey, fakeStorage.booleanValues[StorageLibraryKeys.AlwaysAskEnabled]!!)
+    }
+
+    @Test
+    fun alwaysAskRequested() = runTest  {
+
+        val expectedKey = false
+
+        fakeStorage.booleanValues[StorageLibraryKeys.AlwaysAskEnabled] = expectedKey
+
+        assertFalse(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.AlwaysAskEnabled, true))
+
+        preferencesLibrary.alwaysAskDecisionDialog()
+
+        assertTrue(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.AlwaysAskEnabled, true))
+        assertEquals(expectedKey, fakeStorage.booleanValues[StorageLibraryKeys.AlwaysAskEnabled]!!)
+    }
+
+    @Test
     fun checkVersionPassed() = runTest {
         
         assertEquals(expectedVersionName, preferencesLibrary.checkVersionName())

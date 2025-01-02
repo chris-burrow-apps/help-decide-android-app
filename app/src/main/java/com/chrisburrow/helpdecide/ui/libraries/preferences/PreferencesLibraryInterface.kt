@@ -8,5 +8,8 @@ interface PreferencesLibraryInterface {
     suspend fun checkDefaultDecisionOption(): String
     suspend fun saveDefaultDecisionOption(key: String)
 
+    suspend fun alwaysAskDecisionDialog() : Boolean
+    suspend fun alwaysAskDecisionOption(enabled: Boolean)
+
     fun checkVersionName(): String
 }

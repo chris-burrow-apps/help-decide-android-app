@@ -5,7 +5,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
-import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
@@ -92,14 +91,36 @@ class SettingsJourneyTest {
 
         settings(rule) {
 
-            checkText(0, context.getString(R.string.analytics), context.getString(R.string.analytics_desc))
-            checkText(1, context.getString(R.string.crashalytics), context.getString(R.string.crashalytics_desc))
-            checkText(2, context.getString(R.string.version_name), expectedVersionName)
+            checkText(
+                position = 0,
+                title = context.getString(R.string.analytics),
+                desc = context.getString(R.string.analytics_desc)
+            )
+            checkText(
+                position = 1,
+                title = context.getString(R.string.crashalytics),
+                desc = context.getString(R.string.crashalytics_desc)
+            )
+            checkText(
+                position = 2,
+                title = context.getString(R.string.always_ask_decision),
+                desc = context.getString(R.string.always_ask_decision_desc)
+            )
+            checkText(
+                position = 3,
+                title = context.getString(R.string.decision_type),
+                desc = context.getString(R.string.spin_the_wheel)
+            )
+            checkText(
+                position = 4,
+                title = context.getString(R.string.version_name),
+                desc = expectedVersionName
+            )
         }
     }
 
     @Test
-    fun packClosesScreen() = runTest {
+    fun backClosesScreen() = runTest {
 
         home(rule) {
 

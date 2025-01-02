@@ -7,6 +7,7 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
 import com.chrisburrow.helpdecide.ui.views.screens.SettingsScreenTags
 import com.chrisburrow.helpdecide.ui.views.screens.settings.SettingsListTags
 
@@ -20,6 +21,7 @@ class SettingsRobot(private val rule: ComposeContentTestRule) {
 
     fun checkText(position: Int, title: String = "", desc: String = "") {
 
+        rule.onNodeWithTag(SettingsListTags.BASE_VIEW).performScrollToIndex(position)
         rule.onNodeWithTag(SettingsListTags.TITLE_TAG + position).assertTextEquals(title)
         rule.onNodeWithTag(SettingsListTags.DESCRIPTION_TAG + position).assertTextEquals(desc)
     }
@@ -35,6 +37,8 @@ class SettingsRobot(private val rule: ComposeContentTestRule) {
     }
 
     fun pressToggle(position: Int) { rule.onNodeWithTag(SettingsListTags.SWITCH_TAG + position).performClick() }
+
+    fun pressOption(position: Int) { rule.onNodeWithTag(SettingsListTags.ROW_VIEW + position).performClick() }
 
     fun pressBack() { rule.onNodeWithTag(SettingsScreenTags.BACK_BUTTON_TAG).performClick() }
 }
