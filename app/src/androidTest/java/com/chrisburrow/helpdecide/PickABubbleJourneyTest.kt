@@ -71,7 +71,7 @@ class PickABubbleJourneyTest {
 
                 pressOptions()
                 pressBubbleOption()
-                pressGo()
+                pressDone()
             }
         }
 

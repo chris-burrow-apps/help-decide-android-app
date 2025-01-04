@@ -3,14 +3,14 @@ package com.chrisburrow.helpdecide.utils
 open class SettingsRow (
     val title: String = "",
     val description: String = "",
-    var enabled: Boolean = true,
 )
 
 class SettingsBooleanRow(
     title: String,
     description: String,
+    val enabled: Boolean = true,
     var switchPosition: Boolean = false,
-    var loading: Boolean = false,
+    val loading: Boolean = false,
     val toggled: (Boolean) -> Unit,
 ) : SettingsRow(title, description)
 

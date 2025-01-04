@@ -69,7 +69,7 @@ class SpinTheWheelJourneyTest {
 
                 pressOptions()
                 pressWheelOption()
-                pressGo()
+                pressDone()
             }
         }
 
@@ -115,7 +115,7 @@ class SpinTheWheelJourneyTest {
 
                 pressOptions()
                 pressWheelOption()
-                pressGo()
+                pressDone()
             }
         }
 

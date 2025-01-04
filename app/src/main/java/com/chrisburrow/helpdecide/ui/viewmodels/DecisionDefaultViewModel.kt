@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 
 
 data class DecisionDefaultState(
+    val doneButtonText: String,
     val options: LinkedHashMap<String, String> = linkedMapOf(),
     val currentlySelectedKey: String,
     val currentlySelectedValue: String,
@@ -17,14 +18,17 @@ data class DecisionDefaultState(
 class DecisionDefaultViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface,
     val preferencesLibrary: PreferencesLibraryInterface,
-    val options: LinkedHashMap<String, String>,
+    doneButtonText: String,
+    options: LinkedHashMap<String, String>,
+    val pressedDone: (String) -> Unit,
 ): AnalyticsViewModel(analyticsLibrary) {
 
     private val _uiState = MutableStateFlow(
         DecisionDefaultState(
             options = options,
             currentlySelectedKey = options.keys.first(),
-            currentlySelectedValue = options.values.first()
+            currentlySelectedValue = options.values.first(),
+            doneButtonText = doneButtonText,
         )
     )
 
@@ -34,7 +38,7 @@ class DecisionDefaultViewModel(
 
         _uiState.value = uiState.value.copy(
             currentlySelectedKey = selectedKey,
-            currentlySelectedValue = options[selectedKey]!!
+            currentlySelectedValue = _uiState.value.options[selectedKey]!!
         )
     }
 
@@ -43,10 +47,14 @@ class DecisionDefaultViewModel(
         viewModelScope.launch {
 
             preferencesLibrary.saveDefaultDecisionOption(uiState.value.currentlySelectedKey)
+
+            pressedDone(uiState.value.currentlySelectedKey)
         }
     }
 
     fun refreshDefaultDecision() {
+
+        val options = _uiState.value.options
 
         viewModelScope.launch {
 

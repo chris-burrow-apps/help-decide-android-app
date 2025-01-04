@@ -1,10 +1,12 @@
 package com.chrisburrow.helpdecide.ui.robots
 
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialogTags
+import org.w3c.dom.Text
 
 class DecisionDefaultDialogRobot(private val rule: ComposeContentTestRule) {
 
@@ -24,7 +26,9 @@ class DecisionDefaultDialogRobot(private val rule: ComposeContentTestRule) {
 
     fun pressOption(position: Int) { rule.onNodeWithTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position, useUnmergedTree = true).performClick() }
 
-    fun pressGo() { rule.onNodeWithTag(DecisionDefaultDialogTags.GO_BUTTON_TAG).performClick() }
+    fun pressDone() { rule.onNodeWithTag(DecisionDefaultDialogTags.DONE_BUTTON_TAG).performClick() }
+
+    fun checkDoneText(text: String) { rule.onNodeWithTag(DecisionDefaultDialogTags.DONE_BUTTON_TAG).assertTextEquals(text) }
 }
 
 fun decisionDefault(rule: ComposeContentTestRule, block: DecisionDefaultDialogRobot.() -> Unit) = DecisionDefaultDialogRobot(rule).apply(block)

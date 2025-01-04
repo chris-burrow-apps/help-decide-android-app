@@ -29,7 +29,7 @@
     <string name="analytics">Analytics</string>
     <string name="analytics_desc">Do you give permission to allow the developer to see what is used in the app. This makes it easier in future to know what extra features can be made depending upon features currently used.</string>
     <string name="always_ask_decision">Always Use Default</string>
-    <string name="always_ask_decision_desc">Enable if you no longer want the app to ask how to decide.</string>
+    <string name="always_ask_decision_desc">If you no longer want the app to ask how to decide and use default below</string>
     <string name="decision_type">Default Decision Type</string>
 
     <string name="version_name">Version Name</string>

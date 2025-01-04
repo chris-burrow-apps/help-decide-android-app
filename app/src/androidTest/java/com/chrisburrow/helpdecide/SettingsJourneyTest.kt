@@ -8,6 +8,7 @@ import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
+import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.home
 import com.chrisburrow.helpdecide.ui.robots.settings
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
@@ -15,7 +16,6 @@ import com.google.firebase.installations.time.SystemClock
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,8 +40,7 @@ class SettingsJourneyTest {
         versionCode = expectedVersionName
     )
 
-    @Before
-    fun setup() {
+    private fun setup(analyticsLibrary: MockAnalyticsLibrary, preferencesLibrary: MockPreferencesLibrary) {
 
         rule.setContent {
 
@@ -58,6 +57,8 @@ class SettingsJourneyTest {
 
     @Test
     fun checkSettingsToggles() = runTest {
+
+        setup(analyticsLibrary, preferencesLibrary)
 
         home(rule) {
 
@@ -89,7 +90,32 @@ class SettingsJourneyTest {
     }
 
     @Test
+    fun checkDecisionType() = runTest {
+
+        setup(analyticsLibrary, preferencesLibrary)
+
+        home(rule) {
+
+            pressSettings()
+        }
+
+        settings(rule) {
+
+
+
+            pressOption(3)
+
+            decisionDefault(rule) {
+
+
+            }
+        }
+    }
+
+    @Test
     fun checkSettingsShown() = runTest {
+
+        setup(analyticsLibrary, preferencesLibrary)
 
         home(rule) {
 
@@ -129,6 +155,8 @@ class SettingsJourneyTest {
     @Test
     fun backClosesScreen() = runTest {
 
+        setup(analyticsLibrary, preferencesLibrary)
+
         home(rule) {
 
             pressSettings()
@@ -147,6 +175,8 @@ class SettingsJourneyTest {
 
     @Test
     fun analyticsLogged() = runTest {
+
+        setup(analyticsLibrary, preferencesLibrary)
 
         home(rule) {
 

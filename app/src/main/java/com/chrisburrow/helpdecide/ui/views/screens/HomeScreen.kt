@@ -77,8 +77,13 @@ class HomeTags {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    model: HomeViewModel
+    model: HomeViewModel,
+    decidePressed: () -> Unit,
+    addOptionPressed: () -> Unit,
+    addVoicePressed: () -> Unit,
+    deleteAllPressed: () -> Unit,
+    settingsPressed: () -> Unit,
+    addAnotherHintShown: () -> Unit,
 ) {
 
     val state = remember { model.view }
@@ -115,7 +120,7 @@ fun HomeScreen(
                             onClick = {
 
                                 model.logButtonPressed(AnalyticsActions.CLEAR)
-                                navController.navigate(NavigationDialogItem.DeleteAll.route)
+                                deleteAllPressed()
                             }
                         ) {
                             Icon(
@@ -137,7 +142,7 @@ fun HomeScreen(
                             .weight(0.25f),
                         onClick = {
 
-                            navController.navigate(NavigationDialogItem.AddOption.route)
+                            addOptionPressed()
                         },
                     ) {
                         Icon(
@@ -155,7 +160,8 @@ fun HomeScreen(
                             onClick = {
 
                                 model.logButtonPressed(AnalyticsActions.VOICE)
-                                navController.navigate(NavigationDialogItem.SpeechToText.route)
+                                addVoicePressed()
+
                             },
                         ) {
                             Icon(
@@ -172,7 +178,8 @@ fun HomeScreen(
                             .weight(0.25f),
                         onClick = {
 
-                            navController.navigate(NavigationScreenItem.Settings.route)
+                            settingsPressed()
+
                         },
                     ) {
                         Icon(
@@ -192,10 +199,11 @@ fun HomeScreen(
                             if(view.value.options.size > 1) {
 
                                 model.logButtonPressed(AnalyticsActions.DECIDE)
-                                navController.navigate(NavigationDialogItem.DecideType.route)
+                                decidePressed()
+
                             } else {
 
-                                navController.navigate(NavigationDialogItem.AddAnother.route)
+                                addAnotherHintShown()
                             }
                         },
                     ){
@@ -300,7 +308,9 @@ fun EmptyHomeInstructions(modifier: Modifier, isSpeechEnabled: Boolean) {
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Icon(
-                    modifier = Modifier.size(50.dp).rotate(-45f),
+                    modifier = Modifier
+                        .size(50.dp)
+                        .rotate(-45f),
                     painter = painterResource(R.drawable.down_left_arrow),
                     contentDescription = ""
                 )
@@ -316,13 +326,18 @@ fun HomeScreenEmptyPreview() {
     HelpDecideTheme {
 
         val analyticsLibrary = MockAnalyticsLibrary()
-        val navController = rememberNavController()
 
-        HomeScreen(navController,
-            HomeViewModel(
+        HomeScreen(
+            model = HomeViewModel(
                 analyticsLibrary = analyticsLibrary,
                 isSpeechCompatible = true
-            )
+            ),
+            decidePressed = { },
+            addOptionPressed = { },
+            addVoicePressed = { },
+            deleteAllPressed = { },
+            settingsPressed = { },
+            addAnotherHintShown = { },
         )
     }
 }
@@ -334,14 +349,19 @@ fun HomeScreenPreview() {
     HelpDecideTheme {
 
         val analyticsLibrary = MockAnalyticsLibrary()
-        val navController = rememberNavController()
 
-        HomeScreen(navController,
-            HomeViewModel(
+        HomeScreen(
+            model = HomeViewModel(
                 analyticsLibrary = analyticsLibrary,
                 isSpeechCompatible = true,
                 initialOptions = PreviewOptions()
-            )
+            ),
+            decidePressed = { },
+            addOptionPressed = { },
+            addVoicePressed = { },
+            deleteAllPressed = { },
+            settingsPressed = { },
+            addAnotherHintShown = { },
         )
     }
 }

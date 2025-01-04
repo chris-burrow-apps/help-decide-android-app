@@ -9,6 +9,7 @@ import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrar
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionDefaultViewModel
+import com.google.firebase.installations.time.SystemClock
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
@@ -44,12 +45,14 @@ class DecisionDefaultDialogTest {
                     viewModel = DecisionDefaultViewModel(
                         analyticsLibrary = MockAnalyticsLibrary(),
                         preferencesLibrary = MockPreferencesLibrary(),
-                        options = options
+                        options = options,
+                        doneButtonText = "",
+                        pressedDone = {
+                            selectedCallbackCalled = true
+                            optionSelected = it
+                        }
                     )
-                ) {
-                    selectedCallbackCalled = true
-                    optionSelected = it
-                }
+                )
             }
         }
 
@@ -58,7 +61,7 @@ class DecisionDefaultDialogTest {
             pressOptions()
             pressOption(1)
 
-            pressGo()
+            pressDone()
 
             assertTrue(selectedCallbackCalled)
             assertEquals(secondOptionKey, optionSelected)
@@ -78,11 +81,11 @@ class DecisionDefaultDialogTest {
                     viewModel = DecisionDefaultViewModel(
                         analyticsLibrary = analyticsLibrary,
                         preferencesLibrary = MockPreferencesLibrary(),
-                        options = options
+                        options = options,
+                        doneButtonText = "",
+                        pressedDone = { }
                     )
-                ) {
-
-                }
+                )
             }
         }
 
@@ -90,7 +93,7 @@ class DecisionDefaultDialogTest {
 
             assertTrue(analyticsLibrary.logScreenCalledWith(AnalyticsScreens.DECISION_TYPE))
 
-            pressGo()
+            pressDone()
 
             assertTrue(analyticsLibrary.logButtonCalledWith(AnalyticsActions.GO))
         }
@@ -109,11 +112,11 @@ class DecisionDefaultDialogTest {
                     viewModel = DecisionDefaultViewModel(
                         analyticsLibrary = MockAnalyticsLibrary(),
                         preferencesLibrary = preferencesLibrary,
-                        options = options
+                        options = options,
+                        doneButtonText = "",
+                        pressedDone = { }
                     )
-                ) {
-
-                }
+                )
             }
         }
 
@@ -122,7 +125,7 @@ class DecisionDefaultDialogTest {
             pressOptions()
             pressOption(1)
 
-            pressGo()
+            pressDone()
 
             assertEquals(secondOptionKey, preferencesLibrary.defaultDecisionOption)
         }
@@ -141,11 +144,11 @@ class DecisionDefaultDialogTest {
                     viewModel = DecisionDefaultViewModel(
                         analyticsLibrary = MockAnalyticsLibrary(),
                         preferencesLibrary = preferencesLibrary,
-                        options = options
+                        options = options,
+                        doneButtonText = "",
+                        pressedDone = { }
                     )
-                ) {
-
-                }
+                )
             }
         }
 
@@ -171,19 +174,51 @@ class DecisionDefaultDialogTest {
                     viewModel = DecisionDefaultViewModel(
                         analyticsLibrary = MockAnalyticsLibrary(),
                         preferencesLibrary = preferencesLibrary,
-                        options = options
+                        options = options,
+                        doneButtonText = "",
+                        pressedDone = {
+                            optionSelected = it
+                        }
                     )
-                ) {
-                    optionSelected = it
-                }
+                )
             }
         }
 
         decisionDefault(rule) {
 
-            pressGo()
+            pressDone()
 
             assertEquals(firstOptionKey, optionSelected)
+        }
+    }
+
+    @Test
+    fun doneButtonText() {
+
+        val expectedText = SystemClock.getInstance().currentTimeMillis().toString()
+        val preferencesLibrary = MockPreferencesLibrary(defaultDecisionOption = "")
+
+        rule.setContent {
+
+            HelpDecideTheme {
+
+                DecisionDefaultDialog(
+                    viewModel = DecisionDefaultViewModel(
+                        analyticsLibrary = MockAnalyticsLibrary(),
+                        preferencesLibrary = preferencesLibrary,
+                        options = options,
+                        doneButtonText = expectedText,
+                        pressedDone = {
+
+                        }
+                    )
+                )
+            }
+        }
+
+        decisionDefault(rule) {
+
+            checkDoneText(expectedText)
         }
     }
 }

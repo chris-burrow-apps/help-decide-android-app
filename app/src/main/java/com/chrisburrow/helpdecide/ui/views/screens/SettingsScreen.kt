@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -33,6 +34,7 @@ import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.DecisionTypeLookup
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
@@ -53,9 +55,12 @@ class SettingsScreenTags {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel,
-    onBackPressed: () -> Unit
+    viewmodel: SettingsViewModel,
+    decisionTypePressed: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
+    val viewModel = remember { viewmodel }
+    val view by viewModel.view.collectAsState()
 
     Scaffold(
         topBar = {
@@ -94,9 +99,6 @@ fun SettingsScreen(
 
         ) { innerPadding ->
 
-        val state = remember { viewModel.uiState }
-        val uiState by state.collectAsState()
-
         Surface(
             modifier = Modifier
                 .testTag(SettingsScreenTags.BASE_VIEW_TAG)
@@ -107,13 +109,14 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 SettingsList(options = listOf(
 
                     SettingsBooleanRow(
                         title = stringResource(R.string.analytics),
                         description = stringResource(R.string.analytics_desc),
-                        switchPosition = uiState.googleAnalyticsEnabled,
-                        loading = uiState.googleAnalyticsLoading
+                        switchPosition = view.googleAnalyticsEnabled,
+                        loading = view.googleAnalyticsLoading
                     ) { toggled ->
 
                         viewModel.toggleGoogleAnalytics(toggled)
@@ -121,8 +124,8 @@ fun SettingsScreen(
                     SettingsBooleanRow(
                         title = stringResource(R.string.crashalytics),
                         description = stringResource(R.string.crashalytics_desc),
-                        switchPosition = uiState.crashalyticsEnabled,
-                        loading = uiState.crashalyticsLoading
+                        switchPosition = view.crashalyticsEnabled,
+                        loading = view.crashalyticsLoading
                     ) { toggled ->
 
                         viewModel.toggleCrashalytics(toggled)
@@ -130,22 +133,22 @@ fun SettingsScreen(
                     SettingsBooleanRow(
                         title = stringResource(R.string.always_ask_decision),
                         description = stringResource(R.string.always_ask_decision_desc),
-                        switchPosition = uiState.alwaysAskEnabled,
-                        loading = uiState.alwaysAskLoading
+                        switchPosition = view.alwaysAskEnabled,
+                        loading = view.alwaysAskLoading
                     ) { toggled ->
 
                         viewModel.toggleAlwaysAsk(toggled)
                     },
                     SettingsStringRow(
                         title = stringResource(R.string.decision_type),
-                        description = stringResource(R.string.spin_the_wheel),
+                        description = view.decisionType,
                     ) {
 
-
+                        decisionTypePressed()
                     },
                     SettingsStringRow(
                         title = stringResource(R.string.version_name),
-                        description = uiState.versionName,
+                        description = view.versionName,
                     )
                 ))
             }
@@ -166,9 +169,14 @@ fun SettingsDialogPreview() {
 
     HelpDecideTheme {
 
-        SettingsScreen(SettingsViewModel(
-            analyticsLibrary = MockAnalyticsLibrary(),
-            preferencesLibrary = MockPreferencesLibrary()
-        )) {}
+        SettingsScreen(
+            SettingsViewModel(
+                analyticsLibrary = MockAnalyticsLibrary(),
+                preferencesLibrary = MockPreferencesLibrary(),
+                decisionTypeLookup = DecisionTypeLookup(LocalContext.current)
+            ),
+            decisionTypePressed = {},
+            onBackPressed = {},
+        )
     }
 }

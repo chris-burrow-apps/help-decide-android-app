@@ -2,7 +2,6 @@
 
 package com.chrisburrow.helpdecide.ui.views.dialogs
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,8 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,7 +47,7 @@ class DecisionDefaultDialogTags {
         const val BASE_VIEW_TAG = "DecisionDefaultView"
         const val OPTION_CHOSEN_TAG = "DecisionChosenText"
         const val OPTION_ROW_TAG = "DecisionChosenRow"
-        const val GO_BUTTON_TAG = "DecisionGoButton"
+        const val DONE_BUTTON_TAG = "DecisionGoButton"
     }
 }
 
@@ -58,7 +55,6 @@ class DecisionDefaultDialogTags {
 @Composable
 fun DecisionDefaultDialog(
     viewModel: DecisionDefaultViewModel,
-    selectedKey:(String) -> Unit
 ) {
 
     val state = remember { viewModel.uiState }
@@ -68,8 +64,8 @@ fun DecisionDefaultDialog(
 
     Dialog(
         properties = DialogProperties(
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
         ),
         onDismissRequest = { },
     ) {
@@ -141,21 +137,19 @@ fun DecisionDefaultDialog(
 
                 ElevatedButton(
                     modifier = Modifier
-                        .testTag(DecisionDefaultDialogTags.GO_BUTTON_TAG)
+                        .testTag(DecisionDefaultDialogTags.DONE_BUTTON_TAG)
                         .align(Alignment.CenterHorizontally)
                         .padding(8.dp),
                     onClick = {
 
                         viewModel.logButtonPressed(AnalyticsActions.GO)
                         viewModel.saveUserOption()
-
-                        selectedKey(uiState.currentlySelectedKey)
                     },
                 ) {
 
                     Text(
                         fontWeight = FontWeight.SemiBold,
-                        text = stringResource(R.string.go)
+                        text = uiState.doneButtonText
                     )
                 }
             }
@@ -175,9 +169,11 @@ fun DecisionDefaultBottomSheetPreview() {
 
     DecisionDefaultDialog(
         viewModel = DecisionDefaultViewModel(
-            MockAnalyticsLibrary(),
-            MockPreferencesLibrary(),
-            linkedMapOf("optionOneKey" to "Option 1")
-        ),
-        selectedKey = {})
+            analyticsLibrary = MockAnalyticsLibrary(),
+            preferencesLibrary = MockPreferencesLibrary(),
+            options = linkedMapOf("optionOneKey" to "Option 1"),
+            doneButtonText = "Go",
+            pressedDone = { }
+        )
+    )
 }

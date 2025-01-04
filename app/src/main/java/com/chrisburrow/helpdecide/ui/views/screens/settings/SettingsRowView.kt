@@ -2,6 +2,7 @@ package com.chrisburrow.helpdecide.ui.views.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.chrisburrow.helpdecide.ui.ThemePreviews
@@ -133,8 +136,13 @@ fun SettingsStringView(position: Int, option: SettingsStringRow) {
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .testTag(SettingsListTags.ROW_VIEW + position)
-            .padding(15.dp),
-//            .clickable { option.clicked() },
+            .padding(15.dp)
+            .pointerInput(Unit) { // Using clicked blocks the scroll logic
+                detectTapGestures(onTap = {
+
+                    option.clicked()
+                })
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
 

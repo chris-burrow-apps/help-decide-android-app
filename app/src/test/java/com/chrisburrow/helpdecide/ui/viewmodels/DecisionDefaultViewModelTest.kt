@@ -23,6 +23,8 @@ class DecisionDefaultViewModelTest {
             analyticsLibrary = MockAnalyticsLibrary(),
             preferencesLibrary = MockPreferencesLibrary(),
             options = options,
+            doneButtonText = "",
+            pressedDone = { }
         )
 
         assertEquals(options.keys.first(), viewModel.uiState.value.currentlySelectedKey)
@@ -40,6 +42,8 @@ class DecisionDefaultViewModelTest {
             analyticsLibrary = MockAnalyticsLibrary(),
             preferencesLibrary = MockPreferencesLibrary(),
             options = options,
+            doneButtonText = "",
+            pressedDone = { }
         )
 
         assertEquals(options.keys.first(), viewModel.uiState.value.currentlySelectedKey)
@@ -56,6 +60,8 @@ class DecisionDefaultViewModelTest {
         val newSelectedKey = "testKey2"
         val newSelectedValue = "Test Option 2"
         val options = linkedMapOf("testKey1" to "Test Option 1", newSelectedKey to newSelectedValue)
+        var doneCallbackTriggered = false
+        var doneCallbackTriggeredWith: String? = null
 
         val preferencesLibrary = MockPreferencesLibrary()
 
@@ -63,6 +69,11 @@ class DecisionDefaultViewModelTest {
             analyticsLibrary = MockAnalyticsLibrary(),
             preferencesLibrary = preferencesLibrary,
             options = options,
+            doneButtonText = "",
+            pressedDone = {
+                doneCallbackTriggered = true
+                doneCallbackTriggeredWith = it
+            }
         )
 
         viewModel.setDecisionOption(newSelectedKey)
@@ -72,6 +83,10 @@ class DecisionDefaultViewModelTest {
         viewModel.saveUserOption()
 
         assertEquals(newSelectedKey, preferencesLibrary.defaultDecisionOption)
+
+        assertTrue(doneCallbackTriggered)
+
+        assertEquals(newSelectedKey, doneCallbackTriggeredWith!!)
     }
 
     @Test
@@ -87,6 +102,8 @@ class DecisionDefaultViewModelTest {
             analyticsLibrary = MockAnalyticsLibrary(),
             preferencesLibrary = preferencesLibrary,
             options = options,
+            doneButtonText = "",
+            pressedDone = { }
         )
 
         assertFalse(preferencesLibrary.checkDefaultDecisionOptionCalled)

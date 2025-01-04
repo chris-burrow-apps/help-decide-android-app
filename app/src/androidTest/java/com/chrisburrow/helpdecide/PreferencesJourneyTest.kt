@@ -72,7 +72,7 @@ class PreferencesJourneyTest {
 
             decisionDefault(rule) {
 
-                pressGo()
+                pressDone()
             }
 
             decisionWheel(rule) {
@@ -113,7 +113,7 @@ class PreferencesJourneyTest {
 
             decisionDefault(rule) {
 
-                pressGo()
+                pressDone()
             }
 
             decisionWheel(rule) {
@@ -154,7 +154,7 @@ class PreferencesJourneyTest {
 
             decisionDefault(rule) {
 
-                pressGo()
+                pressDone()
             }
 
             decisionDialog(rule) {
