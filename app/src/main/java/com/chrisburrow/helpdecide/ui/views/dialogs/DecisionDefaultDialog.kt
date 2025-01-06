@@ -3,17 +3,21 @@
 package com.chrisburrow.helpdecide.ui.views.dialogs
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -49,6 +53,7 @@ class DecisionDefaultDialogTags {
         const val BASE_VIEW_TAG = "DecisionDefaultView"
         const val OPTION_CHOSEN_TAG = "DecisionChosenText"
         const val OPTION_ROW_TAG = "DecisionChosenRow"
+        const val DONT_ASK_AGAIN_TAG = "DecisionDontAskAgain"
         const val DONE_BUTTON_TAG = "DecisionGoButton"
     }
 }
@@ -120,7 +125,8 @@ fun DecisionDefaultDialog(
                             options.keys.forEachIndexed { position, key ->
 
                                 DropdownMenuItem(
-                                    modifier = Modifier.testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
+                                    modifier = Modifier
+                                        .testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
                                     text = {
                                         Text(
                                             text = options[key]!!
@@ -135,6 +141,30 @@ fun DecisionDefaultDialog(
                             }
                         }
                     }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .wrapContentSize()
+                ) {
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        text = stringResource(R.string.don_t_ask_me_again_text)
+                    )
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    Checkbox(
+                        modifier = Modifier
+                            .testTag(DecisionDefaultDialogTags.DONT_ASK_AGAIN_TAG),
+                        checked = uiState.dontAskAgainToggle,
+                        onCheckedChange = { toggle ->
+
+                            viewModel.toggleDoNotAskCheck(toggle)
+                        }
+                    )
+                }
 
                 ElevatedButton(
                     modifier = Modifier

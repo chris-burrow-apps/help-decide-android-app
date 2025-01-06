@@ -14,6 +14,7 @@ data class DecisionDefaultState(
     val options: LinkedHashMap<String, String> = linkedMapOf(),
     val currentlySelectedKey: String,
     val currentlySelectedValue: String,
+    val dontAskAgainToggle: Boolean,
 )
 
 class DecisionDefaultViewModel(
@@ -29,6 +30,7 @@ class DecisionDefaultViewModel(
             options = options,
             currentlySelectedKey = options.keys.first(),
             currentlySelectedValue = options.values.first(),
+            dontAskAgainToggle = false,
             doneButtonText = doneButtonText,
         )
     )
@@ -43,11 +45,17 @@ class DecisionDefaultViewModel(
         )
     }
 
+    fun toggleDoNotAskCheck(enabled: Boolean) {
+
+        _uiState.value = _uiState.value.copy(dontAskAgainToggle = enabled)
+    }
+
     fun saveUserOption() {
 
         viewModelScope.launch {
 
             preferencesLibrary.saveDefaultDecisionOption(uiState.value.currentlySelectedKey)
+            preferencesLibrary.saveSkipDecisionType(uiState.value.dontAskAgainToggle)
 
             pressedDone(uiState.value.currentlySelectedKey)
         }
@@ -60,6 +68,7 @@ class DecisionDefaultViewModel(
         viewModelScope.launch {
 
             val savedPreferenceKey = preferencesLibrary.checkDefaultDecisionOption()
+            val dontAskAgainToggle = preferencesLibrary.shouldSkipDecisionType()
 
             val displayedKey = savedPreferenceKey.ifBlank {
                 options.keys.first()
@@ -72,6 +81,7 @@ class DecisionDefaultViewModel(
             }
 
             _uiState.value = uiState.value.copy(
+                dontAskAgainToggle = dontAskAgainToggle,
                 currentlySelectedKey = displayedKey,
                 currentlySelectedValue = displayedValue
             )

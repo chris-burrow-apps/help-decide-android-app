@@ -83,10 +83,34 @@ class DecisionDefaultViewModelTest {
         viewModel.saveUserOption()
 
         assertEquals(newSelectedKey, preferencesLibrary.defaultDecisionOption)
-
         assertTrue(doneCallbackTriggered)
-
         assertEquals(newSelectedKey, doneCallbackTriggeredWith!!)
+    }
+
+    @Test
+    fun saveDoNotAsk() {
+
+        val newSelectedKey = "testKey2"
+        val newSelectedValue = "Test Option 2"
+        val options = linkedMapOf("testKey1" to "Test Option 1", newSelectedKey to newSelectedValue)
+
+        val preferencesLibrary = MockPreferencesLibrary()
+
+        val viewModel = DecisionDefaultViewModel(
+            analyticsLibrary = MockAnalyticsLibrary(),
+            preferencesLibrary = preferencesLibrary,
+            options = options,
+            doneButtonText = "",
+            pressedDone = { }
+        )
+
+        viewModel.toggleDoNotAskCheck(true)
+
+        assertEquals(false, preferencesLibrary.shouldSkipDecisionType)
+
+        viewModel.saveUserOption()
+
+        assertEquals(true, preferencesLibrary.shouldSkipDecisionType)
     }
 
     @Test
