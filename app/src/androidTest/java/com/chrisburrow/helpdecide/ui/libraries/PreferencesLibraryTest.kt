@@ -11,7 +11,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import kotlin.math.exp
 
 @ExperimentalCoroutinesApi
 class PreferencesLibraryTest {
@@ -77,6 +76,33 @@ class PreferencesLibraryTest {
 
         assertTrue(fakeStorage.didGetStringCalledWithDefault(StorageLibraryKeys.DecisionDefault, ""))
         assertEquals(expectedKey, fakeStorage.stringValues[StorageLibraryKeys.DecisionDefault]!!)
+    }
+
+    @Test
+    fun shouldSkipDecisionTypeSaved() = runTest  {
+
+        val expectedKey = true
+
+        assertNull(fakeStorage.stringValues[StorageLibraryKeys.SkipDecisionType])
+
+        preferencesLibrary.saveSkipDecisionType(expectedKey)
+
+        assertEquals(expectedKey, fakeStorage.booleanValues[StorageLibraryKeys.SkipDecisionType]!!)
+    }
+
+    @Test
+    fun skipDecisionType() = runTest  {
+
+        val expectedKey = false
+
+        fakeStorage.booleanValues[StorageLibraryKeys.SkipDecisionType] = expectedKey
+
+        assertFalse(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.SkipDecisionType, false))
+
+        preferencesLibrary.shouldSkipDecisionType()
+
+        assertTrue(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.SkipDecisionType, false))
+        assertEquals(expectedKey, fakeStorage.booleanValues[StorageLibraryKeys.SkipDecisionType]!!)
     }
 
     @Test

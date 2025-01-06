@@ -1,13 +1,18 @@
 package com.chrisburrow.helpdecide.ui.viewmodels
 
+import com.chrisburrow.helpdecide.MainDispatcherRule
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.utils.OptionObject
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
+import org.junit.Rule
 import org.junit.Test
 
 class HomeViewModelTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun defaultState() {

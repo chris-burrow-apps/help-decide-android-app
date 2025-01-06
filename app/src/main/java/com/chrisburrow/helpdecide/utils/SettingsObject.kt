@@ -8,12 +8,14 @@ open class SettingsRow (
 class SettingsBooleanRow(
     title: String,
     description: String,
-    var enabled: Boolean = false,
-    var loading: Boolean = false,
+    val enabled: Boolean = true,
+    var switchPosition: Boolean = false,
+    val loading: Boolean = false,
     val toggled: (Boolean) -> Unit,
 ) : SettingsRow(title, description)
 
 class SettingsStringRow(
     title: String,
     description: String,
+    val clicked: () -> Unit = {},
 ) : SettingsRow(title, description)

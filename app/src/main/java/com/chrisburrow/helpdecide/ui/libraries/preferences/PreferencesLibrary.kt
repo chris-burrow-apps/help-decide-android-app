@@ -4,6 +4,20 @@ import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryKeys
 import kotlinx.coroutines.flow.first
 
+interface PreferencesLibraryInterface {
+
+    suspend fun checkPermissionsShown(): Boolean
+    suspend fun permissionsRequested()
+
+    suspend fun checkDefaultDecisionOption(): String
+    suspend fun saveDefaultDecisionOption(key: String)
+
+    suspend fun shouldSkipDecisionType() : Boolean
+    suspend fun saveSkipDecisionType(enabled: Boolean)
+
+    fun checkVersionName(): String
+}
+
 class PreferencesLibrary(
     private val storageLibrary: StorageLibraryInterface,
     private val versionName: String,
@@ -27,6 +41,16 @@ class PreferencesLibrary(
     override suspend fun saveDefaultDecisionOption(key: String) {
 
         storageLibrary.storeString(StorageLibraryKeys.DecisionDefault, key)
+    }
+
+    override suspend fun shouldSkipDecisionType(): Boolean {
+
+        return storageLibrary.getBoolean(StorageLibraryKeys.SkipDecisionType, defaultValue = false).first()
+    }
+
+    override suspend fun saveSkipDecisionType(enabled: Boolean) {
+
+        storageLibrary.storeBoolean(StorageLibraryKeys.SkipDecisionType, enabled)
     }
 
     override fun checkVersionName(): String {

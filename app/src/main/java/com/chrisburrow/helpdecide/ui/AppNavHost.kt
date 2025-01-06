@@ -5,8 +5,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -17,6 +17,7 @@ import androidx.navigation.navArgument
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
+import com.chrisburrow.helpdecide.ui.libraries.preferences.DecisionTypeLookup
 import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibraryInterface
 import com.chrisburrow.helpdecide.ui.viewmodels.AddOptionViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.AppStartupViewModel
@@ -33,6 +34,7 @@ import com.chrisburrow.helpdecide.ui.views.screens.DecideWheelScreen
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDialog
 import com.chrisburrow.helpdecide.ui.views.dialogs.GeneralDialog
+import com.chrisburrow.helpdecide.ui.views.screens.DecisionFlowScreen
 import com.chrisburrow.helpdecide.ui.views.screens.PickABubbleScreen
 import com.chrisburrow.helpdecide.ui.views.screens.SettingsScreen
 import com.chrisburrow.helpdecide.ui.views.screens.HomeScreen
@@ -47,7 +49,9 @@ enum class Screen {
     Settings,
     Onboarding,
     Home,
+    SpinTheWheel,
     PickABubbleScreen,
+    DecisionFlow,
 }
 
 sealed class NavigationScreenItem(val route: String) {
@@ -55,15 +59,17 @@ sealed class NavigationScreenItem(val route: String) {
     data object Settings : NavigationDialogItem(Screen.Settings.name)
     data object Onboarding : NavigationScreenItem(Screen.Onboarding.name)
     data object Home : NavigationScreenItem(Screen.Home.name)
+    data object DecisionFlow : NavigationScreenItem("${Screen.DecisionFlow.name}/{forceSkipDecisionTypeDialog}")
     data object PickABubbleScreen : NavigationScreenItem(Screen.PickABubbleScreen.name)
+    data object SpinTheWheel : NavigationDialogItem(Screen.SpinTheWheel.name)
 }
 
 enum class Dialog {
     AddOption,
     SpeechToText,
     DecideType,
+    SettingsDecideType,
     InstantDecision,
-    SpinTheWheel,
     DeleteAll,
     AddAnother,
     OptionChosen,
@@ -73,8 +79,8 @@ sealed class NavigationDialogItem(val route: String) {
     data object AddOption : NavigationDialogItem(Dialog.AddOption.name)
     data object SpeechToText : NavigationDialogItem(Dialog.SpeechToText.name)
     data object DecideType : NavigationDialogItem(Dialog.DecideType.name)
+    data object SettingsDecideType : NavigationDialogItem(Dialog.SettingsDecideType.name)
     data object InstantDecision : NavigationDialogItem(Dialog.InstantDecision.name)
-    data object SpinTheWheel : NavigationDialogItem(Dialog.SpinTheWheel.name)
     data object DeleteAll : NavigationDialogItem(Dialog.DeleteAll.name)
     data object AddAnother : NavigationDialogItem(Dialog.AddAnother.name)
     data object OptionChosen : NavigationDialogItem("${Dialog.OptionChosen.name}/{optionId}")
@@ -124,7 +130,27 @@ fun AppNavHost (
 
         composable(NavigationScreenItem.Home.route) {
 
-            HomeScreen(navController, homeViewModel)
+            HomeScreen(
+                model = homeViewModel,
+                decidePressed = {
+                    navController.navigate("${NavigationScreenItem.DecisionFlow}/${false}")
+                },
+                addOptionPressed = {
+                    navController.navigate(NavigationDialogItem.AddOption.route)
+                },
+                addVoicePressed = {
+                    navController.navigate(NavigationDialogItem.SpeechToText.route)
+                },
+                deleteAllPressed = {
+                    navController.navigate(NavigationDialogItem.DeleteAll.route)
+                },
+                settingsPressed = {
+                    navController.navigate(NavigationScreenItem.Settings.route)
+                },
+                addAnotherHintShown = {
+                    navController.navigate(NavigationDialogItem.AddAnother.route)
+                },
+            )
         }
 
         dialog(NavigationDialogItem.AddOption.route) {
@@ -145,10 +171,21 @@ fun AppNavHost (
 
         composable(NavigationScreenItem.Settings.route) {
 
-            SettingsScreen(viewModel = SettingsViewModel(analyticsLibrary = analyticsLibrary, preferencesLibrary = preferencesLibrary)) {
+            SettingsScreen(
+                viewmodel = SettingsViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    preferencesLibrary = preferencesLibrary,
+                    options = DecisionTypeLookup.options(LocalContext.current)
+                ),
+                decisionTypePressed = {
 
-                navController.popBackStack()
-            }
+                    navController.navigate(NavigationDialogItem.SettingsDecideType.route)
+                },
+                onBackPressed = {
+
+                    navController.popBackStack()
+                }
+            )
         }
 
         dialog(NavigationDialogItem.DeleteAll.route) {
@@ -197,50 +234,72 @@ fun AppNavHost (
             )
         }
 
-        dialog(NavigationDialogItem.DecideType.route) {
+        composable(
+            route = NavigationScreenItem.DecisionFlow.route,
+            arguments = listOf(navArgument("forceSkipDecisionTypeDialog") { type = NavType.BoolType })
+        ) { navArgument ->
 
-            val spinTheWheelKey = "spinTheWheel"
-            val instantKey = "instant"
-            val pickABubbleKey = "pickABubble"
+            val forceSkipDecisionTypeDialog = navArgument.arguments?.getBoolean("forceSkipDecisionTypeDialog") ?: false
 
-            val options: LinkedHashMap<String, String> = linkedMapOf(
-                spinTheWheelKey to stringResource(R.string.spin_the_wheel),
-                pickABubbleKey to stringResource(R.string.pick_a_bubble),
-                instantKey to stringResource(R.string.instant_decision),
+            DecisionFlowScreen(
+                preferencesLibrary = preferencesLibrary,
+                forceSkipDecisionTypeDialog = forceSkipDecisionTypeDialog,
+                showDecisionType = {
+                    navController.popBackStack()
+                    navController.navigate(NavigationDialogItem.DecideType.route)
+                },
+                showInstantDecision = {
+                    navController.popBackStack()
+                    navController.navigate(NavigationDialogItem.InstantDecision.route)
+                },
+                showPopTheBubble = {
+                    navController.popBackStack()
+                    navController.navigate(NavigationScreenItem.PickABubbleScreen.route)
+                },
+                showSpinTheWheel = {
+                    navController.popBackStack()
+                    navController.navigate(NavigationScreenItem.SpinTheWheel.route)
+                }
             )
+        }
+
+        dialog(NavigationDialogItem.DecideType.route) {
 
             DecisionDefaultDialog(
                 viewModel = DecisionDefaultViewModel(
                     analyticsLibrary = analyticsLibrary,
                     preferencesLibrary = preferencesLibrary,
-                    options = options,
-                ),
-                selectedKey = { key ->
+                    options = DecisionTypeLookup.options(LocalContext.current),
+                    doneButtonText = stringResource(R.string.go),
+                    pressedDone = {
 
-                    navController.popBackStack()
-
-                    when (key) {
-
-                        spinTheWheelKey -> {
-
-                            navController.navigate(NavigationDialogItem.SpinTheWheel.route)
-                        }
-
-                        instantKey -> {
-
-                            navController.navigate(NavigationDialogItem.InstantDecision.route)
-                        }
-
-                        pickABubbleKey -> {
-
-                            navController.navigate(NavigationScreenItem.PickABubbleScreen.route)
-                        }
+                        navController.popBackStack()
+//                        navController.navigate(NavigationScreenItem.DecisionFlow.route)
+                        navController.navigate("${NavigationScreenItem.DecisionFlow}/${true}")
                     }
-                }
+                ),
             )
         }
 
-        composable(NavigationDialogItem.SpinTheWheel.route) {
+        dialog(NavigationDialogItem.SettingsDecideType.route) {
+
+            DecisionDefaultDialog(
+                viewModel = DecisionDefaultViewModel(
+                    analyticsLibrary = analyticsLibrary,
+                    preferencesLibrary = preferencesLibrary,
+                    options = DecisionTypeLookup.options(LocalContext.current),
+                    doneButtonText = stringResource(R.string.save),
+                    pressedDone = { _ ->
+
+                        // Force refresh by navigating to Home & back to Settings
+                        navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
+                        navController.navigate(NavigationScreenItem.Settings.route)
+                    }
+                ),
+            )
+        }
+
+        composable(NavigationScreenItem.SpinTheWheel.route) {
 
             val options = homeViewModel.view.collectAsState()
 

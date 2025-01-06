@@ -271,7 +271,7 @@ class HomeJourneyTest {
 
                 pressOptions()
                 pressQuickOption()
-                pressGo()
+                pressDone()
             }
 
             decisionDialog(rule) {

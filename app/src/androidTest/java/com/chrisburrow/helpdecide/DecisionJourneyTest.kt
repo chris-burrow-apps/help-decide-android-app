@@ -4,8 +4,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chrisburrow.helpdecide.ui.HelpDecideApp
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.DecisionTypeLookup
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.robots.addDialog
+import com.chrisburrow.helpdecide.ui.robots.decisionChosenDialog
 import com.chrisburrow.helpdecide.ui.robots.decisionDefault
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.robots.home
@@ -17,21 +19,25 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class SpinTheWheelJourneyTest {
+class DecisionJourneyTest {
 
     @get:Rule
     val rule = createComposeRule()
 
-    @Before
-    fun setup() {
+    private val analyticsLibrary = MockAnalyticsLibrary()
+
+    fun setup(doNotAskToggle : Boolean) {
 
         rule.setContent {
 
             HelpDecideTheme {
 
                 HelpDecideApp(
-                    analyticsLibrary = MockAnalyticsLibrary(),
-                    preferencesLibrary = MockPreferencesLibrary(),
+                    analyticsLibrary = analyticsLibrary,
+                    preferencesLibrary = MockPreferencesLibrary(
+                        defaultDecisionOption = DecisionTypeLookup.SPIN_THE_WHEEL_KEY,
+                        shouldSkipDecisionType = doNotAskToggle
+                    ),
                     voiceCompatible = false
                 )
             }
@@ -39,9 +45,9 @@ class SpinTheWheelJourneyTest {
     }
 
     @Test
-    fun decisionWheelShown() = runTest {
+    fun decisionTypeDialogShown() = runTest {
 
-        val optionText = "Option 1"
+        setup(doNotAskToggle = false)
 
         home(rule) {
 
@@ -49,45 +55,35 @@ class SpinTheWheelJourneyTest {
 
             addDialog(rule) {
 
-                typeText(optionText)
+                typeText("Option 1")
                 pressAdd()
+
+                dialogHidden()
             }
 
             pressAdd()
 
             addDialog(rule) {
 
-                typeText(optionText)
+                typeText("Option 2")
                 pressAdd()
-            }
 
-            checkNumberOfOptions(2)
+                dialogHidden()
+            }
 
             pressDecide()
 
             decisionDefault(rule) {
 
-                pressOptions()
-                pressWheelOption()
-                pressDone()
+
             }
-        }
-
-        decisionWheel(rule) {
-
-            pressDone()
-        }
-
-        home(rule) {
-
-            checkNumberOfOptions(2)
         }
     }
 
     @Test
-    fun pressRemove() = runTest {
+    fun decisionTypeDialogNotShown() = runTest {
 
-        val optionText = "Option 1"
+        setup(doNotAskToggle = true)
 
         home(rule) {
 
@@ -95,38 +91,27 @@ class SpinTheWheelJourneyTest {
 
             addDialog(rule) {
 
-                typeText(optionText)
+                typeText("Option 1")
                 pressAdd()
+
+                dialogHidden()
             }
 
             pressAdd()
 
             addDialog(rule) {
 
-                typeText(optionText)
+                typeText("Option 2")
                 pressAdd()
-            }
 
-            checkNumberOfOptions(2)
+                dialogHidden()
+            }
 
             pressDecide()
-
-            decisionDefault(rule) {
-
-                pressOptions()
-                pressWheelOption()
-                pressDone()
-            }
         }
 
         decisionWheel(rule) {
 
-            pressRemove()
-        }
-
-        home(rule) {
-
-            checkNumberOfOptions(1)
         }
     }
 }
