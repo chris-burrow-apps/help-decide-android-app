@@ -2,7 +2,6 @@ package com.chrisburrow.helpdecide.ui.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
-import com.chrisburrow.helpdecide.ui.libraries.preferences.DecisionTypeLookup
 import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibraryInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,15 +16,14 @@ data class ScreenUiState(
     val alwaysAskEnabled: Boolean = false,
     val alwaysAskLoading: Boolean = true,
     val decisionTypeLoading: Boolean = true,
-    val decisionType: String = "",
+    val decisionTypeString: String = "",
     val versionName: String = "",
-) {
-}
+)
 
 class SettingsViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface,
     val preferencesLibrary: PreferencesLibraryInterface,
-    val decisionTypeLookup: DecisionTypeLookup,
+    val options: LinkedHashMap<String, String>,
 ): AnalyticsViewModel(analyticsLibrary) {
 
     private val _viewState = MutableStateFlow(
@@ -34,21 +32,23 @@ class SettingsViewModel(
 
     val view: StateFlow<ScreenUiState> = _viewState.asStateFlow()
 
-    fun refreshAnalytics() {
+    fun refreshPermissions() {
 
         viewModelScope.launch {
 
             val defaultDecisionTypeKey = preferencesLibrary.checkDefaultDecisionOption()
+            val decisionType = options[defaultDecisionTypeKey] ?: options.values.first()
 
             _viewState.value = _viewState.value.copy(
                 crashalyticsEnabled = analyticsLibrary.getCrashalyticsState(),
                 googleAnalyticsEnabled = analyticsLibrary.getAnalyticsState(),
-                alwaysAskEnabled = preferencesLibrary.alwaysAskDecisionDialog(),
-                decisionType = decisionTypeLookup.getDecisionTypeTitle(defaultDecisionTypeKey),
+                alwaysAskEnabled = preferencesLibrary.shouldSkipDecisionType(),
+                decisionTypeString = decisionType,
 
                 crashalyticsLoading = false,
                 googleAnalyticsLoading = false,
                 alwaysAskLoading = false,
+                decisionTypeLoading = false,
 
                 versionName = preferencesLibrary.checkVersionName()
             )
@@ -81,7 +81,7 @@ class SettingsViewModel(
 
             _viewState.value = _viewState.value.copy(alwaysAskEnabled = toggled)
 
-            preferencesLibrary.alwaysAskDecisionOption(toggled)
+            preferencesLibrary.saveSkipDecisionType(toggled)
         }
     }
 }

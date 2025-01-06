@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.views.dialogs
+package com.chrisburrow.helpdecide.ui.views.screens
 
 import android.os.SystemClock
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -9,7 +9,6 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.pickABubble
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.PickABubbleViewModel
-import com.chrisburrow.helpdecide.ui.views.screens.PickABubbleScreen
 import com.chrisburrow.helpdecide.utils.OptionObject
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue

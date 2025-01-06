@@ -1,4 +1,4 @@
-package com.chrisburrow.helpdecide.ui.views.dialogs
+package com.chrisburrow.helpdecide.ui.views.screens
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -8,7 +8,6 @@ import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.robots.decisionWheel
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
 import com.chrisburrow.helpdecide.ui.viewmodels.DecideWheelViewModel
-import com.chrisburrow.helpdecide.ui.views.screens.DecideWheelScreen
 import com.chrisburrow.helpdecide.utils.OptionObject
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue

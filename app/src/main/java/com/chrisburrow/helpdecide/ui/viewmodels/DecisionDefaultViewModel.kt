@@ -2,6 +2,7 @@ package com.chrisburrow.helpdecide.ui.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsLibraryInterface
+import com.chrisburrow.helpdecide.ui.libraries.preferences.DecisionTypeLookup
 import com.chrisburrow.helpdecide.ui.libraries.preferences.PreferencesLibraryInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,8 +19,8 @@ data class DecisionDefaultState(
 class DecisionDefaultViewModel(
     val analyticsLibrary: AnalyticsLibraryInterface,
     val preferencesLibrary: PreferencesLibraryInterface,
+    val options: LinkedHashMap<String, String>,
     doneButtonText: String,
-    options: LinkedHashMap<String, String>,
     val pressedDone: (String) -> Unit,
 ): AnalyticsViewModel(analyticsLibrary) {
 
@@ -38,7 +39,7 @@ class DecisionDefaultViewModel(
 
         _uiState.value = uiState.value.copy(
             currentlySelectedKey = selectedKey,
-            currentlySelectedValue = _uiState.value.options[selectedKey]!!
+            currentlySelectedValue = options.get(selectedKey) ?: options.values.first()
         )
     }
 

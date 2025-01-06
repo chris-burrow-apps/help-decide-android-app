@@ -3,14 +3,14 @@ package com.chrisburrow.helpdecide.ui.libraries.preferences
 class MockPreferencesLibrary(
     var onboardingShown: Boolean = true,
     var defaultDecisionOption: String = "",
-    var alwaysAskOption: Boolean = true,
+    var shouldSkipDecisionType: Boolean = false,
     private var versionCode: String = ""
 ) : PreferencesLibraryInterface {
 
     var checkDefaultDecisionOptionCalled: Boolean = false
     var saveDefaultDecisionOptionCalledWithKey: String? = null
-    var alwaysAskOptionCalled: Boolean = false
-    var alwaysAskOptionCalledWith: Boolean? = null
+    var shouldSkipDecisionTypeCalled: Boolean = false
+    var shouldSkipDecisionTypeCalledWith: Boolean? = null
 
     override suspend fun checkPermissionsShown(): Boolean {
 
@@ -36,18 +36,18 @@ class MockPreferencesLibrary(
         defaultDecisionOption = key
     }
 
-    override suspend fun alwaysAskDecisionDialog(): Boolean {
+    override suspend fun shouldSkipDecisionType(): Boolean {
 
-        alwaysAskOptionCalled = true
+        shouldSkipDecisionTypeCalled = true
 
-        return alwaysAskOption
+        return shouldSkipDecisionType
     }
 
-    override suspend fun alwaysAskDecisionOption(enabled: Boolean) {
+    override suspend fun saveSkipDecisionType(enabled: Boolean) {
 
-        alwaysAskOptionCalledWith = enabled
+        shouldSkipDecisionTypeCalledWith = enabled
 
-        alwaysAskOption = enabled
+        shouldSkipDecisionType = enabled
     }
 
     override fun checkVersionName(): String {

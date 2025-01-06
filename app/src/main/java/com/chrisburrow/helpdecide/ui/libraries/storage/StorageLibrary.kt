@@ -16,7 +16,7 @@ object StorageLibraryKeys {
     val AnalyticsEnabled = "analytics_enabled"
     val PermissionsShown = "settings_shown"
     val DecisionDefault = "decision_default"
-    val AlwaysAskEnabled = "always_ask_dialog"
+    val SkipDecisionType = "always_ask_dialog"
 }
 
 interface StorageLibraryInterface {

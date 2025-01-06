@@ -131,8 +131,8 @@ fun SettingsScreen(
                         viewModel.toggleCrashalytics(toggled)
                     },
                     SettingsBooleanRow(
-                        title = stringResource(R.string.always_ask_decision),
-                        description = stringResource(R.string.always_ask_decision_desc),
+                        title = stringResource(R.string.skip_decision_type),
+                        description = stringResource(R.string.skip_decision_type_desc),
                         switchPosition = view.alwaysAskEnabled,
                         loading = view.alwaysAskLoading
                     ) { toggled ->
@@ -141,7 +141,7 @@ fun SettingsScreen(
                     },
                     SettingsStringRow(
                         title = stringResource(R.string.decision_type),
-                        description = view.decisionType,
+                        description = view.decisionTypeString,
                     ) {
 
                         decisionTypePressed()
@@ -158,7 +158,7 @@ fun SettingsScreen(
 
             viewModel.logScreenView(AnalyticsScreens.SETTINGS)
 
-            viewModel.refreshAnalytics()
+            viewModel.refreshPermissions()
         }
     }
 }
@@ -173,7 +173,7 @@ fun SettingsDialogPreview() {
             SettingsViewModel(
                 analyticsLibrary = MockAnalyticsLibrary(),
                 preferencesLibrary = MockPreferencesLibrary(),
-                decisionTypeLookup = DecisionTypeLookup(LocalContext.current)
+                options = DecisionTypeLookup.options(LocalContext.current)
             ),
             decisionTypePressed = {},
             onBackPressed = {},

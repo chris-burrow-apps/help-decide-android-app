@@ -12,8 +12,8 @@ interface PreferencesLibraryInterface {
     suspend fun checkDefaultDecisionOption(): String
     suspend fun saveDefaultDecisionOption(key: String)
 
-    suspend fun alwaysAskDecisionDialog() : Boolean
-    suspend fun alwaysAskDecisionOption(enabled: Boolean)
+    suspend fun shouldSkipDecisionType() : Boolean
+    suspend fun saveSkipDecisionType(enabled: Boolean)
 
     fun checkVersionName(): String
 }
@@ -43,14 +43,14 @@ class PreferencesLibrary(
         storageLibrary.storeString(StorageLibraryKeys.DecisionDefault, key)
     }
 
-    override suspend fun alwaysAskDecisionDialog(): Boolean {
+    override suspend fun shouldSkipDecisionType(): Boolean {
 
-        return storageLibrary.getBoolean(StorageLibraryKeys.AlwaysAskEnabled, defaultValue = false).first()
+        return storageLibrary.getBoolean(StorageLibraryKeys.SkipDecisionType, defaultValue = false).first()
     }
 
-    override suspend fun alwaysAskDecisionOption(enabled: Boolean) {
+    override suspend fun saveSkipDecisionType(enabled: Boolean) {
 
-        storageLibrary.storeBoolean(StorageLibraryKeys.AlwaysAskEnabled, enabled)
+        storageLibrary.storeBoolean(StorageLibraryKeys.SkipDecisionType, enabled)
     }
 
     override fun checkVersionName(): String {

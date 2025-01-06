@@ -11,7 +11,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import kotlin.math.exp
 
 @ExperimentalCoroutinesApi
 class PreferencesLibraryTest {
@@ -80,30 +79,30 @@ class PreferencesLibraryTest {
     }
 
     @Test
-    fun alwaysAskSaved() = runTest  {
+    fun shouldSkipDecisionTypeSaved() = runTest  {
 
         val expectedKey = true
 
-        assertNull(fakeStorage.stringValues[StorageLibraryKeys.AlwaysAskEnabled])
+        assertNull(fakeStorage.stringValues[StorageLibraryKeys.SkipDecisionType])
 
-        preferencesLibrary.alwaysAskDecisionOption(expectedKey)
+        preferencesLibrary.saveSkipDecisionType(expectedKey)
 
-        assertEquals(expectedKey, fakeStorage.booleanValues[StorageLibraryKeys.AlwaysAskEnabled]!!)
+        assertEquals(expectedKey, fakeStorage.booleanValues[StorageLibraryKeys.SkipDecisionType]!!)
     }
 
     @Test
-    fun alwaysAskRequested() = runTest  {
+    fun skipDecisionType() = runTest  {
 
         val expectedKey = false
 
-        fakeStorage.booleanValues[StorageLibraryKeys.AlwaysAskEnabled] = expectedKey
+        fakeStorage.booleanValues[StorageLibraryKeys.SkipDecisionType] = expectedKey
 
-        assertFalse(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.AlwaysAskEnabled, true))
+        assertFalse(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.SkipDecisionType, false))
 
-        preferencesLibrary.alwaysAskDecisionDialog()
+        preferencesLibrary.shouldSkipDecisionType()
 
-        assertTrue(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.AlwaysAskEnabled, true))
-        assertEquals(expectedKey, fakeStorage.booleanValues[StorageLibraryKeys.AlwaysAskEnabled]!!)
+        assertTrue(fakeStorage.didGetBooleanCalledWithDefault(StorageLibraryKeys.SkipDecisionType, false))
+        assertEquals(expectedKey, fakeStorage.booleanValues[StorageLibraryKeys.SkipDecisionType]!!)
     }
 
     @Test

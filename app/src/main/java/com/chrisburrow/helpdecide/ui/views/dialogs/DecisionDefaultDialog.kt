@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +38,7 @@ import com.chrisburrow.helpdecide.ui.ThemePreviews
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
+import com.chrisburrow.helpdecide.ui.libraries.preferences.DecisionTypeLookup
 import com.chrisburrow.helpdecide.ui.libraries.preferences.MockPreferencesLibrary
 import com.chrisburrow.helpdecide.ui.viewmodels.DecisionDefaultViewModel
 
@@ -94,10 +96,9 @@ fun DecisionDefaultDialog(
                         }
                     ) {
                         TextField(
-                            modifier = Modifier
-                                .menuAnchor(),
-                            readOnly = true,
                             value = uiState.currentlySelectedValue,
+                            modifier = Modifier.menuAnchor(),
+                            readOnly = true,
                             onValueChange = { },
                             label = { Text(stringResource(R.string.how_do_you_want_to_decide)) },
                             trailingIcon = {
@@ -122,7 +123,7 @@ fun DecisionDefaultDialog(
                                     modifier = Modifier.testTag(DecisionDefaultDialogTags.OPTION_ROW_TAG + position),
                                     text = {
                                         Text(
-                                            text = options.get(key)!!
+                                            text = options[key]!!
                                         )
                                     },
                                     onClick = {
@@ -171,7 +172,7 @@ fun DecisionDefaultBottomSheetPreview() {
         viewModel = DecisionDefaultViewModel(
             analyticsLibrary = MockAnalyticsLibrary(),
             preferencesLibrary = MockPreferencesLibrary(),
-            options = linkedMapOf("optionOneKey" to "Option 1"),
+            options = DecisionTypeLookup.options(LocalContext.current),
             doneButtonText = "Go",
             pressedDone = { }
         )

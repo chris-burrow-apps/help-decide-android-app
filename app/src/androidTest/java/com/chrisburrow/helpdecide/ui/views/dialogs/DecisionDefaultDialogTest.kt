@@ -154,7 +154,7 @@ class DecisionDefaultDialogTest {
 
         decisionDefault(rule) {
 
-            assertTrue(preferencesLibrary.checkDefaultDecisionOptionCalled!!)
+            assertTrue(preferencesLibrary.checkDefaultDecisionOptionCalled)
             assertEquals(secondOptionKey, preferencesLibrary.defaultDecisionOption)
         }
     }

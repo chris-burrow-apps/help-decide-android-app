@@ -36,7 +36,7 @@ class SettingsJourneyTest {
     )
 
     private val preferencesLibrary = MockPreferencesLibrary(
-        alwaysAskOption = false,
+        shouldSkipDecisionType = false,
         versionCode = expectedVersionName
     )
 
@@ -85,7 +85,7 @@ class SettingsJourneyTest {
 
             pressToggle(2)
 
-            assertTrue(preferencesLibrary.alwaysAskOptionCalledWith!!)
+            assertTrue(preferencesLibrary.shouldSkipDecisionTypeCalledWith!!)
         }
     }
 
@@ -100,8 +100,6 @@ class SettingsJourneyTest {
         }
 
         settings(rule) {
-
-
 
             pressOption(3)
 
@@ -136,8 +134,8 @@ class SettingsJourneyTest {
             )
             checkText(
                 position = 2,
-                title = context.getString(R.string.always_ask_decision),
-                desc = context.getString(R.string.always_ask_decision_desc)
+                title = context.getString(R.string.skip_decision_type),
+                desc = context.getString(R.string.skip_decision_type_desc)
             )
             checkText(
                 position = 3,
