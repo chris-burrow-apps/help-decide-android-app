@@ -7,6 +7,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -29,6 +30,7 @@ import com.chrisburrow.helpdecide.ui.viewmodels.GeneralDialogViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.HomeViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.PickABubbleViewModel
 import com.chrisburrow.helpdecide.ui.viewmodels.SettingsViewModel
+import com.chrisburrow.helpdecide.ui.viewmodels.viewModelFactory
 import com.chrisburrow.helpdecide.ui.views.dialogs.AddOptionDialog
 import com.chrisburrow.helpdecide.ui.views.screens.DecideWheelScreen
 import com.chrisburrow.helpdecide.ui.views.dialogs.DecisionDefaultDialog
@@ -110,7 +112,14 @@ fun AppNavHost (
     {
         composable(NavigationScreenItem.Loading.route) {
 
-            LoadingScreen(AppStartupViewModel(navController, preferencesLibrary))
+            val viewModel = viewModel<AppStartupViewModel> (
+
+                factory = viewModelFactory {
+                    AppStartupViewModel(navController, preferencesLibrary)
+                }
+            )
+
+            LoadingScreen(viewModel)
         }
 
         composable(NavigationScreenItem.Onboarding.route) {
@@ -155,8 +164,15 @@ fun AppNavHost (
 
         dialog(NavigationDialogItem.AddOption.route) {
 
+            val viewModel = viewModel<AddOptionViewModel> (
+
+                factory = viewModelFactory {
+                    AddOptionViewModel(analyticsLibrary)
+                }
+            )
+
             AddOptionDialog(
-                viewModel = AddOptionViewModel(analyticsLibrary),
+                viewModel = viewModel,
                 optionSaved = {
 
                     homeViewModel.addOption(OptionObject(text = it))
@@ -171,12 +187,21 @@ fun AppNavHost (
 
         composable(NavigationScreenItem.Settings.route) {
 
+            val context = LocalContext.current
+
+            val viewModel = viewModel<SettingsViewModel> (
+
+                factory = viewModelFactory {
+                    SettingsViewModel(
+                        analyticsLibrary = analyticsLibrary,
+                        preferencesLibrary = preferencesLibrary,
+                        options = DecisionTypeLookup.options(context)
+                    )
+                }
+            )
+
             SettingsScreen(
-                viewmodel = SettingsViewModel(
-                    analyticsLibrary = analyticsLibrary,
-                    preferencesLibrary = preferencesLibrary,
-                    options = DecisionTypeLookup.options(LocalContext.current)
-                ),
+                viewmodel = viewModel,
                 decisionTypePressed = {
 
                     navController.navigate(NavigationDialogItem.SettingsDecideType.route)
@@ -190,47 +215,65 @@ fun AppNavHost (
 
         dialog(NavigationDialogItem.DeleteAll.route) {
 
+            val context = LocalContext.current
+
+            val viewModel = viewModel<GeneralDialogViewModel> (
+
+                factory = viewModelFactory {
+                    GeneralDialogViewModel(
+                        configuration = GeneralDialogConfig(
+                            screenName = AnalyticsScreens.REMOVE_ALL,
+                            description = context.getString(R.string.confirm_delete_desc),
+                            confirmText = context.getString( R.string.delete_all_button),
+                            confirmPressed = {
+                                homeViewModel.clearOptions()
+                                navController.popBackStack()
+                            },
+                            cancelText = context.getString( R.string.cancel),
+                            cancelPressed = {
+                                navController.popBackStack()
+                            },
+                        ),
+                        analyticsLibrary = analyticsLibrary,
+                    )
+                }
+            )
+
             GeneralDialog(
-                viewModel = GeneralDialogViewModel(
-                    configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.REMOVE_ALL,
-                        description = stringResource(id = R.string.confirm_delete_desc),
-                        confirmText = stringResource(id = R.string.delete_all_button),
-                        confirmPressed = {
-                            homeViewModel.clearOptions()
-                            navController.popBackStack()
-                        },
-                        cancelText = stringResource(id = R.string.cancel),
-                        cancelPressed = {
-                            navController.popBackStack()
-                        },
-                    ),
-                    analyticsLibrary = analyticsLibrary,
-                )
+                viewModel = viewModel
             )
         }
 
         dialog(NavigationDialogItem.AddAnother.route) {
 
+            val context = LocalContext.current
+
+            val viewModel = viewModel<GeneralDialogViewModel> (
+
+                factory = viewModelFactory {
+                    GeneralDialogViewModel(
+                        configuration = GeneralDialogConfig(
+                            screenName = AnalyticsScreens.ADD_ANOTHER,
+                            description = context.getString(R.string.add_another_desc),
+                            confirmText = context.getString(R.string.continue_option),
+                            confirmPressed = {
+
+                                navController.popBackStack()
+                                navController.navigate(NavigationDialogItem.InstantDecision.route)
+                            },
+                            cancelText = context.getString(R.string.cancel),
+                            cancelPressed = {
+
+                                navController.popBackStack()
+                            },
+                        ),
+                        analyticsLibrary = analyticsLibrary,
+                    )
+                }
+            )
+
             GeneralDialog(
-                viewModel = GeneralDialogViewModel(
-                    configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.ADD_ANOTHER,
-                        description = stringResource(id = R.string.add_another_desc),
-                        confirmText = stringResource(id = R.string.continue_option),
-                        confirmPressed = {
-
-                            navController.popBackStack()
-                            navController.navigate(NavigationDialogItem.InstantDecision.route)
-                        },
-                        cancelText = stringResource(id = R.string.cancel),
-                        cancelPressed = {
-
-                            navController.popBackStack()
-                        },
-                    ),
-                    analyticsLibrary = analyticsLibrary,
-                )
+                viewModel = viewModel
             )
         }
 
@@ -265,37 +308,54 @@ fun AppNavHost (
 
         dialog(NavigationDialogItem.DecideType.route) {
 
-            DecisionDefaultDialog(
-                viewModel = DecisionDefaultViewModel(
-                    analyticsLibrary = analyticsLibrary,
-                    preferencesLibrary = preferencesLibrary,
-                    options = DecisionTypeLookup.options(LocalContext.current),
-                    doneButtonText = stringResource(R.string.go),
-                    pressedDone = {
+            val context = LocalContext.current
 
-                        navController.popBackStack()
-//                        navController.navigate(NavigationScreenItem.DecisionFlow.route)
-                        navController.navigate("${NavigationScreenItem.DecisionFlow}/${true}")
-                    }
-                ),
+            val viewModel = viewModel<DecisionDefaultViewModel> (
+
+                factory = viewModelFactory {
+                    DecisionDefaultViewModel(
+                        analyticsLibrary = analyticsLibrary,
+                        preferencesLibrary = preferencesLibrary,
+                        options = DecisionTypeLookup.options(context),
+                        doneButtonText = context.getString(R.string.go),
+                        pressedDone = {
+
+                            navController.popBackStack()
+                            navController.navigate("${NavigationScreenItem.DecisionFlow}/${true}")
+                        }
+                    )
+                }
+            )
+
+            DecisionDefaultDialog(
+                viewModel = viewModel,
             )
         }
 
         dialog(NavigationDialogItem.SettingsDecideType.route) {
 
-            DecisionDefaultDialog(
-                viewModel = DecisionDefaultViewModel(
-                    analyticsLibrary = analyticsLibrary,
-                    preferencesLibrary = preferencesLibrary,
-                    options = DecisionTypeLookup.options(LocalContext.current),
-                    doneButtonText = stringResource(R.string.save),
-                    pressedDone = { _ ->
+            val context = LocalContext.current
 
-                        // Force refresh by navigating to Home & back to Settings
-                        navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
-                        navController.navigate(NavigationScreenItem.Settings.route)
-                    }
-                ),
+            val viewModel = viewModel<DecisionDefaultViewModel> (
+
+                factory = viewModelFactory {
+                    DecisionDefaultViewModel(
+                        analyticsLibrary = analyticsLibrary,
+                        preferencesLibrary = preferencesLibrary,
+                        options = DecisionTypeLookup.options(context),
+                        doneButtonText = context.getString(R.string.save),
+                        pressedDone = { _ ->
+
+                            // Force refresh by navigating to Home & back to Settings
+                            navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
+                            navController.navigate(NavigationScreenItem.Settings.route)
+                        }
+                    )
+                }
+            )
+
+            DecisionDefaultDialog(
+                viewModel = viewModel,
             )
         }
 
@@ -303,11 +363,18 @@ fun AppNavHost (
 
             val options = homeViewModel.view.collectAsState()
 
+            val viewModel = viewModel<DecideWheelViewModel> (
+
+                factory = viewModelFactory {
+                    DecideWheelViewModel(
+                        analyticsLibrary = analyticsLibrary,
+                        options = options.value.options
+                    )
+                }
+            )
+
             DecideWheelScreen(
-                DecideWheelViewModel(
-                    analyticsLibrary = analyticsLibrary,
-                    options = options.value.options
-                ),
+                viewModel = viewModel,
                 removePressed = { optionId ->
 
                     homeViewModel.deleteOption(optionId)
@@ -328,11 +395,18 @@ fun AppNavHost (
 
             val options = homeViewModel.view.collectAsState()
 
+            val viewModel = viewModel<DecisionViewModel> (
+
+                factory = viewModelFactory {
+                    DecisionViewModel(
+                        analyticsLibrary = analyticsLibrary,
+                        options = options.value.options
+                    )
+                }
+            )
+
             DecisionDialog(
-                DecisionViewModel(
-                    analyticsLibrary = analyticsLibrary,
-                    options = options.value.options
-                ),
+                viewModel = viewModel,
                 removePressed = { option ->
 
                     homeViewModel.deleteOption(option)
@@ -362,11 +436,18 @@ fun AppNavHost (
 
             val state = homeViewModel.view.collectAsState()
 
+            val viewModel = viewModel<PickABubbleViewModel> (
+
+                factory = viewModelFactory {
+                    PickABubbleViewModel(
+                        analyticsLibrary = analyticsLibrary,
+                        options = state.value.options
+                    )
+                }
+            )
+
             PickABubbleScreen(
-                model = PickABubbleViewModel(
-                    analyticsLibrary = analyticsLibrary,
-                    options = state.value.options
-                ),
+                model = viewModel,
                 optionPressed = {
 
                     navController.navigate("${NavigationDialogItem.OptionChosen}/$it")
@@ -386,26 +467,35 @@ fun AppNavHost (
             val optionId = navArguments.arguments?.getString("optionId")!!
             val state = homeViewModel.view.collectAsState()
             val optionText = state.value.options.first { it.id == optionId }.text
+            val context = LocalContext.current
+
+            val viewModel = viewModel<GeneralDialogViewModel> (
+
+                factory = viewModelFactory {
+
+                    GeneralDialogViewModel(
+                        configuration = GeneralDialogConfig(
+                            screenName = AnalyticsScreens.DECISION_CHOSEN,
+                            description = optionText,
+                            confirmText = context.getString(R.string.done),
+                            confirmPressed = {
+
+                                navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
+                            },
+                            cancelText = context.getString(R.string.remove_option),
+                            cancelPressed = {
+
+                                homeViewModel.deleteOption(optionId)
+                                navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
+                            },
+                        ),
+                        analyticsLibrary = analyticsLibrary,
+                    )
+                }
+            )
 
             GeneralDialog(
-                viewModel = GeneralDialogViewModel(
-                    configuration = GeneralDialogConfig(
-                        screenName = AnalyticsScreens.DECISION_CHOSEN,
-                        description = optionText,
-                        confirmText = stringResource(id = R.string.done),
-                        confirmPressed = {
-
-                            navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
-                        },
-                        cancelText = stringResource(id = R.string.remove_option),
-                        cancelPressed = {
-
-                            homeViewModel.deleteOption(optionId)
-                            navController.navigateAndPopUpTo(NavigationScreenItem.Home.route)
-                        },
-                    ),
-                    analyticsLibrary = analyticsLibrary,
-                )
+                viewModel = viewModel
             )
         }
     }
