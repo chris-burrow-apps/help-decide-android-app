@@ -37,9 +37,11 @@ import androidx.compose.ui.unit.sp
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.PreviewOptions
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.backgroundGradientBrush
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
 import com.chrisburrow.helpdecide.ui.theme.HelpDecideTheme
+import com.chrisburrow.helpdecide.ui.viewmodels.Bubble
 import com.chrisburrow.helpdecide.ui.viewmodels.PickABubbleViewModel
 import kotlin.random.Random
 
@@ -119,30 +121,13 @@ fun PickABubbleScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .testTag(PickABubbleTags.BUBBLE_BUTTON_BASE_TAG)
-                    .background(MaterialTheme.colorScheme.surface)
+                    .background(backgroundGradientBrush())
             ) {
 
-                view.value.circles.forEach { circle ->
+                view.value.bubbles.forEach { bubble ->
 
-                    Button(
-                        onClick = {
-                            model.chooseOption(circle.position)
-                            optionPressed(model.state.value.optionPressed!!.id)
-                        },
-                        modifier = Modifier
-                            .testTag(PickABubbleTags.BUBBLE_BUTTON_CLICK_TAG + circle.position)
-                            .size((circle.radius * 2).dp)
-                            .offset((circle.x - circle.radius).dp, (circle.y - circle.radius).dp)
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(Color.White, Color.DarkGray)
-                                ),
-                                shape = CircleShape
-                            ),
-                        colors = ButtonDefaults.buttonColors(containerColor = pickARandomColour()),
-                    ) {
-                        Text("?")
-                    }
+                    val color = pickARandomColour()
+                    BubbleButton(model, bubble, color, optionPressed)
                 }
             }
         }
@@ -156,6 +141,34 @@ fun PickABubbleScreen(
             screenWidth = screenWidth,
             screenHeight = screenHeight
         )
+    }
+}
+
+@Composable
+private fun BubbleButton(
+    model: PickABubbleViewModel,
+    bubble: Bubble,
+    color: Color,
+    optionPressed: (String) -> Unit
+) {
+    Button(
+        onClick = {
+            model.chooseOption(bubble.position)
+            optionPressed(model.state.value.optionPressed!!.id)
+        },
+        modifier = Modifier
+            .testTag(PickABubbleTags.BUBBLE_BUTTON_CLICK_TAG + bubble.position)
+            .size((bubble.radius * 2).dp)
+            .offset((bubble.x - bubble.radius).dp, (bubble.y - bubble.radius).dp)
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(Color.White, Color.DarkGray)
+                ),
+                shape = CircleShape
+            ),
+        colors = ButtonDefaults.buttonColors(containerColor = color),
+    ) {
+        Text("?")
     }
 }
 

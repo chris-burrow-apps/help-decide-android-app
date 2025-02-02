@@ -1,6 +1,7 @@
 package com.chrisburrow.helpdecide.ui.views.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -39,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chrisburrow.helpdecide.R
 import com.chrisburrow.helpdecide.ui.PreviewOptions
 import com.chrisburrow.helpdecide.ui.ThemePreviews
+import com.chrisburrow.helpdecide.ui.backgroundGradientBrush
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsActions
 import com.chrisburrow.helpdecide.ui.libraries.analytics.AnalyticsScreens
 import com.chrisburrow.helpdecide.ui.libraries.analytics.MockAnalyticsLibrary
@@ -109,6 +112,7 @@ fun DecideWheelScreen(
             .padding(top = innerPadding.calculateTopPadding())
             .fillMaxSize()
             .testTag(DecideWheelTags.BASE_VIEW_TAG)
+            .background(backgroundGradientBrush())
         ) {
 
             Column (modifier = Modifier

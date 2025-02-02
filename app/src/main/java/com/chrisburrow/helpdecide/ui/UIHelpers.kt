@@ -1,6 +1,9 @@
 package com.chrisburrow.helpdecide.ui
 
 import android.content.res.Configuration
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import com.chrisburrow.helpdecide.utils.OptionObject
 
@@ -26,3 +29,6 @@ fun PreviewOptions() : List<OptionObject> {
 
     return options
 }
+
+@Composable
+fun backgroundGradientBrush() = Brush.verticalGradient(colors = listOf(MaterialTheme.colorScheme.background,MaterialTheme.colorScheme.surfaceVariant))
