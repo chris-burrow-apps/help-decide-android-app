@@ -103,7 +103,6 @@ fun SettingsScreen(
             modifier = Modifier
                 .testTag(SettingsScreenTags.BASE_VIEW_TAG)
                 .padding(top = innerPadding.calculateTopPadding()),
-            shape = RoundedCornerShape(8.dp),
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),

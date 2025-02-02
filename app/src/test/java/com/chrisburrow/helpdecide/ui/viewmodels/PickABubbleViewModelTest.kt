@@ -26,7 +26,7 @@ class PickABubbleViewModelTest {
 
         viewModel.generateBubbles(Int.MAX_VALUE, Int.MAX_VALUE)
 
-        assertEquals(2, viewModel.state.value.circles.size)
+        assertEquals(2, viewModel.state.value.bubbles.size)
     }
 
     @Test
