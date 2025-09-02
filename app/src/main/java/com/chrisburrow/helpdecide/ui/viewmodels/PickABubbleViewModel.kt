@@ -48,7 +48,7 @@ class PickABubbleViewModel(
 
             var retryLoop = 0
 
-            while (retryLoop <= 3) {
+            while (retryLoop <= 10) {
 
                 val radius = Random.nextInt(screenWidth / 8, screenWidth / 4).toFloat()
                 val x = Random.nextInt(radius.toInt(), (screenWidth - radius).toInt()).toFloat()

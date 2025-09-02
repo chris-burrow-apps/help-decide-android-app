@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryInterface
 import com.chrisburrow.helpdecide.ui.libraries.storage.StorageLibraryKeys
+import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.analytics
 import com.google.firebase.analytics.logEvent
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import kotlinx.coroutines.flow.first
 
 object AnalyticsScreens {
@@ -58,7 +58,7 @@ class AnalyticsLibrary(
 
         if(!test) {
 
-            Firebase.crashlytics.isCrashlyticsCollectionEnabled = enabled
+            Firebase.crashlytics.setCrashlyticsCollectionEnabled(enabled)
 
             if(!enabled) {
 
